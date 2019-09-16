@@ -1,0 +1,36 @@
+{
+  "name": "thread-front-end",
+  "version": "1.0.0",
+  "description": "Summative 3.0 group project by John, Andy, Matt and Sophie.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexsophiekim/thread-front-end.git"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "jQery",
+    "bootstrap",
+    "ajax",
+    "json"
+  ],
+  "author": "John, Andy, Matt and Sophie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexsophiekim/thread-front-end/issues"
+  },
+  "homepage": "https://github.com/alexsophiekim/thread-front-end#readme",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4"
+  }
+}
