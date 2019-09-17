@@ -3,6 +3,9 @@
   padding: 0;
   margin: 0;
 }
-.navbar-colour{
-  background-color: #fdc9a1 !important;
+.bg-thread{
+  background-color: #e9d5ce !important;
+}
+.navbar-brand{
+  font-family: 'Pacifico', cursive;
 }
