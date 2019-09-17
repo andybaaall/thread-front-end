@@ -3,9 +3,18 @@
   padding: 0;
   margin: 0;
 }
+body{
+  font-family: 'Montserrat', sans-serif;
+}
 .bg-thread{
   background-color: #e9d5ce !important;
 }
 .navbar-brand{
   font-family: 'Pacifico', cursive;
+}
+.intro{
+  font-weight: 400;
+}
+.shopTitle{
+  font-size: 2.5rem !important;
 }

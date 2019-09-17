@@ -9,22 +9,22 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <nav class="navbar navbar-light bg-thread">
+    <nav class="navbar navbar-light bg-thread fixed">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon white"></span>
       </button>
-        <a class="navbar-brand mx-auto text-white" href="#">Thread</a>
-      <button class="btn btn-light" type="button" name="button">Login</button>
+        <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
+      <button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active mx-auto">
-            <a class="nav-link" href="#">TOP</a>
+            <a class="nav-link" href="#">TOPS</a>
           </li>
           <li class="nav-item mx-auto">
-            <a class="nav-link" href="#">BOTTOM</a>
+            <a class="nav-link" href="#">BOTTOMS</a>
           </li>
           <li class="nav-item mx-auto">
-            <a class="nav-link" href="#">OUTER</a>
+            <a class="nav-link" href="#">OUTERWEAR</a>
           </li>
           <li class="nav-item mx-auto">
             <a class="nav-link" href="#">OTHER</a>
@@ -33,13 +33,13 @@
       </div>
     </nav>
 
-    <main role="main">
+    <main role="main" class="main">
       <div class="container text-center">
-        <p class="my-4 text-center lead text-muted">Welcome to Thread, a dedicated space for browsing, buying and selling pre-loved designer garments.</p>
+        <p class="my-4 text-center lead text-muted intro">Welcome to Thread, a dedicated space for <br/> browsing, buying and selling pre-loved designer garments.</p>
           <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
       </div>
 
-      <div class="album py-5 bg-light">
+      <!-- <div class="album py-5 bg-light">
         <div class="container">
 
           <div class="row">
@@ -182,19 +182,66 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </div> -->
     </main>
 
     <footer class="text-muted">
-      <div class="container">
+      <!-- <div class="container">
         <p class="float-right">
           <a href="#">Back to top</a>
         </p>
         <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
         <p>New to Bootstrap? <a href="https://getbootstrap.com/">Visit the homepage</a> or read our <a href="/docs/4.3/getting-started/introduction/">getting started guide</a>.</p>
-      </div>
+      </div> -->
     </footer>
+
+    <section id="loginForm" class="">
+      <div class="container mt-5">
+        <div class="loginFormBox">
+          <form>
+            <div class="form-group">
+                <label for="lUsername">Username</label>
+                <input type="text" name="lUsername" id="lUsername" class="form-control">
+            </div>
+            <div class="form-group">
+                  <label for="lPassword">Password</label>
+                  <input type="password" name="lPassword" id="lPassword" class="form-control" autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                  <button type="submit" name="button" class="btn btn-primary btn-block">Login</button>
+              </div>
+          </form>
+        </div>
+        <div class="registerFromBox">
+          <form>
+            <div class="form-group">
+                <label for="rUsername">Username</label>
+                <input type="text" name="rUsername" id="rUsername" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="rEmail">Email</label>
+                <input type="email" name="rEmail" id="rEmail" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="rPassword">Password</label>
+                <input type="password" name="rPassword" id="rPassword" class="form-control" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="rConfirmPassword">Confirm Password</label>
+                <input type="password" name="rConfirmPassword" id="rConfirmPassword" class="form-control">
+            </div>
+            <div id="errRego"></div>
+            <div class="form-group">
+                <button type="submit" name="button" class="btn btn-dark btn-block">Register</button>
+            </div>
+</form>
+        </div>
+
+      </div>
+
+    </section>
+
+
 
 
     <script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>

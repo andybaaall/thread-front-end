@@ -15,3 +15,8 @@ $.ajax({
     console.log('cannot find config.json file, cannot run application');
   }
 });
+
+$('#loginBtn').click(function(){
+  $('.main').addClass('d-none');
+
+})
