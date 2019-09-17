@@ -1,0 +1,8 @@
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.navbar-colour{
+  background-color: #fdc9a1 !important;
+}
