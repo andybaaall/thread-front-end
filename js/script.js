@@ -74,21 +74,20 @@ $('#loginForm').submit(function(){
   } else {
     $.ajax({
       url: `${url}/getUser`,
-      type: 'GET',
+      type: 'POST',
       data: {
         username: username,
         password: password
       },
       success: function(result){
-          if (result === 'invalid user') {
-            console.log('cannot find user with that username');
-          } else if (result === 'invalid password') {
-            console.log('your password id wrong');
-          } else {
-            console.log('lets log you in');
-            $('#loginBtn').text('Logout');
-          }
-      },
+             if (result === 'user does not exist'){
+                 console.log('user does not exist');
+             } else if (result === 'invalid password'){
+                 console.log('invalid password');
+             } else {
+                 console.log(result);
+             }
+         } ,
       error: function(err){
           console.log(err);
           console.log('Something went wrong');
