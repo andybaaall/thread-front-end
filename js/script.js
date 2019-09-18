@@ -50,8 +50,8 @@ $('#registerForm').submit(function(){
        },
        success: function(result){
           console.log(result);
-          if (result === 'Sorry, this is already existed') {
-            $('#errRego').append('<p class="text-danger">Sorry, this is already existes</p>');
+          if (result === 'Invalid user') {
+            $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
           } else {
             $('#loginBtn').text('Logout');
           }
