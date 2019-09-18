@@ -18,7 +18,7 @@ $.ajax({
 
 $('#loginBtn').click(function(){
   $('.main').addClass('d-none');
-  $('#loginForm').removeClass('d-none');
+  $('#userForm').removeClass('d-none');
 })
 //
 // $('#loginForm').submit(function(){
