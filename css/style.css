@@ -18,3 +18,14 @@ body{
 .shopTitle{
   font-size: 2.5rem !important;
 }
+.loginFormBox{
+  background-color: #f4efb5;
+  padding: 0.25px 0;
+}
+.registerFromBox{
+  background-color: #eab0c8;
+  padding: 0.25px 0;
+}
+label{
+  margin-bottom: 0 !important;
+}

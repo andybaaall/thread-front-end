@@ -195,46 +195,48 @@
       </div> -->
     </footer>
 
-    <section id="loginForm" class="">
-      <div class="container mt-5">
-        <div class="loginFormBox">
+    <section id="loginForm" class="d-none">
+      <div class="container my-3">
+        <div class="loginFormBox px-3">
+          <p class="font-weight-bold text-secondary mt-3 h4">Login</p>
           <form>
             <div class="form-group">
-                <label for="lUsername">Username</label>
+                <label class="text-secondary" for="lUsername">Username</label>
                 <input type="text" name="lUsername" id="lUsername" class="form-control">
             </div>
             <div class="form-group">
-                  <label for="lPassword">Password</label>
+                  <label class="text-secondary" for="lPassword">Password</label>
                   <input type="password" name="lPassword" id="lPassword" class="form-control" autocomplete="new-password">
               </div>
               <div class="form-group">
-                  <button type="submit" name="button" class="btn btn-primary btn-block">Login</button>
+                  <button type="submit" name="button" class="btn btn-dark btn-block">Login</button>
               </div>
           </form>
         </div>
-        <div class="registerFromBox">
+        <div class="registerFromBox px-3">
+          <p class="font-weight-bold text-secondary mt-3 h4">Register</p>
           <form>
             <div class="form-group">
-                <label for="rUsername">Username</label>
+                <label class="text-secondary" for="rUsername">Username</label>
                 <input type="text" name="rUsername" id="rUsername" class="form-control">
             </div>
             <div class="form-group">
-                <label for="rEmail">Email</label>
+                <label class="text-secondary" for="rEmail">Email</label>
                 <input type="email" name="rEmail" id="rEmail" class="form-control">
             </div>
             <div class="form-group">
-                <label for="rPassword">Password</label>
+                <label class="text-secondary" for="rPassword">Password</label>
                 <input type="password" name="rPassword" id="rPassword" class="form-control" autocomplete="new-password">
             </div>
             <div class="form-group">
-                <label for="rConfirmPassword">Confirm Password</label>
+                <label class="text-secondary" for="rConfirmPassword">Confirm Password</label>
                 <input type="password" name="rConfirmPassword" id="rConfirmPassword" class="form-control">
             </div>
             <div id="errRego"></div>
             <div class="form-group">
                 <button type="submit" name="button" class="btn btn-dark btn-block">Register</button>
             </div>
-</form>
+          </form>
         </div>
 
       </div>
