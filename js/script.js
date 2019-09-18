@@ -86,6 +86,9 @@ $('#loginForm').submit(function(){
                  console.log('invalid password');
              } else {
                  console.log(result);
+                 $('#loginBtn').text('Logout');
+                 $('#userForm').addClass('d-none');
+                 $('.main').removeClass('d-none');
              }
          } ,
       error: function(err){
