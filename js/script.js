@@ -56,6 +56,8 @@ $('#loginForm').submit(function(){
 
 $('#registerForm').submit(function(){
   event.preventDefault();
+
+  console.log('got a click');
   const username = $('#rUsername').val();
   const email = $('#rEmail').val();
   const password = $('#rPassword').val();
@@ -82,15 +84,10 @@ $('#registerForm').submit(function(){
        },
        success: function(result){
           console.log(result);
-          if (result === 'Sorry, this is already existed') {
-            $('#errRego').append('<p class="text-danger">Sorry, this is already existes</p>');
-          } else {
-            $('#loginBtn').text('Logout');
-          }
        },
-       error: function(){
+       error: function(err){
           console.log(err);
-          console.log('Something went wrong');
+          console.log('Something went wrong registering a new user');
        }
      })
    }
