@@ -86,6 +86,20 @@ $('#loginForm').submit(function(){
                  console.log('invalid password');
              } else {
                  console.log(result);
+                 console.log('log you in ');
+                 ////////
+
+                 // result.username -> sessionStorage.username
+                 // result.user_id -> sessionStorge.user_id
+                 // this bad baby tells us who's logged in
+                 // and if we know who's logged in, we know whose ID to attach to items and comments
+
+
+
+
+
+
+                 ///////
                  $('#loginBtn').text('Logout');
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
