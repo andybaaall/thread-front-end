@@ -2,6 +2,18 @@ let serverURL;
 let serverPort;
 let url;
 
+$(document).ready(function(){
+    if(sessionStorage['username']){
+        console.log('you are fully logged in, buddy');
+        $('#loginBtn').hide();
+        $('#logoutBtn').removeClass('d-none');
+
+    } else{
+        console.log('please sign in');
+    }
+    console.log(sessionStorage);
+})
+
 $.ajax({
   url: 'config.json',
   type: 'GET',
@@ -10,16 +22,35 @@ $.ajax({
     serverURL = keys['SERVER_URL'];
     serverPort = keys['SERVER_PORT'];
     url = `${keys['SERVER_URL']}:${keys['SERVER_PORT']}`;
+    // need to run a function to get all the items data, right?
+    // getItemsData();
   },
   error: function(){
     console.log('cannot find config.json file, cannot run application');
   }
 });
 
+// Ajax get request to get all the items
+// getItemsData = () => {
+//     $.ajax({
+//         url: `${url}/allItems`,
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(data){
+//             $('#itemList').empty();
+//             for (var i = 0; i < data.length; i++) {
+//                 let item = `
+//
+//                 `
+//             }
+//         }
+//     })
+// }
+
 $('#loginBtn').click(function(){
   $('.main').addClass('d-none');
   $('#userForm').removeClass('d-none');
-})
+});
 
 
 $('#registerForm').submit(function(){
