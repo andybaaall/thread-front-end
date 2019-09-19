@@ -2,24 +2,41 @@ module.exports = function(grunt){
     grunt.initConfig({
         // pass in options to plugins, references to files
         jshint: {
-              files: ['*.js'],
-              options: {
+            files: ['*.js', '/js/*.js'],
+            options: {
                 globals: {
-                  jQuery: true
+                    jQuery: true
                 },
                 esversion: 6
-              }
+            }
+        },
+        csslint: {
+          strict: {
+            options: {
+              import: 2
             },
+            src: ['css/style.css']
+          },
+          lax: {
+            options: {
+              import: false
+            },
+            src: ['css/style.css']
+          }
+      },
         watch: {
-            files: ['<%= jshint.files %>'],
-            tasks: ['jshint']
+            files: ['<%= jshint.files %>', 'css/style.css'],
+            tasks: ['jshint', 'csslint']
         }
     });
     // load plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+
     // register tasks
     grunt.registerTask('checkJS', ['jshint']);
+    grunt.registerTask('checkCSS',['csslint']);
     grunt.registerTask('runWatch', ['watch']);
 };
 
