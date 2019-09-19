@@ -35,6 +35,8 @@ $.ajax({
     serverURL = keys['SERVER_URL'];
     serverPort = keys['SERVER_PORT'];
     url = `${keys['SERVER_URL']}:${keys['SERVER_PORT']}`;
+    // need to run a function to get all the items data, right?
+    // getItemsData();
   },
   error: function(){
     console.log('cannot find config.json file, cannot run application');
@@ -43,6 +45,8 @@ $.ajax({
 
 $('#registerForm').submit(function(){
   event.preventDefault();
+
+  console.log('got a click');
   const username = $('#rUsername').val();
   const email = $('#rEmail').val();
   const password = $('#rPassword').val();
@@ -75,9 +79,9 @@ $('#registerForm').submit(function(){
             $('#loginBtn').text('Logout');
           }
        },
-       error: function(){
+       error: function(err){
           console.log(err);
-          console.log('Something went wrong');
+          console.log('Something went wrong registering a new user');
        }
      })
    }

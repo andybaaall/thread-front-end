@@ -4,7 +4,7 @@
 
 This project is the front end part of our mongodb project.  
 For this to work, you will also need to have a server running and have it connected to [mongodb](https://www.mongodb.com/).  
-The repo for our server is located here [thread-back-end](https://github.com/alexsophiekim/thread-back-end).  
+The repo for our server is located here: [thread-back-end](https://github.com/alexsophiekim/thread-back-end).  
 
 ## Installation
 To install everything needed for this project, you need to have a stable version of Node JS and NPM installed on your computer or server.
