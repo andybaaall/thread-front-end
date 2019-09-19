@@ -1,29 +1,38 @@
 let serverURL;
 let serverPort;
 let url;
-
-$('#loginBtn').click(function(){
-  $('.main').addClass('d-none');
-  $('#userForm').removeClass('d-none');
-});
-
-$('#logoutBtn').click(function(){
-    if(!sessionStorage['userID']){
-        alert('401, permission denied');
-        return;
-    };
-    sessionStorage.clear();
-    $('#loginBtn').removeClass('d-none');
-    $('#logoutBtn').addClass('d-none');
-});
+let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>`;
+let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button">Logout</button>`;
+//
+// $('#logoutBtn').click(function(){
+//     if(!sessionStorage['userID']){
+//         alert('401, permission denied');
+//         return;
+//     };
+//     sessionStorage.clear();
+//     $('#logInOutBox').append(loginBtn);
+//
+// });
 
 $(document).ready(function(){
   console.log(sessionStorage);
   if(sessionStorage.userName){
-      $('#loginBtn').addClass('d-none');
-      $('#logoutBtn').removeClass('d-none');
+      // you're logged in, nice :)
+      $('#logInOutBox').append(logoutBtn);
+      $('#logoutBtn').click(function(){
+          console.log('got a click');
+      });
+
   } else {
-    console.log('please sign in');
+      // you're not logged in
+      $('#logInOutBox').append(loginBtn);
+      $('#loginBtn').click(function(){
+          // console.log('got a click');
+          $('.main').addClass('d-none');
+          $('#userForm').removeClass('d-none');
+          // $('#logInOutBox').hide(loginBtn);
+          // $('#logInOutBox').append(logoutBtn);
+      })
   }
 });
 
@@ -109,10 +118,11 @@ $('#loginForm').submit(function(){
                  console.log('invalid password');
              } else {
                  console.log(result);
-                 itemCard();
+                 // itemCard();
                  sessionStorage.setItem('userID', result['_id']);
                  sessionStorage.setItem('userName', result['username']);
                  sessionStorage.setItem('userEmail', result['email']);
+                 $('#logInOutBox').append(logoutBtn);
                  ////////
 
                  // result.username -> sessionStorage.username
@@ -126,7 +136,7 @@ $('#loginForm').submit(function(){
 
 
                  ///////
-                 $('#loginBtn').text('Logout');
+                 // $('#loginBtn').show();
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
                  $('#addListBtn').removeClass('d-none');
@@ -141,34 +151,34 @@ $('#loginForm').submit(function(){
 });
 
 
-
-itemCard = () => {
-  $.ajax({
-    url: `{url}/item`,
-    type: 'GET',
-    dataType: 'json',
-    success: function(data){
-      console.log(data);
-      $('#cardContainer').empty();
-      for (var i = 0; i < data.length; i++) {
-        $('#cardContainer').append(`
-          <div class="card col-6">
-          <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
-            <div>
-             <div id="worktitle" class="card-title">
-               <h5 class="card-title text-center mt-3" data-id="${data[i].itemName}">${data[i].itemName}</h5>
-               <p class="text-center">${data[i].price}</p>
-             </div>
-              <div class="d-flex justify-content-between align-items-center btn-group">
-                <button class="btn btn-primary" type="button" name="button">Detail</button>
-              </div>
-            </div>
-          </div>`);
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('Something went wrong');
-    }
-  })
-}
+//
+// itemCard = () => {
+//   $.ajax({
+//     url: `{url}/item`,
+//     type: 'GET',
+//     dataType: 'json',
+//     success: function(data){
+//       console.log(data);
+//       $('#cardContainer').empty();
+//       for (var i = 0; i < data.length; i++) {
+//         $('#cardContainer').append(`
+//           <div class="card col-6">
+//           <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
+//             <div>
+//              <div id="worktitle" class="card-title">
+//                <h5 class="card-title text-center mt-3" data-id="${data[i].itemName}">${data[i].itemName}</h5>
+//                <p class="text-center">${data[i].price}</p>
+//              </div>
+//               <div class="d-flex justify-content-between align-items-center btn-group">
+//                 <button class="btn btn-primary" type="button" name="button">Detail</button>
+//               </div>
+//             </div>
+//           </div>`);
+//       }
+//     },
+//     error: function(err){
+//       console.log(err);
+//       console.log('Something went wrong');
+//     }
+//   })
+// }
