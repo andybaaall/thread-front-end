@@ -1,66 +1,53 @@
-module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-
-  grunt.registerTask('js-hint', ['jshint']);
-
 module.exports = function(grunt){
-  grunt.initConfig({
-    csslint: {
-      strict: {
-        options: {
-          import: 2
+    grunt.initConfig({
+        // pass in options to plugins, references to files
+        jshint: {
+            files: ['*.js', '/js/*.js'],
+            options: {
+                globals: {
+                    jQuery: true
+                },
+                esversion: 6
+            }
         },
-        src: ['css/*.css']
+        csslint: {
+          strict: {
+            options: {
+              import: 2
+            },
+            src: ['css/style.css']
+          },
+          lax: {
+            options: {
+              import: false
+            },
+            src: ['css/style.css']
+          }
       },
-      lax: {
-        options: {
-          import: false
-        },
-        src: ['css/*.css']
-      }
-    },
-// Sophie working above section
+      cssmin: {
+          target: {
+              files: [{
+                  expand: true,
+                  src: ['css/*.css', 'css/!*.min.css'],
+                  dest: '',
+                  ext: '.min.css'
+              }]
+          }
+      },
+        watch: {
+            files: ['<%= jshint.files %>', 'css/style.css'],
+            tasks: ['jshint', 'csslint', 'cssmin']
+        }
+    });
+    // load plugins
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
-
-    jshint: {
-      files: ['Gruntfile.js', 'js/script.js'],
-      options: {
-        globals: {
-          jQuery: true
-        },
-        curly: true,
-        eqeqeq: true,
-        esversion: 6
-      }
-    }
-//Andy working above section
-watch: {
-  css: {
-    files: ['css/*.css'],
-    tasks: ['csslint']
-  },
-  js: {
-    files: ['js/*.js', '!js/*.min.js'],
-    tasks: ['jshint']
-  }
-}
-//Matt working above section
-  });
-grunt.loadNpmTasks('grunt-contrib-csslint');
-// Sophie working above section
-
-grunt.loadNpmTasks('grunt-contrib-jshint');
-//Andy working above section
-
-grunt.loadNpmTasks('grunt-contrib-watch');
-//Matt working above section
-
-grunt.registerTask('csslint',['csslint']);
-// Sophie working above section
-
-grunt.registerTask('jshint',['jshint']);
-//Andy working above section
-
-grunt.registerTask('runWatch', ['watch'])
-//Matt working above section
+    // register tasks
+    grunt.registerTask('checkJS', ['jshint']);
+    grunt.registerTask('checkCSS',['csslint']);
+    grunt.registerTask('minifyCSS', ['cssmin']);
+    grunt.registerTask('runWatch', ['watch']);
 };
