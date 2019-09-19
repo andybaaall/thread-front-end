@@ -40,7 +40,7 @@ $.ajax({
 //             $('#itemList').empty();
 //             for (var i = 0; i < data.length; i++) {
 //                 let item = `
-//
+//                      NEED TO ADD HTML FOR ITEMS IN GALLERY
 //                 `
 //             }
 //         }
@@ -52,6 +52,10 @@ $('#loginBtn').click(function(){
   $('#userForm').removeClass('d-none');
 });
 
+$('#logoutBtn').click(function(){
+  $('.main').removeClass('d-none');
+  $('#userForm').addClass('d-none');
+});
 
 $('#registerForm').submit(function(){
   event.preventDefault();
