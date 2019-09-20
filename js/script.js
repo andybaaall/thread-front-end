@@ -1,28 +1,31 @@
 let serverURL;
 let serverPort;
 let url;
-let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>`;
-let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button">Logout</button>`;
+let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button" onclick="login()">Login</button>`;
+let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
+  logout = () => {
+    console.log('clicked logout button');
+    $('#logInOutBox').empty();
+    $('#logInOutBox').append(loginBtn);
+    sessionStorage.clear();
+  }
+  login = () => {
+    console.log('clicked login button');
+    $('.main').addClass('d-none');
+    $('#userForm').removeClass('d-none');
+    $('#lUsername').val(null);
+    $('#lPassword').val(null);
+  }
   console.log(sessionStorage);
   if(sessionStorage.userName){
       // you're logged in, nice :)
       $('#logInOutBox').append(logoutBtn);
-      $('#logoutBtn').click(function(){
-          console.log('got a click');
-          $('#logoutBtn').hide();
-          $('#logInOutBox').append(loginBtn);
-          sessionStorage.clear();
-      });
+      logout();
   } else {
       // you're not logged in
       $('#logInOutBox').append(loginBtn);
-      $('#loginBtn').click(function(){
-          // console.log('got a click');
-          $('.main').addClass('d-none');
-          $('#userForm').removeClass('d-none');
-      })
   }
 });
 
@@ -113,6 +116,7 @@ $('#loginForm').submit(function(){
                  sessionStorage.setItem('userName', result['username']);
                  sessionStorage.setItem('userEmail', result['email']);
                  $('#loginBtn').hide();
+                 $('#logInOutBox').empty();
                  $('#logInOutBox').append(logoutBtn);
                  ////////
 
