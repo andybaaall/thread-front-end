@@ -111,7 +111,6 @@ $('#loginForm').submit(function(){
                  console.log('invalid password');
              } else {
                  console.log(result);
-                 // itemCard();
                  sessionStorage.setItem('userID', result['_id']);
                  sessionStorage.setItem('userName', result['username']);
                  sessionStorage.setItem('userEmail', result['email']);
@@ -119,6 +118,8 @@ $('#loginForm').submit(function(){
                  $('#logInOutBox').append(logoutBtn);
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
+                 itemCard();
+                 $('#cardContainer').removeClass('d-none');
                  ////////
 
                  // result.username -> sessionStorage.username
@@ -137,34 +138,37 @@ $('#loginForm').submit(function(){
 });
 
 
-//
-// itemCard = () => {
-//   $.ajax({
-//     url: `{url}/item`,
-//     type: 'GET',
-//     dataType: 'json',
-//     success: function(data){
-//       console.log(data);
-//       $('#cardContainer').empty();
-//       for (var i = 0; i < data.length; i++) {
-//         $('#cardContainer').append(`
-//           <div class="card col-6">
-//           <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
-//             <div>
-//              <div id="worktitle" class="card-title">
-//                <h5 class="card-title text-center mt-3" data-id="${data[i].itemName}">${data[i].itemName}</h5>
-//                <p class="text-center">${data[i].price}</p>
-//              </div>
-//               <div class="d-flex justify-content-between align-items-center btn-group">
-//                 <button class="btn btn-primary" type="button" name="button">Detail</button>
-//               </div>
-//             </div>
-//           </div>`);
-//       }
-//     },
-//     error: function(err){
-//       console.log(err);
-//       console.log('Something went wrong');
-//     }
-//   })
-// }
+itemCard = () => {
+  $.ajax({
+    url: `{url}/allItems`,
+    type: 'GET',
+    dataType: 'json',
+    success: function(data){
+      console.log(data);
+      $('#cardContainer').empty();
+      for (var i = 0; i < data.length; i++) {
+        let layout = `<div class="card col-6">
+        <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
+           <div id="worktitle" class="card-title">
+             <h5 class="card-title text-center mt-3" data-id="${data[i].item_id}">${data[i].itemName}</h5>
+             <p class="text-center">${data[i].price}</p>
+           </div>
+        </div>`;
+        layout += `<div class="d-flex justify-content-between align-items-center btn-group">
+          <button class="btn btn-primary" type="button" name="button">edit</button>
+          <button class="btn btn-primary" type="button" name="button">delete</button>
+        </div>`
+        $('#cardContainer').append(layout);
+
+      }
+    },
+    error: function(err){
+      console.log(err);
+      console.log('Something went wrong');
+    }
+  })
+}
+
+$('.addItemBtn').click(function(){
+
+})
