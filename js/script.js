@@ -115,17 +115,17 @@ $('#loginForm').submit(function(){
                  sessionStorage.setItem('userID', result['_id']);
                  sessionStorage.setItem('userName', result['username']);
                  sessionStorage.setItem('userEmail', result['email']);
-                 $('#loginBtn').hide();
                  $('#logInOutBox').empty();
                  $('#logInOutBox').append(logoutBtn);
+                 $('#userForm').addClass('d-none');
+                 $('.main').removeClass('d-none');
                  ////////
 
                  // result.username -> sessionStorage.username
                  // result.user_id -> sessionStorge.user_id
                  // this bad baby tells us who's logged in
                  // and if we know who's logged in, we know whose ID to attach to items and comments
-                 $('#userForm').addClass('d-none');
-                 $('.main').removeClass('d-none');
+
              }
          } ,
       error: function(err){
