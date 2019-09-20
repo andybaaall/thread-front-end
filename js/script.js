@@ -125,10 +125,81 @@ $('#loginForm').submit(function(){
                  $('#logInOutBox').append(logoutBtn);
                  ////////
 
-                 // result.username -> sessionStorage.username
-                 // result.user_id -> sessionStorge.user_id
-                 // this bad baby tells us who's logged in
-                 // and if we know who's logged in, we know whose ID to attach to items and comments
+                // create Item
+                $('#pageContainer').append(`<div class="addItemBox mx-5 my-2 text-left">
+                    <button type="button" class="btn btn-primary" id="addItemBtn">add item</button>
+                    <form id="addItemForm">
+                        <div class="form-group">
+                            <label for="itemName">Item Name</label>
+                            <input type="text" class="form-control" id="itemName">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription">Description</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription">Price</label>
+                            <input type="number" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <fieldset class="form-group">
+                            <div class="row">
+                                <legend class="col-form-label col-sm-2 pt-0">Clothing Type</legend>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="topsRadio" value="Tops" checked>
+                                        <label class="form-check-label" for="topsRadio">
+                                            Tops
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="bottomsRadio" value="Bottoms">
+                                        <label class="form-check-label" for="bottomsRadio">
+                                            Bottoms
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="outwewearRadio" value="Outerwear">
+                                        <label class="form-check-label" for="outwewearRadio">
+                                            Outerwear
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="otherRadio" value="Other">
+                                        <label class="form-check-label" for="otherRadio">
+                                            Other
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <div class="row">
+                                <legend class="col-form-label col-sm-2 pt-0">Condition</legend>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="newRadio" value="New" checked>
+                                        <label class="form-check-label" for="newRadio">
+                                            New
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="usedRadio" value="Used">
+                                        <label class="form-check-label" for="usedRadio">
+                                            Used
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>`);
+                $('#addItemForm').submit(() => {
+                    preventDefault();
+
+                    // do ajax stuff in here
+                })
+
 
 
 
