@@ -3,16 +3,6 @@ let serverPort;
 let url;
 let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>`;
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button">Logout</button>`;
-//
-// $('#logoutBtn').click(function(){
-//     if(!sessionStorage['userID']){
-//         alert('401, permission denied');
-//         return;
-//     };
-//     sessionStorage.clear();
-//     $('#logInOutBox').append(loginBtn);
-//
-// });
 
 $(document).ready(function(){
   console.log(sessionStorage);
@@ -21,8 +11,10 @@ $(document).ready(function(){
       $('#logInOutBox').append(logoutBtn);
       $('#logoutBtn').click(function(){
           console.log('got a click');
+          $('#logoutBtn').hide();
+          $('#logInOutBox').append(loginBtn);
+          sessionStorage.clear();
       });
-
   } else {
       // you're not logged in
       $('#logInOutBox').append(loginBtn);
@@ -30,8 +22,6 @@ $(document).ready(function(){
           // console.log('got a click');
           $('.main').addClass('d-none');
           $('#userForm').removeClass('d-none');
-          // $('#logInOutBox').hide(loginBtn);
-          // $('#logInOutBox').append(logoutBtn);
       })
   }
 });
@@ -122,6 +112,7 @@ $('#loginForm').submit(function(){
                  sessionStorage.setItem('userID', result['_id']);
                  sessionStorage.setItem('userName', result['username']);
                  sessionStorage.setItem('userEmail', result['email']);
+                 $('#loginBtn').hide();
                  $('#logInOutBox').append(logoutBtn);
                  ////////
 
@@ -129,17 +120,8 @@ $('#loginForm').submit(function(){
                  // result.user_id -> sessionStorge.user_id
                  // this bad baby tells us who's logged in
                  // and if we know who's logged in, we know whose ID to attach to items and comments
-
-
-
-
-
-
-                 ///////
-                 // $('#loginBtn').show();
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
-                 $('#addListBtn').removeClass('d-none');
              }
          } ,
       error: function(err){
