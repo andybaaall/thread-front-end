@@ -45,9 +45,8 @@ $.ajax({
   }
 });
 
-$('#registerForm').submit(function(){
+$('.registerSubmit').click(function(){
   event.preventDefault();
-
   console.log('got a click');
   const username = $('#rUsername').val();
   const email = $('#rEmail').val();
@@ -89,7 +88,7 @@ $('#registerForm').submit(function(){
    }
 });
 
-$('#loginForm').submit(function(){
+$('.loginSubmit').click(function(){
   event.preventDefault();
   const username = $('#lUsername').val();
   const password = $('#lPassword').val();
@@ -118,7 +117,6 @@ $('#loginForm').submit(function(){
                  $('#logInOutBox').append(logoutBtn);
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
-                 itemCard();
                  $('#cardContainer').removeClass('d-none');
                  ////////
 
@@ -126,7 +124,6 @@ $('#loginForm').submit(function(){
                  // result.user_id -> sessionStorge.user_id
                  // this bad baby tells us who's logged in
                  // and if we know who's logged in, we know whose ID to attach to items and comments
-
              }
          } ,
       error: function(err){
@@ -136,39 +133,8 @@ $('#loginForm').submit(function(){
     })
   }
 });
-
-
-itemCard = () => {
-  $.ajax({
-    url: `{url}/allItems`,
-    type: 'GET',
-    dataType: 'json',
-    success: function(data){
-      console.log(data);
-      $('#cardContainer').empty();
-      for (var i = 0; i < data.length; i++) {
-        let layout = `<div class="card col-6">
-        <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
-           <div id="worktitle" class="card-title">
-             <h5 class="card-title text-center mt-3" data-id="${data[i].item_id}">${data[i].itemName}</h5>
-             <p class="text-center">${data[i].price}</p>
-           </div>
-        </div>`;
-        layout += `<div class="d-flex justify-content-between align-items-center btn-group">
-          <button class="btn btn-primary" type="button" name="button">edit</button>
-          <button class="btn btn-primary" type="button" name="button">delete</button>
-        </div>`
-        $('#cardContainer').append(layout);
-
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('Something went wrong');
-    }
-  })
-}
-
-$('.addItemBtn').click(function(){
-
+$('#uploadBtn').click(function(){
+  $('#cardContainer').removeClass('d-none');
+  $('.uploadModal').remove();
+  $('.modal-backdrop').remove();
 })
