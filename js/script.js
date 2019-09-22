@@ -266,11 +266,13 @@ $('#loginForm').submit(function(){
                                             type: 'POST',
                                             data: {
                                                 // item ID and user ID get added on backend
-                                                item_name: itemName,
-                                                item_description: itemDescription,
-                                                price: itemPrice,
-                                                clothing_type: itemType,
-                                                condition: itemCondition,                                                bought: itemBought,
+                                                itemName: itemName,
+                                                itemDescription: itemDescription,
+                                                itemPrice: itemPrice,
+                                                itemType: itemType,
+                                                itemCondition: itemCondition,
+                                                userID: sessionStorage.userID,
+                                                itemBought: itemBought,
                                                 // need to add image uploading
                                             },
                                             success: (result) => {
