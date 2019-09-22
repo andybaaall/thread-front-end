@@ -51,6 +51,39 @@ $(document).ready(function(){
         }
     }
 
+    itemCard = () => {
+      $.ajax({
+        url: `${url}/allItems`,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+          console.log(data);
+          $('#cardContainer').empty();
+          for (var i = 0; i < data.length; i++) {
+            $('#cardContainer').append(`
+              <div class="card" style="width:18rem;>
+                <div class="card-body">
+                 <div id="worktitle" class="card-title">
+                   <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
+                   <p class="text-center">${data[i].price}</p>
+                 </div>
+                  <div class="d-flex justify-content-between align-items-center btn-group">
+                    <button class="btn btn-primary" type="button" name="button">Detail</button>
+                  </div>
+                </div>
+              </div>
+            `);
+          }
+        },
+        error: function(err){
+          console.log(err);
+          console.log('Something went wrong');
+        }
+    });
+    };
+
+    itemCard();
+
 });
 
 $.ajax({
@@ -266,13 +299,11 @@ $('#loginForm').submit(function(){
                                             type: 'POST',
                                             data: {
                                                 // item ID and user ID get added on backend
-                                                itemName: itemName,
-                                                itemDescription: itemDescription,
-                                                itemPrice: itemPrice,
-                                                itemType: itemType,
-                                                itemCondition: itemCondition,
-                                                userID: sessionStorage.userID,
-                                                itemBought: itemBought,
+                                                item_name: itemName,
+                                                item_description: itemDescription,
+                                                price: itemPrice,
+                                                clothing_type: itemType,
+                                                condition: itemCondition,                                                bought: itemBought,
                                                 // need to add image uploading
                                             },
                                             success: (result) => {
@@ -320,34 +351,3 @@ $('#loginForm').submit(function(){
     }
 });
           // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
-
-itemCard = () => {
-  $.ajax({
-    url: `{url}/allItems`,
-    type: 'GET',
-    dataType: 'json',
-    success: function(data){
-      console.log(data);
-      $('#cardContainer').empty();
-      for (var i = 0; i < data.length; i++) {
-        $('#cardContainer').append(`
-          <div class="card col-6">
-
-            <div>
-             <div id="worktitle" class="card-title">
-               <h5 class="card-title text-center mt-3" data-id="${data[i].itemName}">${data[i].itemName}</h5>
-               <p class="text-center">${data[i].price}</p>
-             </div>
-              <div class="d-flex justify-content-between align-items-center btn-group">
-                <button class="btn btn-primary" type="button" name="button">Detail</button>
-              </div>
-            </div>
-          </div>`);
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('Something went wrong');
-    }
-});
-};
