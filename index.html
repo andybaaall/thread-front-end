@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>Thread</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,500,700,900|Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
+</head>
+<body>
     <nav class="navbar navbar-light bg-thread fixed">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon white"></span>
-      </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon white"></span>
+        </button>
         <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
-        <div id="logInOutBox"></div>
+
+        <div id="logInOutBox">
+
+        </div>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active mx-auto">
@@ -31,76 +34,93 @@
           </li>
         </ul>
       </div>
+
+        <!-- add div with id for login/out button -->
+        <!-- <button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>
+        <button id="logoutBtn" class="btn btn-light d-none" type="button" name="button">Logout</button> -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active mx-auto">
+                    <a class="nav-link" href="#">TOPS</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">BOTTOMS</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">OUTERWEAR</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">OTHER</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
     <main role="main" class="main">
-      <div class="container text-center">
-        <p class="my-4 text-center lead text-muted intro">Browse, buy and sell <br/> pre-loved designer garments</p>
-          <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
-      </div>
-      <div id="cardContainer" class="d-none">
-        <button class="addItemBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Item</button>
-        <button class="deleteItemBtn" type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Delete Item</button>
-      </div>
+
+        <div id="pageContainer" class="container text-center">
+            <p class="my-4 text-center lead text-muted intro">Browse, buy and sell <br/> pre-loved designer garments</p>
+            <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
+        </div>
     </main>
 
     <footer class="text-muted">
-      <!-- <div class="container">
+        <!-- <div class="container">
         <p class="float-right">
-          <a href="#">Back to top</a>
-        </p>
-        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-        <p>New to Bootstrap? <a href="https://getbootstrap.com/">Visit the homepage</a> or read our <a href="/docs/4.3/getting-started/introduction/">getting started guide</a>.</p>
-      </div> -->
-    </footer>
+        <a href="#">Back to top</a>
+    </p>
+    <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+    <p>New to Bootstrap? <a href="https://getbootstrap.com/">Visit the homepage</a> or read our <a href="/docs/4.3/getting-started/introduction/">getting started guide</a>.</p>
+</div> -->
+</footer>
 
-    <section id="userForm" class="d-none">
-      <div class="container my-3">
+<section id="userForm" class="d-none">
+    <div class="container my-3">
         <div class="loginFormBox px-3">
-          <p class="font-weight-bold text-secondary mt-3 h4">Login</p>
-          <form id="loginForm">
-            <div class="form-group">
-                <label class="text-secondary" for="lUsername">Username</label>
-                <input type="text" name="lUsername" id="lUsername" class="form-control">
-            </div>
-            <div class="form-group">
-                  <label class="text-secondary" for="lPassword">Password</label>
-                  <input type="password" name="lPassword" id="lPassword" class="form-control" autocomplete="new-password">
-              </div>
-              <div class="form-group">
-                  <button type="button" name="button" class="loginSubmit btn btn-dark btn-block">Login</button>
-              </div>
-          </form>
+            <p class="font-weight-bold text-secondary mt-3 h4">Login</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="text-secondary" for="lUsername">Username</label>
+                    <input type="text" name="lUsername" id="lUsername" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="text-secondary" for="lPassword">Password</label>
+                    <input type="password" name="lPassword" id="lPassword" class="form-control" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" name="button" class="btn btn-dark btn-block">Login</button>
+                </div>
+            </form>
         </div>
         <div class="registerFormBox px-3">
-          <p class="font-weight-bold text-secondary mt-3 h4">Register</p>
-          <form id="registerForm">
-            <div class="form-group">
-                <label class="text-secondary" for="rUsername">Username</label>
-                <input type="text" name="rUsername" id="rUsername" class="form-control">
-            </div>
-            <div class="form-group">
-                <label class="text-secondary" for="rEmail">Email</label>
-                <input type="email" name="rEmail" id="rEmail" class="form-control">
-            </div>
-            <div class="form-group">
-                <label class="text-secondary" for="rPassword">Password</label>
-                <input type="password" name="rPassword" id="rPassword" class="form-control" autocomplete="new-password">
-            </div>
-            <div class="form-group">
-                <label class="text-secondary" for="rConfirmPassword">Confirm Password</label>
-                <input type="password" name="rConfirmPassword" id="rConfirmPassword" class="form-control">
-            </div>
-            <div id="errRego"></div>
-            <div class="form-group">
-                <button type="button" name="button" class="registerSubmit btn btn-dark btn-block">Register</button>
-            </div>
-          </form>
+            <p class="font-weight-bold text-secondary mt-3 h4">Register</p>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="text-secondary" for="rUsername">Username</label>
+                    <input type="text" name="rUsername" id="rUsername" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="text-secondary" for="rEmail">Email</label>
+                    <input type="email" name="rEmail" id="rEmail" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="text-secondary" for="rPassword">Password</label>
+                    <input type="password" name="rPassword" id="rPassword" class="form-control" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label class="text-secondary" for="rConfirmPassword">Confirm Password</label>
+                    <input type="password" name="rConfirmPassword" id="rConfirmPassword" class="form-control">
+                </div>
+                <div id="errRego"></div>
+                <div class="form-group">
+                    <button type="submit" name="button" class="btn btn-dark btn-block">Register</button>
+                </div>
+            </form>
         </div>
 
-      </div>
+    </div>
 
-    </section>
+</section>
 
     <div class="uploadModal modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -136,9 +156,9 @@
 
 
 
-    <script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
-    <script src="node_modules/popper.js/dist/umd/popper.min.js" charset="utf-8"></script>
-    <script src="js/script.js" charset="utf-8"></script>
-  </body>
+<script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="node_modules/popper.js/dist/umd/popper.min.js" charset="utf-8"></script>
+<script src="js/script.js" charset="utf-8"></script>
+</body>
 </html>
