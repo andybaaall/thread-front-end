@@ -40,15 +40,15 @@ $(document).ready(function(){
         $('#lPassword').val(null);
     };
 
-    console.log(sessionStorage);
-
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
         logout();
     } else {
         // you're not logged in
-        $('#logInOutBox').append(loginBtn);
+        if (!loginBtn){
+            $('#logInOutBox').append(loginBtn);
+        }
     }
 
 });
@@ -183,7 +183,6 @@ $('#loginForm').submit(function(){
 
                                     // create Item
                                     $('#pageContainer').append(`<div class="addItemBox mx-5 my-2 text-left">
-                                    >>>>>>> master
                                     <button type="button" class="btn btn-primary" id="addItemBtn">add item</button>
                                     <form id="addItemForm">
                                     <div class="form-group">
@@ -253,8 +252,20 @@ $('#loginForm').submit(function(){
                                     </div>`);
                                     $('#addItemForm').submit(() => {
                                         preventDefault();
-
-                                        // do ajax stuff in here
+                                        console.log('got a click on add item');
+                                        $.ajax({
+                                            url: `${url}/addItem`,
+                                            type: 'post',
+                                            data: {
+                                                // some data
+                                            },
+                                            success: (result) => {
+                                                console.log(result);
+                                            },
+                                            error: (err) => {
+                                                console.log(err);
+                                            }
+                                        });
                                     });
 
                                     ///////
