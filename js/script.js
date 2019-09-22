@@ -29,6 +29,7 @@ $(document).ready(function(){
   }
 });
 
+
 $.ajax({
   url: 'config.json',
   type: 'GET',
@@ -37,6 +38,7 @@ $.ajax({
     serverURL = keys['SERVER_URL'];
     serverPort = keys['SERVER_PORT'];
     url = `${keys['SERVER_URL']}:${keys['SERVER_PORT']}`;
+    getItemsData();
     // need to run a function to get all the items data, right?
     // getItemsData();
   },
@@ -44,6 +46,25 @@ $.ajax({
     console.log('cannot find config.json file, cannot run application');
   }
 });
+
+
+getItemsData = () => {
+  $.ajax({
+    url:`${url}/view`,
+    dataType:'json',
+    type:'GET',
+    success: function(data){
+      console.log(data);
+    },
+    error: function(err){
+      console.log(err);
+      console.log('Something went wrong');
+    }
+  })
+}
+
+
+
 
 $('.registerSubmit').click(function(){
   event.preventDefault();
@@ -133,6 +154,7 @@ $('.loginSubmit').click(function(){
     })
   }
 });
+
 $('#uploadBtn').click(function(){
   $('#cardContainer').removeClass('d-none');
   $('.uploadModal').remove();
