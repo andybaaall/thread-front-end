@@ -5,7 +5,7 @@ let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
-    console.log(sessionStorage);
+    // console.log(sessionStorage);
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
@@ -26,7 +26,7 @@ $(document).ready(function(){
     }
 
     logout = () => {
-        console.log('clicked logout button');
+        // console.log('clicked logout button');
         $('#logInOutBox').empty();
         $('#logInOutBox').append(loginBtn);
         sessionStorage.clear();
@@ -134,7 +134,7 @@ $('#loginForm').submit(function(){
                 } else if (result === 'invalid password'){
                     console.log('invalid password');
                 } else {
-                    console.log(result);
+                    // console.log(result);
                     // itemCard();
                     sessionStorage.setItem('userID', result._id);
                     sessionStorage.setItem('userName', result.username);
@@ -167,7 +167,6 @@ $('#loginForm').submit(function(){
                                     console.log('invalid password');
                                 } else {
                                     console.log(result);
-                                    // itemCard();
                                     sessionStorage.setItem('userID', result._id);
                                     sessionStorage.setItem('userName', result.username);
                                     sessionStorage.setItem('userEmail', result.email);
@@ -183,7 +182,6 @@ $('#loginForm').submit(function(){
 
                                     // create Item
                                     $('#pageContainer').append(`<div class="addItemBox mx-5 my-2 text-left">
-                                    <button type="button" class="btn btn-primary" id="addItemBtn">add item</button>
                                     <form id="addItemForm">
                                     <div class="form-group">
                                     <label for="itemName">Item Name</label>
@@ -191,36 +189,36 @@ $('#loginForm').submit(function(){
                                     </div>
                                     <div class="form-group">
                                     <label for="itemDescription">Description</label>
-                                    <input type="text" class="form-control" id="exampleInputPassword1">
+                                    <input type="text" class="form-control" id="itemDescription">
                                     </div>
                                     <div class="form-group">
-                                    <label for="itemDescription">Price</label>
-                                    <input type="number" class="form-control" id="exampleInputPassword1">
+                                    <label for="itemPrice">Price</label>
+                                    <input type="number" class="form-control" id="itemPrice">
                                     </div>
                                     <fieldset class="form-group">
                                     <div class="row">
                                     <legend class="col-form-label col-sm-2 pt-0">Clothing Type</legend>
                                     <div class="col-sm-10">
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="topsRadio" value="Tops" checked>
+                                    <input class="form-check-input" type="radio" id="topsRadio" value="Tops" name="itemType" >
                                     <label class="form-check-label" for="topsRadio">
                                     Tops
                                     </label>
                                     </div>
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="bottomsRadio" value="Bottoms">
+                                    <input class="form-check-input" type="radio" id="bottomsRadio" value="Bottoms" name="itemType">
                                     <label class="form-check-label" for="bottomsRadio">
                                     Bottoms
                                     </label>
                                     </div>
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="outwewearRadio" value="Outerwear">
+                                    <input class="form-check-input" type="radio" id="outwewearRadio" value="Outerwear" name="itemType">
                                     <label class="form-check-label" for="outwewearRadio">
                                     Outerwear
                                     </label>
                                     </div>
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="otherRadio" value="Other">
+                                    <input class="form-check-input" type="radio" id="otherRadio" value="Other" name="itemType">
                                     <label class="form-check-label" for="otherRadio">
                                     Other
                                     </label>
@@ -233,13 +231,13 @@ $('#loginForm').submit(function(){
                                     <legend class="col-form-label col-sm-2 pt-0">Condition</legend>
                                     <div class="col-sm-10">
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="newRadio" value="New" checked>
+                                    <input class="form-check-input" type="radio" id="newRadio" value="New" name="itemCondition">
                                     <label class="form-check-label" for="newRadio">
                                     New
                                     </label>
                                     </div>
                                     <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="usedRadio" value="Used">
+                                    <input class="form-check-input" type="radio" id="usedRadio" value="Used" name="itemCondition">
                                     <label class="form-check-label" for="usedRadio">
                                     Used
                                     </label>
@@ -247,29 +245,52 @@ $('#loginForm').submit(function(){
                                     </div>
                                     </div>
                                     </fieldset>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">add an item</button>
                                     </form>
                                     </div>`);
+
                                     $('#addItemForm').submit(() => {
-                                        preventDefault();
-                                        console.log('got a click on add item');
+                                        event.preventDefault();
+                                        // need to put some validation in here
+
+                                        let itemName = $('#itemName').val();
+                                        let itemDescription = $('#itemDescription').val();
+                                        let itemPrice = $('#itemPrice').val();
+                                        let itemType = $('input[name="itemType"]:checked').val();
+                                        let itemCondition = $('input[name="itemCondition"]:checked').val();
+
+                                        // send data to db
                                         $.ajax({
                                             url: `${url}/addItem`,
                                             type: 'post',
                                             data: {
-                                                // some data
+                                                // item ID and user ID get added on backend
+                                                item_name: itemName,
+                                                item_description: itemDescription,
+                                                price: itemPrice,
+                                                clothing_type: itemType,
+                                                condition: itemCondition,                                                bought: false,
+                                                // need to add image uploading
                                             },
                                             success: (result) => {
                                                 console.log(result);
+
+                                                // clear form values
+                                                let itemName = $('#itemName').val();
+                                                let itemDescription = $('#itemDescription').val();
+                                                let itemPrice = $('#itemPrice').val();
+                                                let itemType = $('input[name="itemType"]:checked').val();
+                                                let itemCondition = $('input[name="itemCondition"]:checked').val();
                                             },
                                             error: (err) => {
                                                 console.log(err);
                                             }
                                         });
+                                        // send image to server
                                     });
 
+
                                     ///////
-                                    // $('#loginBtn').show();
                                     $('#userForm').addClass('d-none');
                                     $('.main').removeClass('d-none');
                                     $('#addListBtn').removeClass('d-none');
@@ -295,7 +316,6 @@ $('#loginForm').submit(function(){
         });
     }
 });
-
 
 //
 // itemCard = () => {
