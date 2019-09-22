@@ -258,18 +258,19 @@ $('#loginForm').submit(function(){
                                         let itemPrice = $('#itemPrice').val();
                                         let itemType = $('input[name="itemType"]:checked').val();
                                         let itemCondition = $('input[name="itemCondition"]:checked').val();
+                                        let itemBought = false;
 
                                         // send data to db
                                         $.ajax({
                                             url: `${url}/addItem`,
-                                            type: 'post',
+                                            type: 'POST',
                                             data: {
                                                 // item ID and user ID get added on backend
                                                 item_name: itemName,
                                                 item_description: itemDescription,
                                                 price: itemPrice,
                                                 clothing_type: itemType,
-                                                condition: itemCondition,                                                bought: false,
+                                                condition: itemCondition,                                                bought: itemBought,
                                                 // need to add image uploading
                                             },
                                             success: (result) => {
