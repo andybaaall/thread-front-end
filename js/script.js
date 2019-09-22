@@ -182,7 +182,7 @@ $('#loginForm').submit(function(){
 
                                     // create Item
                                     $('#pageContainer').append(`<div class="addItemBox mx-5 my-2 text-left">
-                                    <form id="addItemForm">
+                                    <form id="addItemForm" enctype="multipart/form-data">
                                     <div class="form-group">
                                     <label for="itemName">Item Name</label>
                                     <input type="text" class="form-control" id="itemName">
@@ -194,6 +194,15 @@ $('#loginForm').submit(function(){
                                     <div class="form-group">
                                     <label for="itemPrice">Price</label>
                                     <input type="number" class="form-control" id="itemPrice">
+                                    </div>
+                                    <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupFileAddon01">Item image</span>
+                                    </div>
+                                    <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="itemImage">
+                                    <label class="custom-file-label" for="itemImage">Choose file</label>
+                                    </div>
                                     </div>
                                     <fieldset class="form-group">
                                     <div class="row">
@@ -259,6 +268,12 @@ $('#loginForm').submit(function(){
                                         let itemType = $('input[name="itemType"]:checked').val();
                                         let itemCondition = $('input[name="itemCondition"]:checked').val();
                                         let itemBought = false;
+
+                                        // create a formData object, which contains ^^^ and the file.
+                                        // should look something like this: 
+                                        // const file = $('#customFile')[0].files[0];
+                                        // fd.append('uploadedImage', file);
+                                        // fd.append('imageName', imageTitle);
 
                                         // send data to db
                                         $.ajax({
