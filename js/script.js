@@ -1,11 +1,11 @@
 let serverURL;
 let serverPort;
 let url;
+let editing = false;
 let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button" onclick="login()">Login</button>`;
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
-    // console.log(sessionStorage);
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
@@ -20,16 +20,15 @@ $(document).ready(function(){
             // console.log('got a click');
             $('.main').addClass('d-none');
             $('#userForm').removeClass('d-none');
-            // $('#logInOutBox').hide(loginBtn);
-            // $('#logInOutBox').append(logoutBtn);
         });
     }
 
     logout = () => {
-        // console.log('clicked logout button');
+        console.log('clicked logout button');
         $('#logInOutBox').empty();
         $('#logInOutBox').append(loginBtn);
         sessionStorage.clear();
+        $('#cardContainer').addClass('d-none');
     };
 
     login = () => {
@@ -50,7 +49,6 @@ $(document).ready(function(){
             $('#logInOutBox').append(loginBtn);
         }
     }
-
     itemCard = () => {
       $.ajax({
         url: `${url}/allItems`,
@@ -73,7 +71,7 @@ $(document).ready(function(){
                                     <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
                                     <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
                                 </div>`;
-            }
+                }
               layout += `</div>`;
             $('#cardContainer').append(layout);
           }
@@ -84,10 +82,9 @@ $(document).ready(function(){
         }
     });
     };
-
     itemCard();
-
 });
+
 
 $.ajax({
     url: 'config.json',
@@ -98,7 +95,6 @@ $.ajax({
         serverPort = keys.SERVER_PORT;
         url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
         // need to run a function to get all the items data, right?
-        // getItemsData();
     },
     error: function(){
         console.log('cannot find config.json file, cannot run application');
@@ -171,7 +167,6 @@ $('#loginForm').submit(function(){
                     console.log('invalid password');
                 } else {
                     // console.log(result);
-                    // itemCard();
                     sessionStorage.setItem('userID', result._id);
                     sessionStorage.setItem('userName', result.username);
                     sessionStorage.setItem('userEmail', result.email);
@@ -206,6 +201,7 @@ $('#loginForm').submit(function(){
                                     sessionStorage.setItem('userID', result._id);
                                     sessionStorage.setItem('userName', result.username);
                                     sessionStorage.setItem('userEmail', result.email);
+                                    itemCard();
                                     $('#loginBtn').hide();
                                     $('#logInOutBox').empty();
                                     $('#logInOutBox').append(logoutBtn);
@@ -288,14 +284,39 @@ $('#loginForm').submit(function(){
                                     $('#addItemForm').submit(() => {
                                         event.preventDefault();
                                         // need to put some validation in here
-
-                                        let itemName = $('#itemName').val();
-                                        let itemDescription = $('#itemDescription').val();
-                                        let itemPrice = $('#itemPrice').val();
-                                        let itemType = $('input[name="itemType"]:checked').val();
-                                        let itemCondition = $('input[name="itemCondition"]:checked').val();
-                                        let itemBought = false;
-
+                                        if (editing ===true) {
+                                          const id = $("#itemID").val();
+                                          console.log(id);
+                                          $.ajax({
+                                            url: `${url}/editItem/${id}`,
+                                            type: 'PATCH',
+                                            data: {
+                                              item_name: itemName,
+                                              item_description: itemDescription,
+                                              price: itemPrice,
+                                              clothing_type: itemType,
+                                              condition: itemCondition,                                                bought: itemBought,
+                                              // need to add image uploading
+                                             },
+                                            success: function(result){
+                                              console.log(result);
+                                              editing = false;
+                                              const allItems = $('#cardContainer');
+                                              console.log(allItems);
+                                              // allProducts.each(function(){
+                                              //   console.log($(this).data('id'));
+                                              //   if ($(this).data('id') === id) {
+                                              //     console.log('match');
+                                              //       $(this).find('.productName').text(name);
+                                              //   }
+                                              // });
+                                            },
+                                            error: function(err) {
+                                              console.log(err);
+                                              console.log('something went wrong with editing the product');
+                                            }
+                                        });
+                                        } else {
                                         // send data to db
                                         $.ajax({
                                             url: `${url}/addItem`,
@@ -323,6 +344,7 @@ $('#loginForm').submit(function(){
                                                 console.log(err);
                                             }
                                         });
+                                      }
                                         // send image to server
                                     });
 
@@ -354,3 +376,73 @@ $('#loginForm').submit(function(){
     }
 });
           // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
+
+
+$("#cardContainer").on('click', '.editBtn', function() {
+  event.preventDefault();
+  const username = $('#lUsername').val();
+  const password = $('#lPassword').val();
+
+  if ((username.length === 0)||(password.length === 0)) {
+      console.log('Please enter your username and password');
+  } else {
+    $.ajax({
+      url: `${url}/getUser`,
+      type: 'POST',
+      data: {
+        username: username,
+        password: password
+      },
+      success: function(result){
+             if (result === 'user does not exist'){
+                 console.log('user does not exist');
+             } else if (result === 'invalid password'){
+                 console.log('invalid password');
+             } else {
+                 console.log(result);
+                 sessionStorage.setItem('userID', result['_id']);
+                 sessionStorage.setItem('userName', result['username']);
+                 sessionStorage.setItem('userEmail', result['email']);
+                 $('#logInOutBox').empty();
+                 $('#logInOutBox').append(logoutBtn);
+                 $('#userForm').addClass('d-none');
+                 $('.main').removeClass('d-none');
+                 $('#cardContainer').removeClass('d-none');
+                   itemCard();
+                 ////////
+                 // result.username -> sessionStorage.username
+                 // result.user_id -> sessionStorge.user_id
+                 // this bad baby tells us who's logged in
+                 // and if we know who's logged in, we know whose ID to attach to items and comments
+             }
+         } ,
+      error: function(err){
+          console.log(err);
+          console.log('Something went wrong');
+      }
+  });
+  }
+  const id = $('.dataId').data('id');
+  console.log(id);
+  console.log('button has been clicked');
+  $.ajax({
+    url:`${url}/allItem/${id}`,
+    type: 'POST',
+    data: {
+        userId: sessionStorage['userID']
+    },
+    dataType:'json',
+    success: function(item){
+      console.log(item);
+      // $("#itemName").val(item['name']);
+      // $("#itemPrice").val(item['price']);
+      // $("#itemID").val(item['_id']);
+      // $("#addBtn").text('Edit Product').addClass('btn-warning');
+      // editing = true;
+    },
+    error: function(err){
+      console.log(err);
+      console.log('something went wrong with getting the single product');
+    }
+    });
+});
