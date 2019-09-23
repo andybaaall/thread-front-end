@@ -56,7 +56,7 @@ $(document).ready(function(){
         dataType: 'json',
         success: function(data){
           console.log(data);
-          $('#cardContainer').empty();
+          $('.cardDeck').empty();
           for (var i = 0; i < data.length; i++) {
               let layout = `<div class="row">
                 <div class="card col">
@@ -73,7 +73,7 @@ $(document).ready(function(){
                                 </div>`;
                 }
               layout += `</div>`;
-            $('#cardContainer').append(layout);
+            $('.cardDeck').append(layout);
           }
         },
         error: function(err){
@@ -301,7 +301,7 @@ $('#loginForm').submit(function(){
                                             success: function(result){
                                               console.log(result);
                                               editing = false;
-                                              const allItems = $('#cardContainer');
+                                              const allItems = $('.cardDeck');
                                               console.log(allItems);
                                               // allProducts.each(function(){
                                               //   console.log($(this).data('id'));
@@ -378,7 +378,7 @@ $('#loginForm').submit(function(){
           // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
 
 
-$("#cardContainer").on('click', '.editBtn', function() {
+$(".cardDeck").on('click', '.editBtn', function() {
   event.preventDefault();
   const username = $('#lUsername').val();
   const password = $('#lPassword').val();
