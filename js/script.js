@@ -6,6 +6,26 @@ let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
+
+  // get server details
+  $.ajax({
+    url: 'config.json',
+    type: 'GET',
+    dataType: 'json',
+    success:function(keys){
+      serverURL = keys.SERVER_URL;
+      serverPort = keys.SERVER_PORT;
+      url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
+
+      //
+
+      /////
+    },
+    error: function(){
+      console.log('cannot find config.json file, cannot run application');
+    }
+  });
+
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
@@ -66,13 +86,12 @@ $(document).ready(function(){
                                <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
                                <p class="text-center">${data[i].price}</p>
                              </div>
-                            </div>
-                            `
-            if (sessionStorage['userName']) {
+                            </div>`;
+            if (sessionStorage.userName) {
                 layout += `<div class="btnSet d-flex justify-content-center">
                             <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
                             <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                          </div>`
+                          </div>`;
             }
               layout += `</div>`;
             $('#cardContainer').append(layout);
@@ -85,22 +104,6 @@ $(document).ready(function(){
     });
     };
     itemCard();
-});
-
-$.ajax({
-  url: 'config.json',
-  type: 'GET',
-  dataType: 'json',
-  success:function(keys){
-    serverURL = keys.SERVER_URL;
-    serverPort = keys.SERVER_PORT;
-    url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
-    // need to run a function to get all the items data, right?
-    // getItemsData();
-  },
-  error: function(){
-    console.log('cannot find config.json file, cannot run application');
-  }
 });
 
 $('#registerForm').submit(function(){
@@ -360,7 +363,7 @@ $('#loginForm').submit(function(){
 
 $("#cardContainer").on('click', '.editBtn', function() {
   event.preventDefault();
-  if (!sessionStorage['userID']) {
+  if (!sessionStorage.userID) {
       alert('401, permission denied');
       return;
   }
@@ -371,7 +374,7 @@ $("#cardContainer").on('click', '.editBtn', function() {
     url:`${url}/allItem/${id}`,
     type: 'POST',
     data: {
-        userId: sessionStorage['userID']
+        userId: sessionStorage.userID
     },
     dataType:'json',
     success: function(item){
@@ -386,5 +389,5 @@ $("#cardContainer").on('click', '.editBtn', function() {
       console.log(err);
       console.log('something went wrong with getting the single product');
     }
-  })
+  });
 });
