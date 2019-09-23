@@ -8,7 +8,7 @@ let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
-
+console.log(sessionStorage);
     // get server details, then show all the items for sale in the database
     $.ajax({
         url: 'config.json',
@@ -58,16 +58,16 @@ $(document).ready(function(){
         $('#lPassword').val(null);
     };
 
-    if(sessionStorage.userName){
-        // you're logged in, nice :)
-        $('#logInOutBox').append(logoutBtn);
-        logout();
-    } else {
-        // you're not logged in
-        if (!loginBtn){
-            $('#logInOutBox').append(loginBtn);
-        }
-    }
+    // if(sessionStorage.userName){
+    //     // you're logged in, nice :)
+    //     $('#logInOutBox').append(logoutBtn);
+    //     logout();
+    // } else {
+    //     // you're not logged in
+    //     if (!loginBtn){
+    //         $('#logInOutBox').append(loginBtn);
+    //     }
+    // }
 
     itemCard = () => {
         $.ajax({
@@ -76,25 +76,45 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(data){
                 console.log(data);
-                $('#cardContainer').empty();
+                $('#cardContainer').find('.row').empty();
                 for (var i = 0; i < data.length; i++) {
-                    let layout = `<div class="row">
-                    <div class="card col">
-                    <div class="card-body">
-                    <div id="worktitle" class="card-title">
-                    <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
-                    <p class="text-center">${data[i].price}</p>
-                    </div>
-                    </div>`;
-                    if (sessionStorage.userName) {
-                        layout += `<div class="btnSet d-flex justify-content-center">
-                        <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
-                        <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                        </div>`;
-                    }
-                    layout += `</div>`;
-                    $('#cardContainer').append(layout);
+                    // let layout = `
+                    // <div class="card col">
+                    // <div class="card-body">
+                    // <div id="worktitle" class="card-title">
+                    // <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
+                    // <p class="text-center">${data[i].price}</p>
+                    // </div>
+                    // </div>`;
+                    // if (sessionStorage.userName) {
+                    //     layout += `<div class="btnSet d-flex justify-content-center">
+                    //     <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                    //     <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                    //     </div>`;
+                    // }
+                    // layout += `</div>`;
+
+                    let layout = `
+                        <div class="col-12 col-md-3">
+                            <div class="card" data-id="${data[i]._id}">
+                                <div class="card-body">
+                                    <div id="worktitle" class="card-title">
+                                        <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
+                                        <p class="text-center">${data[i].price}</p>
+                                    </div>`;
+                                    if (sessionStorage.userName) {
+                                        layout += `<div class="btnSet d-flex justify-content-center">
+                                        <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                                        <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                                        </div>`;
+                                    }
+                                layout += `</div>
+                            </div>
+                        </div>
+                    `;
+                    $('#cardContainer').find('.row').append(layout);
                 }
+                $('#cardContainer').removeClass('d-none');
             },
             error: function(err){
                 console.log(err);
@@ -249,36 +269,57 @@ addItem = () => {
 //comment here//
 
 
-// what on earth is this
-// <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
 
-$("#cardContainer").on('click', '.editBtn', function() {
+$('.cardDeck').on('click', '.removeBtn', function(){
     event.preventDefault();
-    if (!sessionStorage.userID) {
+    if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
     }
-    const id = $('.dataId').data('id');
-    console.log(id);
-    console.log('button has been clicked');
+    const id = $('dataId').data('id');
     $.ajax({
-        url:`${url}/allItem/${id}`,
-        type: 'POST',
-        data: {
-            userId: sessionStorage.userID
-        },
-        dataType:'json',
-        success: function(item){
-            console.log(item);
-            // $("#itemName").val(item['name']);
-            // $("#itemPrice").val(item['price']);
-            // $("#itemID").val(item['_id']);
-            // $("#addBtn").text('Edit Product').addClass('btn-warning');
-            // editing = true;
-        },
-        error: function(err){
-            console.log(err);
-            console.log('something went wrong with getting the single product');
-        }
+      url: `${url}/addItem/${id}`,
+      type: 'DELETE',
+      data: {
+          userId: sessionStorage.userID
+      },
+      success:function(result){
+          if(result == '401'){
+              alert('401 UNAUTHORIZED');
+          } else {
+              $('.cardRow').remove();
+          }
+      },
+      error:function(err) {
+        console.log(err);
+        console.log('something went wrong deleting the product');
+      }
+  });
+});
+
+////// not working update
+$("#cardContainer").on('click', '.editBtn', function() {
+  event.preventDefault();
+  const id = $(this).parent().parent().parent().data('id');
+  console.log(id);
+  $.ajax({
+    url:`${url}/addItem/${id}`,
+    type: 'PATCH',
+    data: {
+        userId: sessionStorage.userID
+    },
+    dataType:'json',
+    success: function(item){
+      console.log(item);
+      // $("#itemName").val(item['name']);
+      // $("#itemPrice").val(item['price']);
+      // $("#itemID").val(item['_id']);
+      // $("#addBtn").text('Edit Product').addClass('btn-warning');
+      // editing = true;
+    },
+    error: function(err){
+      console.log(err);
+      console.log('something went wrong with getting the single product');
+    }
     });
 });
