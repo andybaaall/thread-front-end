@@ -60,19 +60,22 @@ $(document).ready(function(){
           console.log(data);
           $('#cardContainer').empty();
           for (var i = 0; i < data.length; i++) {
-            $('#cardContainer').append(`
-              <div class="card" style="width:18rem;>
-                <div class="card-body">
-                 <div id="worktitle" class="card-title">
-                   <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
-                   <p class="text-center">${data[i].price}</p>
-                 </div>
-                  <div class="d-flex justify-content-between align-items-center btn-group">
-                    <button class="btn btn-primary" type="button" name="button">Detail</button>
-                  </div>
-                </div>
-              </div>
-            `);
+              let layout = `<div class="row">
+                <div class="card col">
+                  <div class="card-body">
+                   <div id="worktitle" class="card-title">
+                     <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
+                     <p class="text-center">${data[i].price}</p>
+                   </div>
+                  </div>`;
+                 if (sessionStorage.userName) {
+                     layout += `<div class="btnSet d-flex justify-content-center">
+                                    <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                                    <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                                </div>`;
+            }
+              layout += `</div>`;
+            $('#cardContainer').append(layout);
           }
         },
         error: function(err){
@@ -172,7 +175,7 @@ $('#loginForm').submit(function(){
                     sessionStorage.setItem('userID', result._id);
                     sessionStorage.setItem('userName', result.username);
                     sessionStorage.setItem('userEmail', result.email);
-
+                    itemCard();
                     $('#logInOutBox').append(logoutBtn);
                     ////////
 
