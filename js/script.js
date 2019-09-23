@@ -1,11 +1,11 @@
 let serverURL;
 let serverPort;
 let url;
+let editing = false;
 let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button" onclick="login()">Login</button>`;
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
-    // console.log(sessionStorage);
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
@@ -20,16 +20,15 @@ $(document).ready(function(){
             // console.log('got a click');
             $('.main').addClass('d-none');
             $('#userForm').removeClass('d-none');
-            // $('#logInOutBox').hide(loginBtn);
-            // $('#logInOutBox').append(logoutBtn);
         });
     }
 
     logout = () => {
-        // console.log('clicked logout button');
+        console.log('clicked logout button');
         $('#logInOutBox').empty();
         $('#logInOutBox').append(loginBtn);
         sessionStorage.clear();
+        $('#cardContainer').addClass('d-none');
     };
 
     login = () => {
@@ -60,19 +59,25 @@ $(document).ready(function(){
           console.log(data);
           $('#cardContainer').empty();
           for (var i = 0; i < data.length; i++) {
-            $('#cardContainer').append(`
-              <div class="card" style="width:18rem;>
-                <div class="card-body">
-                 <div id="worktitle" class="card-title">
-                   <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
-                   <p class="text-center">${data[i].price}</p>
-                 </div>
-                  <div class="d-flex justify-content-between align-items-center btn-group">
-                    <button class="btn btn-primary" type="button" name="button">Detail</button>
-                  </div>
-                </div>
-              </div>
-            `);
+            let layout = `<div class="row">
+                          <div class="card col">
+                            <div class="card-body">
+                             <div id="worktitle" class="card-title">
+                               <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
+                               <p class="text-center">${data[i].price}</p>
+                             </div>
+                            </div>
+                            `
+            if (sessionStorage['userName']) {
+              // if (sessionStorage['userID'] === data[i].user_id) {
+                layout += `<div class="btnSet d-flex justify-content-center">
+                            <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                            <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                          </div>`
+              // }
+            }
+              layout += `</div>`;
+            $('#cardContainer').append(layout);
           }
         },
         error: function(err){
@@ -81,9 +86,7 @@ $(document).ready(function(){
         }
     });
     };
-
     itemCard();
-
 });
 
 $.ajax({
@@ -168,11 +171,10 @@ $('#loginForm').submit(function(){
                     console.log('invalid password');
                 } else {
                     // console.log(result);
-                    // itemCard();
                     sessionStorage.setItem('userID', result._id);
                     sessionStorage.setItem('userName', result.username);
                     sessionStorage.setItem('userEmail', result.email);
-
+                    itemCard();
                     $('#logInOutBox').append(logoutBtn);
                     ////////
 
@@ -285,14 +287,40 @@ $('#loginForm').submit(function(){
                                     $('#addItemForm').submit(() => {
                                         event.preventDefault();
                                         // need to put some validation in here
-
-                                        let itemName = $('#itemName').val();
-                                        let itemDescription = $('#itemDescription').val();
-                                        let itemPrice = $('#itemPrice').val();
-                                        let itemType = $('input[name="itemType"]:checked').val();
-                                        let itemCondition = $('input[name="itemCondition"]:checked').val();
-                                        let itemBought = false;
-
+                                        if (editing ===true) {
+                                          const id = $("#itemID").val();
+                                          $.ajax({
+                                            url: `${serverURL}:${serverPort}/editProduct/${id}`,
+                                            type: 'PATCH',
+                                            data: {
+                                              name: name,
+                                              price: price,
+                                              userId: sessionStorage['userID']
+                                             },
+                                            success: function(result){
+                                              console.log(result);
+                                              $("#itemName").val(null);
+                                              $("#itemPrice").val(null);
+                                              $("#iemID").val(null);
+                                              $("#addBtn").text('Add New Product').removeClass('btn-warning');
+                                              $("#heading").text('Add New Product');
+                                              editing = false;
+                                              const allProducts = $('.productItem');
+                                              console.log(allProducts);
+                                              allProducts.each(function(){
+                                                console.log($(this).data('id'));
+                                                if ($(this).data('id') === id) {
+                                                  console.log('match');
+                                                    $(this).find('.productName').text(name);
+                                                }
+                                              });
+                                            },
+                                            error: function(err) {
+                                              console.log(err);
+                                              console.log('something went wrong with editing the product');
+                                            }
+                                          })
+                                        } else {
                                         // send data to db
                                         $.ajax({
                                             url: `${url}/addItem`,
@@ -320,6 +348,7 @@ $('#loginForm').submit(function(){
                                                 console.log(err);
                                             }
                                         });
+                                      }
                                         // send image to server
                                     });
 
