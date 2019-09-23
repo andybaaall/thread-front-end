@@ -14,30 +14,10 @@
             <span class="navbar-toggler-icon white"></span>
         </button>
         <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
+
         <div id="logInOutBox">
 
         </div>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active mx-auto">
-            <a class="nav-link" href="#">TOPS</a>
-          </li>
-          <li class="nav-item mx-auto">
-            <a class="nav-link" href="#">BOTTOMS</a>
-          </li>
-          <li class="nav-item mx-auto">
-            <a class="nav-link" href="#">OUTERWEAR</a>
-          </li>
-          <li class="nav-item mx-auto">
-            <a class="nav-link" href="#">OTHER</a>
-          </li>
-        </ul>
-      </div>
-
-        <!-- add div with id for login/out button -->
-        <!-- <button id="loginBtn" class="btn btn-light" type="button" name="button">Login</button>
-        <button id="logoutBtn" class="btn btn-light d-none" type="button" name="button">Logout</button> -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active mx-auto">
@@ -57,21 +37,15 @@
     </nav>
 
     <main role="main" class="main">
+
         <div id="pageContainer" class="container text-center">
             <p class="my-4 text-center lead text-muted intro">Browse, buy and sell <br/> pre-loved designer garments</p>
             <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
+            <div class="card-deck" id="cardContainer">
         </div>
-    </main>
+        </div>
 
-    <footer class="text-muted">
-        <!-- <div class="container">
-        <p class="float-right">
-        <a href="#">Back to top</a>
-    </p>
-    <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-    <p>New to Bootstrap? <a href="https://getbootstrap.com/">Visit the homepage</a> or read our <a href="/docs/4.3/getting-started/introduction/">getting started guide</a>.</p>
-</div> -->
-</footer>
+    </main>
 
 <section id="userForm" class="d-none">
     <div class="container my-3">
@@ -120,6 +94,37 @@
     </div>
 
 </section>
+
+    <div class="uploadModal modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="row justify-content-center my-5">
+            <div class="col-6">
+              <form id="imageUploader" enctype="multipart/form-data">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                  </div>
+                  <div class="form-group">
+                      <input type="text" id="itemName" placeholder="Item Name" class="form-control mt-2 hidden">
+                  </div>
+                  <div class="form-group">
+                      <input type="text" id="clothingType" placeholder="Clothing Type" class="form-control mt-2 hidden">
+                  </div>
+                  <div class="form-group">
+                      <input type="text" id="price" placeholder="$" class="form-control mt-2 hidden">
+                  </div>
+                  <div class="form-group">
+                      <input type="text" id="condition" placeholder="condition" class="form-control mt-2 hidden">
+                  </div>
+                  <button type="button" id="uploadBtn" name="button" class="btn btn-primary btn-block hidden">Upload Image</button>
+                  <button type="button" id="cancelBtn" name="button" class="btn btn-outline-secondary btn-block mt-2 hidden">Cancel Upload</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 

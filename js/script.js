@@ -1,36 +1,35 @@
 let serverURL;
 let serverPort;
 let url;
+let editing = false;
 let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="button" onclick="login()">Login</button>`;
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
-  // console.log(sessionStorage);
-  if(sessionStorage.userName){
-    // you're logged in, nice :)
-    $('#logInOutBox').append(logoutBtn);
-    $('#logoutBtn').click(function(){
-      console.log('got a click');
-    });
+    if(sessionStorage.userName){
+        // you're logged in, nice :)
+        $('#logInOutBox').append(logoutBtn);
+        $('#logoutBtn').click(function(){
+            console.log('got a click');
+        });
 
-  } else {
-    // you're not logged in
-    $('#logInOutBox').append(loginBtn);
-    $('#loginBtn').click(function(){
-      // console.log('got a click');
-      $('.main').addClass('d-none');
-      $('#userForm').removeClass('d-none');
-      // $('#logInOutBox').hide(loginBtn);
-      // $('#logInOutBox').append(logoutBtn);
-    });
-  }
+    } else {
+        // you're not logged in
+        $('#logInOutBox').append(loginBtn);
+        $('#loginBtn').click(function(){
+            // console.log('got a click');
+            $('.main').addClass('d-none');
+            $('#userForm').removeClass('d-none');
+        });
+    }
 
-  logout = () => {
-    // console.log('clicked logout button');
-    $('#logInOutBox').empty();
-    $('#logInOutBox').append(loginBtn);
-    sessionStorage.clear();
-  };
+    logout = () => {
+        console.log('clicked logout button');
+        $('#logInOutBox').empty();
+        $('#logInOutBox').append(loginBtn);
+        sessionStorage.clear();
+        $('#cardContainer').addClass('d-none');
+    };
 
   login = () => {
     console.log('clicked login button');
@@ -51,6 +50,41 @@ $(document).ready(function(){
     }
   }
 
+    itemCard = () => {
+      $.ajax({
+        url: `${url}/allItems`,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+          console.log(data);
+          $('#cardContainer').empty();
+          for (var i = 0; i < data.length; i++) {
+            let layout = `<div class="row">
+                          <div class="card col">
+                            <div class="card-body">
+                             <div id="worktitle" class="card-title">
+                               <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
+                               <p class="text-center">${data[i].price}</p>
+                             </div>
+                            </div>
+                            `
+            if (sessionStorage['userName']) {
+                layout += `<div class="btnSet d-flex justify-content-center">
+                            <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                            <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                          </div>`
+            }
+              layout += `</div>`;
+            $('#cardContainer').append(layout);
+          }
+        },
+        error: function(err){
+          console.log(err);
+          console.log('Something went wrong');
+        }
+    });
+    };
+    itemCard();
 });
 
 $.ajax({
@@ -166,19 +200,13 @@ $('#loginForm').submit(function(){
                 } else if (result === 'invalid password'){
                   console.log('invalid password');
                 } else {
-                  console.log(result);
-                  sessionStorage.setItem('userID', result._id);
-                  sessionStorage.setItem('userName', result.username);
-                  sessionStorage.setItem('userEmail', result.email);
-                  $('#loginBtn').hide();
-                  $('#logInOutBox').empty();
-                  $('#logInOutBox').append(logoutBtn);
-                  ////////
-
-                  // result.username -> sessionStorage.username
-                  // result.user_id -> sessionStorge.user_id
-                  // this bad baby tells us who's logged in
-                  // and if we know who's logged in, we know whose ID to attach to items and comments
+                    // console.log(result);
+                    sessionStorage.setItem('userID', result._id);
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userEmail', result.email);
+                    itemCard();
+                    $('#logInOutBox').append(logoutBtn);
+                    ////////
 
                   // create Item
                   $('#pageContainer').append(`<div class="addItemBox mx-5 my-2 text-left">
@@ -327,35 +355,36 @@ $('#loginForm').submit(function(){
     });
   }
 });
+          // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
 
-//
-// itemCard = () => {
-//   $.ajax({
-//     url: `{url}/item`,
-//     type: 'GET',
-//     dataType: 'json',
-//     success: function(data){
-//       console.log(data);
-//       $('#cardContainer').empty();
-//       for (var i = 0; i < data.length; i++) {
-//         $('#cardContainer').append(`
-//           <div class="card col-6">
-//           <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
-//             <div>
-//              <div id="worktitle" class="card-title">
-//                <h5 class="card-title text-center mt-3" data-id="${data[i].itemName}">${data[i].itemName}</h5>
-//                <p class="text-center">${data[i].price}</p>
-//              </div>
-//               <div class="d-flex justify-content-between align-items-center btn-group">
-//                 <button class="btn btn-primary" type="button" name="button">Detail</button>
-//               </div>
-//             </div>
-//           </div>`);
-//       }
-//     },
-//     error: function(err){
-//       console.log(err);
-//       console.log('Something went wrong');
-//     }
-//   })
-// }
+
+$("#cardContainer").on('click', '.editBtn', function() {
+  event.preventDefault();
+  if (!sessionStorage['userID']) {
+      alert('401, permission denied');
+      return;
+  }
+  const id = $('.dataId').data('id');
+  console.log(id);
+  console.log('button has been clicked');
+  $.ajax({
+    url:`${url}/allItem/${id}`,
+    type: 'POST',
+    data: {
+        userId: sessionStorage['userID']
+    },
+    dataType:'json',
+    success: function(item){
+      console.log(item);
+      // $("#itemName").val(item['name']);
+      // $("#itemPrice").val(item['price']);
+      // $("#itemID").val(item['_id']);
+      // $("#addBtn").text('Edit Product').addClass('btn-warning');
+      // editing = true;
+    },
+    error: function(err){
+      console.log(err);
+      console.log('something went wrong with getting the single product');
+    }
+  })
+});
