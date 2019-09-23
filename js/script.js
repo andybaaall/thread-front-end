@@ -6,6 +6,7 @@ let loginBtn = `<button id="loginBtn" class="btn btn-light" type="button" name="
 let logoutBtn = `<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`;
 
 $(document).ready(function(){
+    console.log(sessionStorage);
     if(sessionStorage.userName){
         // you're logged in, nice :)
         $('#logInOutBox').append(logoutBtn);
@@ -58,7 +59,7 @@ $(document).ready(function(){
           console.log(data);
           $('.cardDeck').empty();
           for (var i = 0; i < data.length; i++) {
-              let layout = `<div class="row">
+              let layout = `<div class="row cardRow">
                 <div class="card col">
                   <div class="card-body">
                    <div id="worktitle" class="card-title">
@@ -378,71 +379,57 @@ $('#loginForm').submit(function(){
           // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
 
 
-$(".cardDeck").on('click', '.editBtn', function() {
-  event.preventDefault();
-  const username = $('#lUsername').val();
-  const password = $('#lPassword').val();
-
-  if ((username.length === 0)||(password.length === 0)) {
-      console.log('Please enter your username and password');
-  } else {
+// Delete item
+$('.cardDeck').on('click', '.removeBtn', function(){
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
+    }
+    const id = $('dataId').data('id');
     $.ajax({
-      url: `${url}/getUser`,
-      type: 'POST',
+      url: `${url}/addItem/${id}`,
+      type: 'DELETE',
       data: {
-        username: username,
-        password: password
+          userId: sessionStorage.userID
       },
-      success: function(result){
-             if (result === 'user does not exist'){
-                 console.log('user does not exist');
-             } else if (result === 'invalid password'){
-                 console.log('invalid password');
-             } else {
-                 console.log(result);
-                 sessionStorage.setItem('userID', result['_id']);
-                 sessionStorage.setItem('userName', result['username']);
-                 sessionStorage.setItem('userEmail', result['email']);
-                 $('#logInOutBox').empty();
-                 $('#logInOutBox').append(logoutBtn);
-                 $('#userForm').addClass('d-none');
-                 $('.main').removeClass('d-none');
-                 $('#cardContainer').removeClass('d-none');
-                   itemCard();
-                 ////////
-                 // result.username -> sessionStorage.username
-                 // result.user_id -> sessionStorge.user_id
-                 // this bad baby tells us who's logged in
-                 // and if we know who's logged in, we know whose ID to attach to items and comments
-             }
-         } ,
-      error: function(err){
-          console.log(err);
-          console.log('Something went wrong');
+      success:function(result){
+          if(result == '401'){
+              alert('401 UNAUTHORIZED');
+          } else {
+              $('.cardRow').remove();
+          }
+      },
+      error:function(err) {
+        console.log(err);
+        console.log('something went wrong deleting the product');
       }
   });
-  }
+});
+
+////// not working update
+$(".cardDeck").on('click', '.editBtn', function() {
+  event.preventDefault();
   const id = $('.dataId').data('id');
   console.log(id);
-  console.log('button has been clicked');
-  $.ajax({
-    url:`${url}/allItem/${id}`,
-    type: 'POST',
-    data: {
-        userId: sessionStorage['userID']
-    },
-    dataType:'json',
-    success: function(item){
-      console.log(item);
-      // $("#itemName").val(item['name']);
-      // $("#itemPrice").val(item['price']);
-      // $("#itemID").val(item['_id']);
-      // $("#addBtn").text('Edit Product').addClass('btn-warning');
-      // editing = true;
-    },
-    error: function(err){
-      console.log(err);
-      console.log('something went wrong with getting the single product');
-    }
-    });
+  // $.ajax({
+  //   url:`${url}/allItem/${id}`,
+  //   type: 'POST',
+  //   data: {
+  //       userId: sessionStorage.userID
+  //   },
+  //   dataType:'json',
+  //   success: function(item){
+  //     console.log(item);
+  //     // $("#itemName").val(item['name']);
+  //     // $("#itemPrice").val(item['price']);
+  //     // $("#itemID").val(item['_id']);
+  //     // $("#addBtn").text('Edit Product').addClass('btn-warning');
+  //     // editing = true;
+  //   },
+  //   error: function(err){
+  //     console.log(err);
+  //     console.log('something went wrong with getting the single product');
+  //   }
+  //   });
 });
