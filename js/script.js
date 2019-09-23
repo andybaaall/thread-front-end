@@ -167,7 +167,7 @@ $('#loginForm').submit(function(){
             data: {
                 username: username,
                 password: password
-                },
+            },
             success: function(result){
                 if (result === 'user does not exist'){
                     console.log('user does not exist');
@@ -189,7 +189,7 @@ $('#loginForm').submit(function(){
 
                     $('#pageContainer').append(addItemBox);
                     itemCard(); // we need to rework this so that it appends and empties, rather than switches from d-flex to d-none
-                    addItem();  
+                    addItem();
                 }
             },
             error: function(err){
@@ -201,58 +201,53 @@ $('#loginForm').submit(function(){
 });
 
 addItem = () => {
-    console.log('add an item');
-    // $("#addItemSubmitBtn").on('click', '.editBtn', function(event) {
-    //     console.log('got a flippin click on add item');
-    //
-    //     event.preventDefault();
-    // });
+    $('#addItemForm').submit(() => {
+        console.log('lets add an item');
+        event.preventDefault();
+        // need to put some validation in here
+        // and need to add the file name to the input field when it changes.
+        // that's if file.length, do some stuff.
+
+        let fd = new FormData();
+
+        let itemName = $('#itemName').val();
+        let itemDescription = $('#itemDescription').val();
+        let itemPrice = $('#itemPrice').val();
+        let itemImage = $('#itemImage')[0].files[0];
+        let itemType = $('input[name="itemType"]:checked').val();
+        let itemCondition = $('input[name="itemCondition"]:checked').val();
+        let itemBought = false;
+
+        fd.append('itemName', itemName);
+        fd.append('itemDescription', itemDescription);
+        fd.append('itemPrice', itemPrice);
+        fd.append('itemImage', itemImage);
+        fd.append('itemType', itemType);
+        fd.append('itemCondition', itemCondition);
+        fd.append('itemBought', itemBought);
+        fd.append('userID', sessionStorage.userID);
+
+        $.ajax({
+            url: `${url}/addItem`,
+            type: 'POST',
+            data: fd,
+            // dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: (result) => {
+                console.log(result);
+                // clear form values
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    });
 };
 
 
 
-// $('#addItemForm').submit(() => {
-//     console.log('lets add an item');
-//     event.preventDefault();
-//     // need to put some validation in here
-//     // and need to add the file name to the input field when it changes.
-//     // that's if file.length, do some stuff.
-//
-//     let fd = new FormData();
-//
-//     let itemName = $('#itemName').val();
-//     let itemDescription = $('#itemDescription').val();
-//     let itemPrice = $('#itemPrice').val();
-//     let itemImage = $('#itemImage')[0].files[0];
-//     let itemType = $('input[name="itemType"]:checked').val();
-//     let itemCondition = $('input[name="itemCondition"]:checked').val();
-//     let itemBought = false;
-//
-//     fd.append('itemName', itemName);
-//     fd.append('itemDescription', itemDescription);
-//     fd.append('itemPrice', itemPrice);
-//     fd.append('itemImage', itemImage);
-//     fd.append('itemType', itemType);
-//     fd.append('itemCondition', itemCondition);
-//     fd.append('itemBought', itemBought);
-//     fd.append('userID', sessionStorage.userID);
-//
-//     $.ajax({
-//         url: `${url}/addItem`,
-//         type: 'POST',
-//         data: fd,
-//         // dataType: 'json',
-//         contentType: false,
-//         processData: false,
-//         success: (result) => {
-//             console.log(result);
-//             // clear form values
-//         },
-//         error: (err) => {
-//             console.log(err);
-//         }
-//     });
-// });
+
 
 // what on earth is this
 // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
