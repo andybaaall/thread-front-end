@@ -63,18 +63,16 @@ $(document).ready(function(){
                           <div class="card col">
                             <div class="card-body">
                              <div id="worktitle" class="card-title">
-                               <h5 class="card-title text-center mt-3" data-id="${data[i].item_name}">${data[i].item_name}</h5>
+                               <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
                                <p class="text-center">${data[i].price}</p>
                              </div>
                             </div>
                             `
             if (sessionStorage['userName']) {
-              // if (sessionStorage['userID'] === data[i].user_id) {
                 layout += `<div class="btnSet d-flex justify-content-center">
                             <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
                             <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
                           </div>`
-              // }
             }
               layout += `</div>`;
             $('#cardContainer').append(layout);
@@ -289,31 +287,30 @@ $('#loginForm').submit(function(){
                                         // need to put some validation in here
                                         if (editing ===true) {
                                           const id = $("#itemID").val();
+                                          console.log(id);
                                           $.ajax({
-                                            url: `${serverURL}:${serverPort}/editProduct/${id}`,
+                                            url: `${url}/editItem/${id}`,
                                             type: 'PATCH',
                                             data: {
-                                              name: name,
-                                              price: price,
-                                              userId: sessionStorage['userID']
+                                              item_name: itemName,
+                                              item_description: itemDescription,
+                                              price: itemPrice,
+                                              clothing_type: itemType,
+                                              condition: itemCondition,                                                bought: itemBought,
+                                              // need to add image uploading
                                              },
                                             success: function(result){
                                               console.log(result);
-                                              $("#itemName").val(null);
-                                              $("#itemPrice").val(null);
-                                              $("#iemID").val(null);
-                                              $("#addBtn").text('Add New Product').removeClass('btn-warning');
-                                              $("#heading").text('Add New Product');
                                               editing = false;
-                                              const allProducts = $('.productItem');
-                                              console.log(allProducts);
-                                              allProducts.each(function(){
-                                                console.log($(this).data('id'));
-                                                if ($(this).data('id') === id) {
-                                                  console.log('match');
-                                                    $(this).find('.productName').text(name);
-                                                }
-                                              });
+                                              const allItems = $('#cardContainer');
+                                              console.log(allItems);
+                                              // allProducts.each(function(){
+                                              //   console.log($(this).data('id'));
+                                              //   if ($(this).data('id') === id) {
+                                              //     console.log('match');
+                                              //       $(this).find('.productName').text(name);
+                                              //   }
+                                              // });
                                             },
                                             error: function(err) {
                                               console.log(err);
@@ -380,3 +377,35 @@ $('#loginForm').submit(function(){
     }
 });
           // <img id="workImg" src="${data[i].imgURL}" class="card-img-top">
+
+
+$("#cardContainer").on('click', '.editBtn', function() {
+  event.preventDefault();
+  if (!sessionStorage['userID']) {
+      alert('401, permission denied');
+      return;
+  }
+  const id = $('.dataId').data('id');
+  console.log(id);
+  console.log('button has been clicked');
+  $.ajax({
+    url:`${url}/allItem/${id}`,
+    type: 'POST',
+    data: {
+        userId: sessionStorage['userID']
+    },
+    dataType:'json',
+    success: function(item){
+      console.log(item);
+      // $("#itemName").val(item['name']);
+      // $("#itemPrice").val(item['price']);
+      // $("#itemID").val(item['_id']);
+      // $("#addBtn").text('Edit Product').addClass('btn-warning');
+      // editing = true;
+    },
+    error: function(err){
+      console.log(err);
+      console.log('something went wrong with getting the single product');
+    }
+  })
+});
