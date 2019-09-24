@@ -237,6 +237,10 @@ addItem = () => {
 
 $('#cardContainer').on('click', '.editBtn', function() {
   event.preventDefault();
+  if(!sessionStorage.userID){
+      alert('401, permission denied');
+      return;
+  }
   const id = $(this).parent().parent().parent().data('id');
   console.log(id);
   $.ajax({
@@ -247,11 +251,15 @@ $('#cardContainer').on('click', '.editBtn', function() {
     },
     dataType:'json',
     success: function(item){
-      $("#itemName").val();
-      $("#itemPrice").val();
-      $("#itemID").val();
-      // $("#addBtn").text('Edit Product').addClass('btn-warning');
-      editing = true;
+      if (item == '401') {
+          alert('401 UNAUTHORIZED');
+      } else {
+        $("#itemName").val();
+        $("#itemPrice").val();
+        $("#itemID").val();
+        // $("#addBtn").text('Edit Product').addClass('btn-warning');
+        editing = true;
+      }
     },
     error: function(err){
       console.log(err);
