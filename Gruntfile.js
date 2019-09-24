@@ -36,7 +36,7 @@ module.exports = function(grunt){
       },
         watch: {
             files: ['<%= jshint.files %>', 'css/style.css'],
-            tasks: ['jshint', 'csslint', 'cssmin']
+            tasks: ['jshint', 'csslint']
         }
     });
     // load plugins
