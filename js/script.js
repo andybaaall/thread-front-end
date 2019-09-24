@@ -18,7 +18,6 @@ $(document).ready(() => {
             console.log('cannot find config.json file, cannot run application');
         }
     });
-
     if (sessionStorage.userName) {
         // user is logged in
         showLogoutBtn();
