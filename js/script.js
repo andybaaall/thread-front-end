@@ -97,7 +97,6 @@ console.log(sessionStorage);
 
 $('#registerForm').submit(function(){
     event.preventDefault();
-
     console.log('got a click');
     const username = $('#rUsername').val();
     const email = $('#rEmail').val();
@@ -128,7 +127,9 @@ $('#registerForm').submit(function(){
                 if (result === 'Invalid user') {
                     $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
                 } else {
+                    console.log('now you are member');
                     $('#loginBtn').text('Logout');
+                    // $('.main').removeClass('d-none');
                 }
             },
             error: function(err){
