@@ -5,17 +5,142 @@
     <meta charset="utf-8">
     <title>Thread</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,500,700,900|Pacifico&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+    <!-- SOPHIE'S BEAUTIFUL NAV BAR WITH DROPDOWN MENU -->
+    <nav class="navbar navbar-light bg-thread fixed">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon white"></span>
+        </button>
+        <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
+
+        <div id="logInOutBox">
+
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active mx-auto">
+                    <a class="nav-link" href="#">TOPS</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">BOTTOMS</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">OUTERWEAR</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="#">OTHER</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- SOPHIE'S BEAUTIFUL HERO IMAGE AND CARD CONTAINER -->
+    <main role="main" class="main">
+        <div class="container text-center">
+            <p class="my-4 text-center lead text-muted intro">Browse, buy and sell <br/> pre-loved designer garments</p>
+            <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
+        </div>
+            <div id="cardContainer" class="container d-none">
+                <div class="row">
+
+                </div>
+            <!-- <button id="addItemBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Item</button> -->
+            <!-- <button id="deleteItemBtn" type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Delete Item</button> -->
+
+          </div>
+    </main>
+
+    <!-- CONTAINER FOR LOGIN AND REGISTER FORMS; ONLY ONE SHOULD APPEAR AT A TIME, TRIGGERED BY CLICKING THE LOGIN OR REGISTER BUTTON -->
+    <section id="userForm" class="d-none">
+        <div class="container my-3">
+            <!-- LOGIN FORM CONTAINER -->
+            <div class="px-3" id="loginFormBox">
+                <p class="font-weight-bold text-secondary mt-3 h4">Login</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="text-secondary" for="lUsername">Username</label>
+                        <input type="text" name="lUsername" id="lUsername" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="lPassword">Password</label>
+                        <input type="password" name="lPassword" id="lPassword" class="form-control" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="button" class="btn btn-dark btn-block">Login</button>
+                    </div>
+                </form>
+            </div>
+            <!-- REGISTER FORM CONTAINER -->
+            <div class="px-3" id="registerFormBox">
+                <p class="font-weight-bold text-secondary mt-3 h4">Register</p>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label class="text-secondary" for="rUsername">Username</label>
+                        <input type="text" name="rUsername" id="rUsername" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="rEmail">Email</label>
+                        <input type="email" name="rEmail" id="rEmail" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="rPassword">Password</label>
+                        <input type="password" name="rPassword" id="rPassword" class="form-control" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="rConfirmPassword">Confirm Password</label>
+                        <input type="password" name="rConfirmPassword" id="rConfirmPassword" class="form-control">
+                    </div>
+                    <div id="errRego"></div>
+                    <div class="form-group">
+                        <button type="submit" name="button" class="btn btn-dark btn-block">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL INPUT FORM FOR UPLOADING A NEW ITEM TO THE DATABASE & GALLERY -->
+    <div class="uploadModal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="row justify-content-center my-5">
+                <div class="col-6">
+                  <form id="imageUploader" enctype="multipart/form-data">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                      </div>
+                      <div class="form-group">
+                          <input type="text" id="itemName" placeholder="Item Name" class="form-control mt-2 hidden">
+                      </div>
+                      <div class="form-group">
+                          <input type="text" id="clothingType" placeholder="Clothing Type" class="form-control mt-2 hidden">
+                      </div>
+                      <div class="form-group">
+                          <input type="text" id="price" placeholder="$" class="form-control mt-2 hidden">
+                      </div>
+                      <div class="form-group">
+                          <input type="text" id="condition" placeholder="Condition" class="form-control mt-2 hidden">
+                      </div>
+                      <button type="button" id="uploadBtn" name="button" class="btn btn-primary btn-block hidden">Upload Image</button>
+                      <button type="button" id="cancelBtn" name="button" class="btn btn-outline-secondary btn-block mt-2 hidden">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
 
-
-<script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
-<script src="node_modules/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
-<script src="node_modules/popper.js/dist/umd/popper.min.js" charset="utf-8"></script>
-<script src="js/script.js" charset="utf-8"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.min.js" charset="utf-8"></script>
+    <script src="js/script.js" charset="utf-8"></script>
 </body>
 </html>
