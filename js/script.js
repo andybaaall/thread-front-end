@@ -70,6 +70,7 @@ console.log(sessionStorage);
                             <div class="card" data-id="${data[i]._id}">
                                 <div class="card-body">
                                     <div id="worktitle" class="card-title">
+                                      <img class="img-fluid" src="${data[i].image_URL}">
                                         <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                         <p class="text-center">${data[i].price}</p>
                                     </div>`;
