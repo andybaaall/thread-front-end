@@ -14,6 +14,8 @@ $(document).ready(() => {
             serverPort = keys.SERVER_PORT;
             url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
             showItems();
+            showRegisterBtn();
+            showLoginBtn();
         },
         error: function(){
             console.log('cannot find config.json file, cannot run application');
@@ -120,7 +122,8 @@ const hideLoginForm = () => {
 
 };
 const hideRegisterForm = () => {
-
+    $('#userForm').addClass('d-none');
+    $('#registerFormBox').addClass('d-none');
 
 };
 const hideAddItemForm = () => {
@@ -145,9 +148,9 @@ $('#logoutBtn').click(() => {
       hideLogoutBtn();
       showRegisterBtn();
       showLoginBtn();
-      sessionStorage.clear();
       $('#cardContainer').addClass('d-none');
-
+      showItems();
+      sessionStorage.clear();
 });
 
 $('#registerBtn').click(() => {
