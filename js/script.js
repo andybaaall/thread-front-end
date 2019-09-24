@@ -30,59 +30,8 @@ $(document).ready(() => {
 });
 
 showItems = () => {
-    $.ajax({
-        url: `${url}/allItems`,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data){
-            console.log(data);
-            $('#cardContainer').find('.row').empty();
-            for (var i = 0; i < data.length; i++) {
-                let layout = `
-                    <div class="col-12 col-md-3">
-                        <div class="card" data-id="${data[i]._id}">
-                            <div class="card-body">
-                                <div id="worktitle" class="card-title">
-                                    <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                                    <p class="text-center">${data[i].price}</p>
-                                </div>`;
-                                if (sessionStorage.userName) {
-                                    layout += `<div class="btnSet d-flex justify-content-center">
-                                    <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
-                                    <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                                    </div>`;
-                                }
-                            layout += `</div>
-                        </div>
-                    </div>
-                `;
-                $('#cardContainer').find('.row').append(layout);
-            }
-            $('#cardContainer').removeClass('d-none');
-        },
-        error: function(err){
-            console.log(err);
-            console.log('Something went wrong');
-        }
-    });
+
 };
-
-
-// fetches stuff from the DB and puts it into cards
-// const showItems = () => {
-//     // clear items
-//
-//     if (sessionStorage.username) {
-//         // user is logged in
-//         // get all of the items from the database
-//         // put each one into a card or something
-//     } else {
-//         // user is not logged in
-//         // get all of the items from the database
-//         // put each one into a card or something
-//         // append an editItemBtn (and, eventually, deleteItemBtn) to each one with the right userID
-//     }
-// };
 
 // sets session storage when user is logged in (or has just registered)
 const setSessionStorage = (userID) => {
@@ -101,47 +50,22 @@ const clearForms = () => {
 
 // these all show DOM elements
 const showLoginBtn = () => {
-  $('#logInOutBox').append(`<button id="loginBtn" class="btn btn-light" type="button" name="button" onclick="login()">Login</button>`);
-  login = () => {
-    console.log('clicked login button');
-        $('.main').addClass('d-none');
-        $('#userForm').removeClass('d-none');
-        $('#loginFormBox').removeClass('d-none');
-        $('#lUsername').val(null);
-        $('#lPassword').val(null);
-  };
+    $('#loginBtn').removeClass('d-none');
 };
 const showLogoutBtn = () => {
-  $('#logInOutBox').append(`<button id="logoutBtn" class="btn btn-light" type="button" name="button" onclick="logout()">Logout</button>`);
-  logout = () => {
-    console.log('clicked logout button');
-      $('#logInOutBox').empty();
-      showRegisterBtn();
-      showLoginBtn();
-      sessionStorage.clear();
-      $('#cardContainer').addClass('d-none');
-  };
+    $('#logoutBtn').removeClass('d-none');
 };
 const showRegisterBtn = () => {
-  $('#logInOutBox').append(`<button id="registerBtn" class="mr-1 btn btn-light" type="button" name="button" onclick="register()">Register</button>`);
-  register = () => {
-    console.log('clicked register button');
-        $('.main').addClass('d-none');
-        $('#userForm').removeClass('d-none');
-        $('#loginFormBox').addClass('d-none');
-        $('#registerFormBox').removeClass('d-none');
-        $('#rUsername').val(null);
-        $('#rEmail').val(null);
-        $('#rPassword').val(null);
-        $('#rConfirmPassword').val(null);
-  };
+    $('#registerBtn').removeClass('d-none');
 };
-// const showLoginForm = () => {
-//
-// };
-// const showRegisterForm = () => {
-//
-// };
+const showLoginForm = () => {
+    $('#userForm').removeClass('d-none');
+    $('#loginFormBox').removeClass('d-none');
+};
+const showRegisterForm = () => {
+    $('#userForm').removeClass('d-none');
+    $('#registerFormBox').removeClass('d-none');
+};
 const showAddItemForm = () => {
   $('#uploadModal').show();
 };
@@ -151,18 +75,21 @@ const showEditItemForm = () => {
 
 // these all hide DOM elements
 const hideLoginBtn = () => {
-
+    $('#loginBtn').addClass('d-none');
 };
 const hideLogoutBtn = () => {
-
+    $('#logoutBtn').addClass('d-none');
 };
 const hideRegisterBtn = () => {
-
+    $('#registerBtn').addClass('d-none');
 };
 const hideLoginForm = () => {
-
+    $('#userForm').addClass('d-none');
+    $('#loginFormBox').addClass('d-none');
 };
 const hideRegisterForm = () => {
+    $('#userForm').addClass('d-none');
+    $('#registerFormBox').addClass('d-none');
 
 };
 const hideAddItemForm = () => {
@@ -173,20 +100,42 @@ const hideEditItemForm = () => {
 };
 
 $('#loginBtn').click(() => {
-    clearForms();
-    showLoginForm();
+    console.log('clicked login button');
+      $('.main').addClass('d-none');
+      $('#lUsername').val(null);
+      $('#lPassword').val(null);
+      showLoginForm();
+      $('#registerFormBox').addClass('d-none');
+});
+
+$('#logoutBtn').click(() => {
+    console.log('clicked logout button');
+      hideLogoutBtn();
+      showRegisterBtn();
+      showLoginBtn();
+      sessionStorage.clear();
+      $('#cardContainer').addClass('d-none');
+});
+
+$('#registerBtn').click(() => {
+    console.log('clicked register button');
+        $('.main').addClass('d-none');
+        $('#rUsername').val(null);
+        $('#rEmail').val(null);
+        $('#rPassword').val(null);
+        $('#rConfirmPassword').val(null);
+        hideLoginForm();
+        showRegisterForm();
 });
 
 $('#loginForm').submit(() => {
-  event.preventDefault();
-
- const username = $('#lUsername').val();
- const password = $('#lPassword').val();
-
- if ((username.length === 0)||(password.length === 0)) {
-     console.log('Please enter your username and password');
- } else {
-     $.ajax({
+    event.preventDefault();
+     const username = $('#lUsername').val();
+     const password = $('#lPassword').val();
+     if ((username.length === 0)||(password.length === 0)) {
+         console.log('Please enter your username and password');
+     } else {
+         $.ajax({
          url: `${url}/getUser`,
          type: 'POST',
          data: {
@@ -198,23 +147,21 @@ $('#loginForm').submit(() => {
                  console.log('user does not exist');
              } else if (result === 'invalid password'){
                  console.log('invalid password');
+             } else if (sessionStorage.username) {
+                 // user is logged in. This bad joke needs a lot of explanation.
+                 console.log('PERMISSION DENIED');
              } else {
                  sessionStorage.setItem('userID', result._id);
                  sessionStorage.setItem('userName', result.username);
                  sessionStorage.setItem('userEmail', result.email);
-
-                 $('#logInOutBox').empty();
+                 hideRegisterBtn();
+                 hideLoginBtn();
                  showLogoutBtn();
-
                  $('#userForm').addClass('d-none');
                  $('.main').removeClass('d-none');
                  $('#addListBtn').removeClass('d-none');
-
-                 const addItemBox = `<div class="addItemBox mx-5 my-2 text-left"><form id="addItemForm" enctype="multipart/form-data"><div class="form-group"><label for="itemName">Item Name</label><input type="text" class="form-control" id="itemName"></div><div class="form-group"><label for="itemDescription">Description</label><input type="text" class="form-control" id="itemDescription"></div><div class="form-group"><label for="itemPrice">Price</label><input type="number" class="form-control" id="itemPrice"></div><div class="input-group"><div class="input-group-prepend"><span class="input-group-text" id="itemImagePrepend">Item image</span></div><div class="custom-file"><input type="file" class="custom-file-input" id="itemImage"><label class="custom-file-label" for="itemImage">Choose file</label></div></div><fieldset class="form-group"><div class="row"><legend class="col-form-label col-sm-2 pt-0">Clothing Type</legend><div class="col-sm-10"><div class="form-check"><input class="form-check-input" type="radio" id="topsRadio" value="Tops" name="itemType" ><label class="form-check-label" for="topsRadio">Tops</label></div><div class="form-check"><input class="form-check-input" type="radio" id="bottomsRadio" value="Bottoms" name="itemType"><label class="form-check-label" for="bottomsRadio">Bottoms</label></div><div class="form-check"><input class="form-check-input" type="radio" id="outwewearRadio" value="Outerwear" name="itemType"><label class="form-check-label" for="outwewearRadio">Outerwear</label></div><div class="form-check"><input class="form-check-input" type="radio" id="otherRadio" value="Other" name="itemType"><label class="form-check-label" for="otherRadio">Other</label></div></div></div></fieldset><fieldset class="form-group"><div class="row"><legend class="col-form-label col-sm-2 pt-0">Condition</legend><div class="col-sm-10"><div class="form-check"><input class="form-check-input" type="radio" id="newRadio" value="New" name="itemCondition"><label class="form-check-label" for="newRadio">New</label></div><div class="form-check"><input class="form-check-input" type="radio" id="usedRadio" value="Used" name="itemCondition"><label class="form-check-label" for="usedRadio">Used</label></div></div></div></fieldset><button id= "addItemSubmitBtn" type="submit" class="btn btn-primary">add an item</button></form></div>`;
-
-                 $('#pageContainer').append(addItemBox);
-                 showItems(); // we need to rework this so that it appends and empties, rather than switches from d-flex to d-none
-                 // addItem();
+                 showItems();
+                 showAddItemForm();
              }
          },
          error: function(err){
@@ -223,46 +170,60 @@ $('#loginForm').submit(() => {
          }
      });
  }
-
-
-    if (sessionStorage.username) {
-        // user is logged in. This bad joke needs a lot of explanation.
-        console.log('PERMISSION DENIED');
-    } else {
-        // user is not logged in
-        // validate the username and password
-        // if (/*validation okay*/) {
-        //     hideLoginBtn();
-        //     hideRegisterBtn();
-        //     hideLoginForm();
-        //
-        //     showLogoutBtn();
-        //     showAddItemForm();
-        //
-        //     showItems();
-        //     showAddItemForm();
-        // }
-    }
-});
-
-$('#registerBtn').click(() => {
-     clearForms();
-     showRegisterForm();
 });
 
 $('#registerForm').submit(() => {
-    // some validation
-    // ajax request to create a new DB item with the registration form data
+    event.preventDefault();
+    console.log('register form got a click');
+    const username = $('#rUsername').val();
+    const email = $('#rEmail').val();
+    const password = $('#rPassword').val();
+    const confirmPassword = $('#rConfirmPassword').val();
 
+    if(username.length === 0){
+        console.log('please enter a username');
+    } else if(email.length === 0){
+        console.log('please enter an email');
+    } else if(password.length === 0){
+        console.log('please enter a password');
+    } else if(confirmPassword.length === 0){
+        console.log('please confirm your password');
+    } else if(password !== confirmPassword){
+        console.log('your passwords do not match');
+    } else {
+        $.ajax({
+            url: `${url}/users`,
+            type: 'POST',
+            data: {
+                username: username,
+                email: email,
+                password: password
+            },
+            success: function(result){
+                console.log(result);
+                if (result === 'Invalid user') {
+                    $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
+                } else {
+                    console.log('now you are member');
+                    sessionStorage.setItem('userID', result._id);
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userEmail', result.email);
+                    $('.main').removeClass('d-none');
+                    hideLoginBtn();
+                    hideRegisterBtn();
+                    hideRegisterForm();
+                    showItems();
+                    showLogoutBtn();
+                    showAddItemForm();
+                }
+            },
+            error: function(err){
+                console.log(err);
+                console.log('Something went wrong registering a new user');
+            }
+        });
+    }
     setSessionStorage(/* whatever username comes back from the Ajax req */);
-
-    hideRegisterForm();
-    hideRegisterBtn();
-    hideLoginBtn();
-
-    showItems();
-    showLogoutBtn();
-    showAddItemForm();
 });
 
 $('#addItemForm').submit(() => {
