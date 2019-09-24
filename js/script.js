@@ -3,7 +3,6 @@ let serverPort;
 let url;
 let editing = false;
 $(document).ready(() => {
-    // get the config.json
     $.ajax({
         url: 'config.json',
         type: 'GET',
@@ -19,10 +18,8 @@ $(document).ready(() => {
         }
     });
     if (sessionStorage.userName) {
-        // user is logged in
         showLogoutBtn();
     } else {
-        // user is not logged in
         showRegisterBtn();
         showLoginBtn();
     }
