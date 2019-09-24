@@ -110,36 +110,36 @@ $('#loginBtn').click(() => {
 });
 
 $('#loginForm').submit(() => {
-    if (sessionStorage.username) {
-        // user is logged in. This bad joke needs a lot of explanation.
-        console.log('PERMISSION DENIED – 말린 감은 기각되었다');
-    } else {
-        // user is not logged in
-        // validate the username and password
-        if (/*validation okay*/) {
-            hideLoginBtn();
-            hideRegisterBtn();
-            hideLoginForm();
-
-            showLogoutBtn();
-            showAddItemForm();
-
-            showItems();
-            showAddItemForm();
-        }
-    }
+    // if (sessionStorage.username) {
+    //     // user is logged in. This bad joke needs a lot of explanation.
+    //     console.log('PERMISSION DENIED – 말린 감은 기각되었다');
+    // } else {
+    //     // user is not logged in
+    //     // validate the username and password
+    //     if (/*validation okay*/) {
+    //         hideLoginBtn();
+    //         hideRegisterBtn();
+    //         hideLoginForm();
+    //
+    //         showLogoutBtn();
+    //         showAddItemForm();
+    //
+    //         showItems();
+    //         showAddItemForm();
+    //     }
+    // }
 });
 
 $('#registerBtn').click(() => {
-     clearForms();
-     showRegisterForm();
+    clearForms();
+    showRegisterForm();
 });
 
 $('#registerForm').submit(() => {
     // some validation
     // ajax request to create a new DB item with the registration form data
 
-    setSessionStorage(/* whatever username comes back from the Ajax req */);
+    // setSessionStorage(/* whatever username comes back from the Ajax req */);
 
     hideRegisterForm();
     hideRegisterBtn();
@@ -150,15 +150,54 @@ $('#registerForm').submit(() => {
     showAddItemForm();
 });
 
-$('#addItemForm').submit(() => {
-    // Ajax request to create database items using the form data
-    showItems();
+$('#addItemForm').on('submit', () => {
+    event.preventDefault();
+
+    let formData = new FormData();
+
+    let itemName = $('#itemName');
+    let itemDescription = $('#itemDescription');
+    let itemPrice = $('#itemPrice');
+    let itemType = $('#itemType');
+    let itemCondition = $('#itemType');
+    let itemImg = $('#itemImage');
+
+    formData.append('itemName', itemName.val());
+    formData.append('itemDescription', itemDescription.val());
+    formData.append('itemPrice', itemPrice.val());
+    formData.append('itemType', itemType.val());
+    // formData.append('itemCondition', itemCondition.('input[name="genderS"]:checked').value;
+    formData.append('itemImg', itemImg[0].files[0]);
+    // this will change when we set sessionStorage
+    formData.append('userID', 'dummy user ID');
+
+    // console.log(itemImg[0].files[0]);
+
+    $.ajax({
+        url: `${url}/addItem`,
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success:function(result){
+            console.log(result);
+        },
+        error: function(){
+            console.log('error sending item to DB');
+        }
+    });
+
 });
 
+// $('#test').on('click', function(){
+//     preventDefault();
+//     console.log('got a click on test');
+// });
+
 $('#editItemBtn').click(() => {
-    if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
-        showEditItemForm();
-    }
+    // if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
+    // showEditItemForm();
+    // }
 });
 
 $('#editItemForm').submit(() => {
