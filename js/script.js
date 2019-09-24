@@ -72,7 +72,7 @@ const clearForms = () => {
 
 // these all show DOM elements
 const showLoginBtn = () => {
-
+ $('#userForm').remove();
 };
 const showLogoutBtn = () => {
 
@@ -143,8 +143,58 @@ $('#loginForm').submit(() => {
 });
 
 $('#registerBtn').click(() => {
-     clearForms();
-     showRegisterForm();
+    console.log('clicked register button');
+        $('.main').addClass('d-none');
+        $('#rUsername').val(null);
+        $('#rEmail').val(null);
+        $('#rPassword').val(null);
+        $('#rConfirmPassword').val(null);
+        hideLoginForm();
+        showRegisterForm();
+});
+
+$('#loginForm').submit(() => {
+    event.preventDefault();
+     const username = $('#lUsername').val();
+     const password = $('#lPassword').val();
+     if ((username.length === 0)||(password.length === 0)) {
+         console.log('Please enter your username and password');
+     } else {
+         $.ajax({
+         url: `${url}/getUser`,
+         type: 'POST',
+         data: {
+             username: username,
+             password: password
+         },
+         success: function(result){
+             if (result === 'user does not exist'){
+                 console.log('user does not exist');
+             } else if (result === 'invalid password'){
+                 console.log('invalid password');
+             } else if (sessionStorage.username) {
+                 // user is logged in. This bad joke needs a lot of explanation.
+                 console.log('PERMISSION DENIED');
+             } else {
+                 sessionStorage.setItem('userID', result._id);
+                 sessionStorage.setItem('userName', result.username);
+                 sessionStorage.setItem('userEmail', result.email);
+                 hideRegisterBtn();
+                 hideLoginBtn();
+                 showLogoutBtn();
+                 $('#userForm').addClass('d-none');
+                 $('.main').removeClass('d-none');
+                 $('#addListBtn').removeClass('d-none');
+                 showItems();
+                 showAddItemForm();
+             }
+         },
+         error: function(err){
+             console.log(err);
+             console.log('Something went wrong');
+         }
+     });
+    }
 });
 
 $('#registerForm').submit(() => {
