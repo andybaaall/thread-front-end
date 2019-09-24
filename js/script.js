@@ -165,7 +165,7 @@ $('#loginForm').submit(() => {
              console.log('Something went wrong');
          }
      });
- }
+    }
 });
 
 $('#registerForm').submit(() => {
