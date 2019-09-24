@@ -72,21 +72,29 @@ const clearForms = () => {
 
 // these all show DOM elements
 const showLoginBtn = () => {
- $('#userForm').remove();
+    $('#loginBtn').removeClass('d-none');
+
 };
 const showLogoutBtn = () => {
+    $('#logoutBtn').removeClass('d-none');
 
 };
 const showRegisterBtn = () => {
+    $('#registerBtn').removeClass('d-none');
 
 };
 const showLoginForm = () => {
+    $('#userForm').removeClass('d-none');
+    $('#loginFormBox').removeClass('d-none');
 
 };
 const showRegisterForm = () => {
+    $('#userForm').removeClass('d-none');
+    $('#registerFormBox').removeClass('d-none');
 
 };
 const showAddItemForm = () => {
+  $('#uploadModal').show();
 
 };
 const showEditItemForm = () => {
@@ -95,18 +103,24 @@ const showEditItemForm = () => {
 
 // these all hide DOM elements
 const hideLoginBtn = () => {
+    $('#loginBtn').addClass('d-none');
 
 };
 const hideLogoutBtn = () => {
+    $('#logoutBtn').addClass('d-none');
 
 };
 const hideRegisterBtn = () => {
+    $('#registerBtn').addClass('d-none');
 
 };
 const hideLoginForm = () => {
+    $('#userForm').addClass('d-none');
+    $('#loginFormBox').addClass('d-none');
 
 };
 const hideRegisterForm = () => {
+
 
 };
 const hideAddItemForm = () => {
@@ -117,29 +131,23 @@ const hideEditItemForm = () => {
 };
 
 $('#loginBtn').click(() => {
-    clearForms();
-    showLoginForm();
+    console.log('clicked login button');
+      $('.main').addClass('d-none');
+      $('#lUsername').val(null);
+      $('#lPassword').val(null);
+      showLoginForm();
+      $('#registerFormBox').addClass('d-none');
+
 });
 
-$('#loginForm').submit(() => {
-    if (sessionStorage.username) {
-        // user is logged in. This bad joke needs a lot of explanation.
-        console.log('PERMISSION DENIED – 말린 감은 기각되었다');
-    } else {
-        // user is not logged in
-        // validate the username and password
-        if (/*validation okay*/) {
-            hideLoginBtn();
-            hideRegisterBtn();
-            hideLoginForm();
+$('#logoutBtn').click(() => {
+    console.log('clicked logout button');
+      hideLogoutBtn();
+      showRegisterBtn();
+      showLoginBtn();
+      sessionStorage.clear();
+      $('#cardContainer').addClass('d-none');
 
-            showLogoutBtn();
-            showAddItemForm();
-
-            showItems();
-            showAddItemForm();
-        }
-    }
 });
 
 $('#registerBtn').click(() => {
@@ -151,6 +159,7 @@ $('#registerBtn').click(() => {
         $('#rConfirmPassword').val(null);
         hideLoginForm();
         showRegisterForm();
+
 });
 
 $('#loginForm').submit(() => {
@@ -192,15 +201,64 @@ $('#loginForm').submit(() => {
          error: function(err){
              console.log(err);
              console.log('Something went wrong');
+
          }
      });
     }
 });
 
 $('#registerForm').submit(() => {
-    // some validation
-    // ajax request to create a new DB item with the registration form data
 
+    event.preventDefault();
+    console.log('register form got a click');
+    const username = $('#rUsername').val();
+    const email = $('#rEmail').val();
+    const password = $('#rPassword').val();
+    const confirmPassword = $('#rConfirmPassword').val();
+
+    if(username.length === 0){
+        console.log('please enter a username');
+    } else if(email.length === 0){
+        console.log('please enter an email');
+    } else if(password.length === 0){
+        console.log('please enter a password');
+    } else if(confirmPassword.length === 0){
+        console.log('please confirm your password');
+    } else if(password !== confirmPassword){
+        console.log('your passwords do not match');
+    } else {
+        $.ajax({
+            url: `${url}/users`,
+            type: 'POST',
+            data: {
+                username: username,
+                email: email,
+                password: password
+            },
+            success: function(result){
+                console.log(result);
+                if (result === 'Invalid user') {
+                    $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
+                } else {
+                    console.log('now you are member');
+                    sessionStorage.setItem('userID', result._id);
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userEmail', result.email);
+                    $('.main').removeClass('d-none');
+                    hideLoginBtn();
+                    hideRegisterBtn();
+                    hideRegisterForm();
+                    showItems();
+                    showLogoutBtn();
+                    showAddItemForm();
+                }
+            },
+            error: function(err){
+                console.log(err);
+                console.log('Something went wrong registering a new user');
+            }
+        });
+    }
     setSessionStorage(/* whatever username comes back from the Ajax req */);
 
     hideRegisterForm();
@@ -217,9 +275,55 @@ $('#addItemForm').submit(() => {
     showItems();
 });
 
-$('#editItemBtn').click(() => {
-    if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
+// $('#editItemBtn').click(() => {
+//     if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
+//         showEditItemForm();
+//     }
+// });
+
+// Edit and delete btns are made when sessionStorage.userID matched
+$('#cardContainer').on('click', '.editBtn', function() {
+
+  event.preventDefault();
+  if(!sessionStorage.userID){
+      alert('401, permission denied');
+      return;
+  }
+  const id = $(this).parent().parent().parent().data('id');
+  console.log(id);
+  $.ajax({
+    url:`${url}/addItem/${id}`,
+    type: 'PATCH',
+    data: {
+        userId: sessionStorage.userID
+    },
+    dataType:'json',
+    success: function(item){
+      if (item == '401') {
+          alert('401 UNAUTHORIZED');
+      } else {
         showEditItemForm();
+        $("#itemName").val();
+        $("#itemPrice").val();
+        $("#itemID").val();
+        $("#addBtn").text('Edit Product').addClass('btn-warning');
+        editing = true;
+      }
+    },
+    error: function(err){
+      console.log(err);
+      console.log('something went wrong with getting the single product');
+    }
+    });
+});
+
+
+$('#cardContainer').on('click', '.removeBtn', function(){
+    event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
     }
 });
 
