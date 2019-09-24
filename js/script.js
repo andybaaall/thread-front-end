@@ -41,7 +41,6 @@ console.log(sessionStorage);
             $('#userForm').removeClass('d-none');
         });
     }
-
     logout = () => {
         console.log('clicked logout button');
         $('#logInOutBox').empty();
@@ -57,18 +56,6 @@ console.log(sessionStorage);
         $('#lUsername').val(null);
         $('#lPassword').val(null);
     };
-
-    // if(sessionStorage.userName){
-    //     // you're logged in, nice :)
-    //     $('#logInOutBox').append(logoutBtn);
-    //     logout();
-    // } else {
-    //     // you're not logged in
-    //     if (!loginBtn){
-    //         $('#logInOutBox').append(loginBtn);
-    //     }
-    // }
-
     itemCard = () => {
         $.ajax({
             url: `${url}/allItems`,
@@ -78,27 +65,12 @@ console.log(sessionStorage);
                 console.log(data);
                 $('#cardContainer').find('.row').empty();
                 for (var i = 0; i < data.length; i++) {
-                    // let layout = `
-                    // <div class="card col">
-                    // <div class="card-body">
-                    // <div id="worktitle" class="card-title">
-                    // <h5 class="card-title text-center mt-3 dataId" data-id="${data[i]._id}">${data[i].item_name}</h5>
-                    // <p class="text-center">${data[i].price}</p>
-                    // </div>
-                    // </div>`;
-                    // if (sessionStorage.userName) {
-                    //     layout += `<div class="btnSet d-flex justify-content-center">
-                    //     <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
-                    //     <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                    //     </div>`;
-                    // }
-                    // layout += `</div>`;
-
                     let layout = `
                         <div class="col-12 col-md-3">
                             <div class="card" data-id="${data[i]._id}">
                                 <div class="card-body">
                                     <div id="worktitle" class="card-title">
+                                      <img class="img-fluid" src="${data[i].image_URL}">
                                         <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                         <p class="text-center">${data[i].price}</p>
                                     </div>`;
@@ -122,15 +94,10 @@ console.log(sessionStorage);
             }
         });
     };
-
-
-
-
 });
 
 $('#registerForm').submit(function(){
     event.preventDefault();
-
     console.log('got a click');
     const username = $('#rUsername').val();
     const email = $('#rEmail').val();
@@ -161,7 +128,9 @@ $('#registerForm').submit(function(){
                 if (result === 'Invalid user') {
                     $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
                 } else {
+                    console.log('now you are member');
                     $('#loginBtn').text('Logout');
+                    // $('.main').removeClass('d-none');
                 }
             },
             error: function(err){
@@ -250,7 +219,10 @@ addItem = () => {
         $.ajax({
             url: `${url}/addItem`,
             type: 'POST',
-            data: fd,
+            data: {
+                fd,
+             userId: sessionStorage['userID']
+            },
             // dataType: 'json',
             contentType: false,
             processData: false,
@@ -265,41 +237,12 @@ addItem = () => {
     });
 };
 
-
-//comment here//
-
-
-
-$('.cardDeck').on('click', '.removeBtn', function(){
-    event.preventDefault();
-    if(!sessionStorage.userID){
-        alert('401, permission denied');
-        return;
-    }
-    const id = $('dataId').data('id');
-    $.ajax({
-      url: `${url}/addItem/${id}`,
-      type: 'DELETE',
-      data: {
-          userId: sessionStorage.userID
-      },
-      success:function(result){
-          if(result == '401'){
-              alert('401 UNAUTHORIZED');
-          } else {
-              $('.cardRow').remove();
-          }
-      },
-      error:function(err) {
-        console.log(err);
-        console.log('something went wrong deleting the product');
-      }
-  });
-});
-
-////// not working update
-$("#cardContainer").on('click', '.editBtn', function() {
+$('#cardContainer').on('click', '.editBtn', function() {
   event.preventDefault();
+  if(!sessionStorage.userID){
+      alert('401, permission denied');
+      return;
+  }
   const id = $(this).parent().parent().parent().data('id');
   console.log(id);
   $.ajax({
@@ -310,16 +253,56 @@ $("#cardContainer").on('click', '.editBtn', function() {
     },
     dataType:'json',
     success: function(item){
-      console.log(item);
-      // $("#itemName").val(item['name']);
-      // $("#itemPrice").val(item['price']);
-      // $("#itemID").val(item['_id']);
-      // $("#addBtn").text('Edit Product').addClass('btn-warning');
-      // editing = true;
+      if (item == '401') {
+          alert('401 UNAUTHORIZED');
+      } else {
+        $("#itemName").val();
+        $("#itemPrice").val();
+        $("#itemID").val();
+        // $("#addBtn").text('Edit Product').addClass('btn-warning');
+        editing = true;
+      }
     },
     error: function(err){
       console.log(err);
       console.log('something went wrong with getting the single product');
     }
     });
+});
+
+<<<<<<< HEAD
+//comment here//
+
+
+
+$('.cardDeck').on('click', '.removeBtn', function(){
+=======
+$('#cardContainer').on('click', '.removeBtn', function(){
+>>>>>>> sophieDev
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
+    }
+    const id = $(this).parent().parent().parent().data('id');
+    const card = $(this).parent().parent().parent();
+    // console.log(card);
+    $.ajax({
+      url: `${url}/addItem/${id}`,
+      type: 'DELETE',
+      data: {
+          userId: sessionStorage.userID
+      },
+      success:function(item){
+          if(item == '401'){
+              alert('401 UNAUTHORIZED');
+          } else {
+             card.remove();
+          }
+      },
+      error:function(err) {
+        console.log(err);
+        console.log('something went wrong deleting the product');
+      }
+  });
 });
