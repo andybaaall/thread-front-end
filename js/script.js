@@ -1,3 +1,7 @@
+let serverURL;
+let serverPort;
+let url;
+let editing = false;
 $(document).ready(() => {
 
     // get the config.json
@@ -155,17 +159,17 @@ $('#loginForm').submit(() => {
     } else {
         // user is not logged in
         // validate the username and password
-        if (/*validation okay*/) {
-            hideLoginBtn();
-            hideRegisterBtn();
-            hideLoginForm();
-
-            showLogoutBtn();
-            showAddItemForm();
-
-            showItems();
-            showAddItemForm();
-        }
+        // if (/*validation okay*/) {
+        //     hideLoginBtn();
+        //     hideRegisterBtn();
+        //     hideLoginForm();
+        //
+        //     showLogoutBtn();
+        //     showAddItemForm();
+        //
+        //     showItems();
+        //     showAddItemForm();
+        // }
     }
 });
 
