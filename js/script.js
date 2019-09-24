@@ -301,8 +301,6 @@ $('#cardContainer').on('click', '.removeBtn', function(){
   });
 });
 
-
-
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
     showItems();
