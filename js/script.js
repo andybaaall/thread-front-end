@@ -2,6 +2,7 @@ let serverURL;
 let serverPort;
 let url;
 let editing = false;
+let id;
 
 $(document).ready(() => {
     console.log(sessionStorage);
@@ -32,6 +33,7 @@ $(document).ready(() => {
         hideLogoutBtn();
         hideAddItemForm();
     }
+
 });
 
 // GET ALL THE ITEMS FROM MONGO DB AND ADD THEM TO CARDS IN OUR CARD CONTAINER
@@ -113,7 +115,7 @@ const showAddItemForm = () => {
     $('#addItemForm').show();
 };
 const showEditItemForm = () => {
-
+    $('#editModal').modal('show');
 };
 
 // these all hide DOM elements
@@ -138,7 +140,7 @@ const hideAddItemForm = () => {
     $('#addItemForm').hide();
 };
 const hideEditItemForm = () => {
-
+    $('#editModal').addClass('d-none');
 };
 
 $('#loginBtn').click(() => {
@@ -316,33 +318,86 @@ $('#addItemForm').on('submit', () => {
         });
 
         clearForms();
-        showItems();
 
     }   else {
         alert('At least one of the form fields is empty.');
     }
 });
 
-$('#itemImage').change(() => {
-    const fileName = $('#itemImage')[0].files[0].name;
-    console.log(fileName);
-    $('#itemImageLabel').html(fileName);
+$('.editBtn').click(() => {
+
 });
-// $('#editItemBtn').click(() => {
-//     if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
-//         showEditItemForm();
-//     }
-// });
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
+
     event.preventDefault();
+
     if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
     }
     const id = $(this).parent().parent().parent().data('id');
     console.log(id);
+
+
+    //THIS PATCH REQUEST APPEARED AFTER I MERGED WITH JOHN'S LATEST MERGE TO MASTER
+    //THIS BREAKS CODE WHEN YOU CLICK EDIT BUTTON, IS THIS IN CORRECT PLACE?
+
+    // $.ajax({
+    //     url:`${url}/addItem/${id}`,
+    //     type: 'PATCH',
+    //     data: {
+    //         userId: sessionStorage.userID
+    //     },
+    //     dataType:'json',
+    //     success: function(item){
+    //         if (item == '401') {
+    //             alert('401 UNAUTHORIZED');
+    //         } else {
+    //             showEditItemForm();
+    //             $('#itemName').val();
+    //             $('#itemPrice').val();
+    //             $('#itemID').val();
+    //             $('#addBtn').text('Edit Product').addClass('btn-warning');
+    //             editing = true;
+    //         }
+    //     }
+    // });
+
+    //MODAL NOW APPEARS TO EDIT DATA, BUT I NEED THIS TO APPEAR AFTER AJAX SUCCESS
+    $('#editModal').modal('show')
+
+
+    //GET REQUEST GETS ME ITEM DATA AND LOGS IT APPROPRIATE FIELDS
+    //HAVEN'T WORKED RADIOS OUT AS OF 9.09
+    $.ajax({
+        url:`${url}/getItem/${id}`,
+        type: 'GET',
+        success: function(item){
+            console.log(item);
+            $('#itemNameEdit').empty();
+            $('#itemNameEdit').val(item.item_name);
+            $('#itemDescriptionEdit').empty();
+            $('#itemDescriptionEdit').val(item.item_description);
+            $('#itemPriceEdit').empty();
+            $('#itemPriceEdit').val(item.price);
+
+
+        },
+        error: function(err){
+            console.log(err);
+            console.log('something went wrong with getting the single item');
+        }
+
+    });
+
+});
+
+
+$('#editItemForm').submit(() => {
+    // Ajax request to patch database items using the form data
+    //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
     $.ajax({
         url:`${url}/addItem/${id}`,
         type: 'PATCH',
@@ -361,10 +416,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
                 $('#addBtn').text('Edit Product').addClass('btn-warning');
                 editing = true;
             }
-        },
-        error: function(err){
-            console.log(err);
-            console.log('something went wrong with getting the single product');
         }
     });
 });
@@ -397,35 +448,33 @@ $('#cardContainer').on('click', '.removeBtn', function(){
   });
 });
 
-$('#editItemForm').submit(() => {
-    // Ajax request to patch database items using the form data
     showItems();
     hideEditItemForm();
 });
 
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
 $('#cardContainer').on('click', '.moreInfoBtn', function() {
-  // console.log('you clicked on the more info button');
-  const id = $(this).parent().parent().parent().data('id');
-  $.ajax({
-      url:`${url}/getItem/${id}`,
-      type: 'GET',
-      success: function(item){
-        console.log(item);
-        // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
-        // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
-        $('#singleItemModalTitle').empty();
-        $('#singleItemModalTitle').append(item.item_name);
-        $('#singleItemModalBody').empty();
-        // $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
-        $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
-        $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
-        $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
-        $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
-      },
-      error: function(err){
-          console.log(err);
-          console.log('something went wrong with getting the single item');
-      }
-  });
+    // console.log('you clicked on the more info button');
+    const id = $(this).parent().parent().parent().data('id');
+    $.ajax({
+        url:`${url}/getItem/${id}`,
+        type: 'GET',
+        success: function(item){
+            console.log(item);
+            // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
+            // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
+            $('#singleItemModalTitle').empty();
+            $('#singleItemModalTitle').append(item.item_name);
+            $('#singleItemModalBody').empty();
+            // $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
+            $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
+            $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
+            $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
+            $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
+        },
+        error: function(err){
+            console.log(err);
+            console.log('something went wrong with getting the single item');
+        }
+    });
 });
