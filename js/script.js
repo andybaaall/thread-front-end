@@ -429,7 +429,7 @@ $('#cardContainer').on('click', '.removeBtn', function(){
       url: `${url}/addItem/${id}`,
       type: 'DELETE',
       data: {
-          userId: sessionStorage.userID
+          userID: sessionStorage.userID
       },
       success:function(response){
           if(response == '401'){
