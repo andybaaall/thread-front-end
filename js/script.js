@@ -21,6 +21,7 @@ $(document).ready(() => {
             console.log('cannot find config.json file, cannot run application');
         }
     });
+    
 });
 
 // GET ALL THE ITEMS FROM MONGO DB AND ADD THEM TO CARDS IN OUR CARD CONTAINER
