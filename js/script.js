@@ -318,10 +318,17 @@ $('#addItemForm').on('submit', () => {
         });
 
         clearForms();
+        showItems();
 
     }   else {
         alert('At least one of the form fields is empty.');
     }
+});
+
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    console.log(fileName);
+    $('#itemImageLabel').html(fileName);
 });
 
 // Edit and delete btns are made when sessionStorage.userID matched
@@ -389,7 +396,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 
 });
-
 
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
