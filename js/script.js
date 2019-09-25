@@ -4,6 +4,7 @@ let url;
 let editing = false;
 
 $(document).ready(() => {
+    console.log(sessionStorage);
     // GET THE CONFIG.JSON
     $.ajax({
         url: 'config.json',
@@ -14,14 +15,21 @@ $(document).ready(() => {
             serverPort = keys.SERVER_PORT;
             url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
             showItems();
-            showRegisterBtn();
-            showLoginBtn();
         },
         error: function(){
             console.log('cannot find config.json file, cannot run application');
         }
     });
-    
+    if(sessionStorage.userName){
+        // you're logged in, nice :)
+        hideRegisterBtn();
+        hideLoginBtn();
+        showLogoutBtn();
+    } else {
+        showRegisterBtn();
+        showLoginBtn();
+        hideLogoutBtn();
+    }
 });
 
 // GET ALL THE ITEMS FROM MONGO DB AND ADD THEM TO CARDS IN OUR CARD CONTAINER
@@ -42,7 +50,7 @@ showItems = () => {
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                     <p class="text-center">${data[i].price}</p>
                                 </div>`;
-                                if(sessionStorage['user_id'] === data[i].user_id) {
+                                if(sessionStorage.user_id === data[i].user_id) {
                                     itemCard += `<div class="btnSet d-flex justify-content-center">
                                     <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
                                     <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
@@ -76,29 +84,23 @@ const clearForms = () => {
 // these all show DOM elements
 const showLoginBtn = () => {
     $('#loginBtn').removeClass('d-none');
-
 };
 const showLogoutBtn = () => {
     $('#logoutBtn').removeClass('d-none');
-
 };
 const showRegisterBtn = () => {
     $('#registerBtn').removeClass('d-none');
-
 };
 const showLoginForm = () => {
     $('#userForm').removeClass('d-none');
     $('#loginFormBox').removeClass('d-none');
-
 };
 const showRegisterForm = () => {
     $('#userForm').removeClass('d-none');
     $('#registerFormBox').removeClass('d-none');
-
 };
 const showAddItemForm = () => {
   $('#uploadModal').show();
-
 };
 const showEditItemForm = () => {
 
@@ -107,25 +109,20 @@ const showEditItemForm = () => {
 // these all hide DOM elements
 const hideLoginBtn = () => {
     $('#loginBtn').addClass('d-none');
-
 };
 const hideLogoutBtn = () => {
     $('#logoutBtn').addClass('d-none');
-
 };
 const hideRegisterBtn = () => {
     $('#registerBtn').addClass('d-none');
-
 };
 const hideLoginForm = () => {
     $('#userForm').addClass('d-none');
     $('#loginFormBox').addClass('d-none');
-
 };
 const hideRegisterForm = () => {
     $('#userForm').addClass('d-none');
     $('#registerFormBox').addClass('d-none');
-
 };
 const hideAddItemForm = () => {
 
@@ -141,7 +138,6 @@ $('#loginBtn').click(() => {
       $('#lPassword').val(null);
       showLoginForm();
       $('#registerFormBox').addClass('d-none');
-
 });
 
 $('#logoutBtn').click(() => {
@@ -163,7 +159,6 @@ $('#registerBtn').click(() => {
         $('#rConfirmPassword').val(null);
         hideLoginForm();
         showRegisterForm();
-
 });
 
 $('#loginForm').submit(() => {
@@ -205,14 +200,12 @@ $('#loginForm').submit(() => {
          error: function(err){
              console.log(err);
              console.log('Something went wrong');
-
          }
      });
     }
 });
 
 $('#registerForm').submit(() => {
-
     event.preventDefault();
     console.log('register form got a click');
     const username = $('#rUsername').val();
@@ -287,7 +280,6 @@ $('#addItemForm').submit(() => {
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
-
   event.preventDefault();
   if(!sessionStorage.userID){
       alert('401, permission denied');
@@ -321,10 +313,8 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 });
 
-
 $('#cardContainer').on('click', '.removeBtn', function(){
     event.preventDefault();
-
     if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
