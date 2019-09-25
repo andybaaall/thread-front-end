@@ -45,22 +45,22 @@ showItems = () => {
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
                 let itemCard = `
-                    <div class="col-12 col-md-3">
-                        <div class="card" data-id="${data[i]._id}">
-                            <div class="card-body">
-                                <div id="worktitle" class="card-title">
-                                    <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                                    <p class="text-center">${data[i].price}</p>
-                                </div>`;
-                                if(sessionStorage.user_id === data[i].user_id) {
-                                    itemCard += `<div class="btnSet d-flex justify-content-center">
-                                    <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
-                                    <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                                    </div>`;
-                                }
-                            itemCard += `</div>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-3">
+                <div class="card" data-id="${data[i]._id}">
+                <div class="card-body">
+                <div id="worktitle" class="card-title">
+                <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
+                <p class="text-center">${data[i].price}</p>
+                </div>`;
+                if(sessionStorage.userID === data[i].user_id) {
+                    itemCard += `<div class="btnSet d-flex justify-content-center">
+                    <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
+                    <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
+                    </div>`;
+                }
+                itemCard += `</div>
+                </div>
+                </div>
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
             }
@@ -102,7 +102,7 @@ const showRegisterForm = () => {
     $('#registerFormBox').removeClass('d-none');
 };
 const showAddItemForm = () => {
-  $('#addItemForm').show();
+    $('#addItemForm').show();
 };
 const showEditItemForm = () => {
 
@@ -135,76 +135,76 @@ const hideEditItemForm = () => {
 
 $('#loginBtn').click(() => {
     console.log('clicked login button');
-      $('.main').addClass('d-none');
-      $('#lUsername').val(null);
-      $('#lPassword').val(null);
-      showLoginForm();
-      $('#registerFormBox').addClass('d-none');
+    $('.main').addClass('d-none');
+    $('#lUsername').val(null);
+    $('#lPassword').val(null);
+    showLoginForm();
+    $('#registerFormBox').addClass('d-none');
 });
 
 $('#logoutBtn').click(() => {
     console.log('clicked logout button');
-      hideLogoutBtn();
-      hideAddItemForm();
-      showRegisterBtn();
-      showLoginBtn();
-      $('#cardContainer').addClass('d-none');
-      showItems();
-      sessionStorage.clear();
+    hideLogoutBtn();
+    hideAddItemForm();
+    showRegisterBtn();
+    showLoginBtn();
+    $('#cardContainer').addClass('d-none');
+    showItems();
+    sessionStorage.clear();
 });
 
 $('#registerBtn').click(() => {
     console.log('clicked register button');
-        $('.main').addClass('d-none');
-        $('#rUsername').val(null);
-        $('#rEmail').val(null);
-        $('#rPassword').val(null);
-        $('#rConfirmPassword').val(null);
-        hideLoginForm();
-        showRegisterForm();
+    $('.main').addClass('d-none');
+    $('#rUsername').val(null);
+    $('#rEmail').val(null);
+    $('#rPassword').val(null);
+    $('#rConfirmPassword').val(null);
+    hideLoginForm();
+    showRegisterForm();
 });
 
 $('#loginForm').submit(() => {
     event.preventDefault();
-     const username = $('#lUsername').val();
-     const password = $('#lPassword').val();
-     if ((username.length === 0)||(password.length === 0)) {
-         console.log('Please enter your username and password');
-     } else {
-         $.ajax({
-         url: `${url}/getUser`,
-         type: 'POST',
-         data: {
-             username: username,
-             password: password
-         },
-         success: function(result){
-             if (result === 'user does not exist'){
-                 console.log('user does not exist');
-             } else if (result === 'invalid password'){
-                 console.log('invalid password');
-             } else if (sessionStorage.username) {
-                 // user is logged in. This bad joke needs a lot of explanation.
-                 console.log('PERMISSION DENIED');
-             } else {
-                 sessionStorage.setItem('userID', result._id);
-                 sessionStorage.setItem('userName', result.username);
-                 sessionStorage.setItem('userEmail', result.email);
-                 hideRegisterBtn();
-                 hideLoginBtn();
-                 showLogoutBtn();
-                 $('#userForm').addClass('d-none');
-                 $('.main').removeClass('d-none');
-                 $('#addListBtn').removeClass('d-none');
-                 showItems();
-                 showAddItemForm();
-             }
-         },
-         error: function(err){
-             console.log(err);
-             console.log('Something went wrong');
-         }
-     });
+    const username = $('#lUsername').val();
+    const password = $('#lPassword').val();
+    if ((username.length === 0)||(password.length === 0)) {
+        console.log('Please enter your username and password');
+    } else {
+        $.ajax({
+            url: `${url}/getUser`,
+            type: 'POST',
+            data: {
+                username: username,
+                password: password
+            },
+            success: function(result){
+                if (result === 'user does not exist'){
+                    console.log('user does not exist');
+                } else if (result === 'invalid password'){
+                    console.log('invalid password');
+                } else if (sessionStorage.username) {
+                    // user is logged in. This bad joke needs a lot of explanation.
+                    console.log('PERMISSION DENIED');
+                } else {
+                    sessionStorage.setItem('userID', result._id);
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userEmail', result.email);
+                    hideRegisterBtn();
+                    hideLoginBtn();
+                    showLogoutBtn();
+                    $('#userForm').addClass('d-none');
+                    $('.main').removeClass('d-none');
+                    $('#addListBtn').removeClass('d-none');
+                    showItems();
+                    showAddItemForm();
+                }
+            },
+            error: function(err){
+                console.log(err);
+                console.log('Something went wrong');
+            }
+        });
     }
 });
 
@@ -282,36 +282,35 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if ((itemName.val()) && (itemDescription.val()) && (itemPrice.val()) && (itemType.val()) && (itemName.val()) && ) {
-        console.log('we have itemname');
-    } else {
-        console.log('fd has no have itemname');
+    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
+        // all of the form fields have a value
+        formData.append('itemName', itemName.val());
+        formData.append('itemDescription', itemDescription.val());
+        formData.append('itemPrice', itemPrice.val());
+        formData.append('itemType', itemType);
+        formData.append('itemCondition', itemCondition);
+        formData.append('itemImg', itemImg[0].files[0]);
+        formData.append('userID', sessionStorage.userID);
+
+        $.ajax({
+            url: `${url}/addItem`,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function(result){
+                console.log(result);
+            },
+            error: function(){
+                console.log('error sending item to DB');
+            }
+        });
+
+        clearForms();
+
+    }   else {
+        alert('At least one of the form fields is empty.');
     }
-
-    formData.append('itemName', itemName.val());
-    formData.append('itemDescription', itemDescription.val());
-    formData.append('itemPrice', itemPrice.val());
-    formData.append('itemType', itemType);
-    formData.append('itemCondition', itemCondition);
-    formData.append('itemImg', itemImg[0].files[0]);
-    formData.append('userID', sessionStorage.userID);
-
-    // $.ajax({
-    //     url: `${url}/addItem`,
-    //     type: 'POST',
-    //     data: formData,
-    //     contentType: false,
-    //     processData: false,
-    //     success:function(result){
-    //         console.log(result);
-    //     },
-    //     error: function(){
-    //         console.log('error sending item to DB');
-    //     }
-    // });
-
-    clearForms();
-
 });
 
 // $('#editItemBtn').click(() => {
@@ -322,36 +321,36 @@ $('#addItemForm').on('submit', () => {
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
-  event.preventDefault();
-  if(!sessionStorage.userID){
-      alert('401, permission denied');
-      return;
-  }
-  const id = $(this).parent().parent().parent().data('id');
-  console.log(id);
-  $.ajax({
-    url:`${url}/addItem/${id}`,
-    type: 'PATCH',
-    data: {
-        userId: sessionStorage.userID
-    },
-    dataType:'json',
-    success: function(item){
-      if (item == '401') {
-          alert('401 UNAUTHORIZED');
-      } else {
-        showEditItemForm();
-        $("#itemName").val();
-        $("#itemPrice").val();
-        $("#itemID").val();
-        $("#addBtn").text('Edit Product').addClass('btn-warning');
-        editing = true;
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('something went wrong with getting the single product');
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
     }
+    const id = $(this).parent().parent().parent().data('id');
+    console.log(id);
+    $.ajax({
+        url:`${url}/addItem/${id}`,
+        type: 'PATCH',
+        data: {
+            userId: sessionStorage.userID
+        },
+        dataType:'json',
+        success: function(item){
+            if (item == '401') {
+                alert('401 UNAUTHORIZED');
+            } else {
+                showEditItemForm();
+                $("#itemName").val();
+                $("#itemPrice").val();
+                $("#itemID").val();
+                $("#addBtn").text('Edit Product').addClass('btn-warning');
+                editing = true;
+            }
+        },
+        error: function(err){
+            console.log(err);
+            console.log('something went wrong with getting the single product');
+        }
     });
 });
 
