@@ -366,7 +366,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
     // });
 
     //MODAL NOW APPEARS TO EDIT DATA, BUT I NEED THIS TO APPEAR AFTER AJAX SUCCESS
-    $('#editModal').modal('show')
+    $('#editModal').modal('show');
 
 
     //GET REQUEST GETS ME ITEM DATA AND LOGS IT APPROPRIATE FIELDS
@@ -432,7 +432,7 @@ $('#cardContainer').on('click', '.removeBtn', function(){
       url: `${url}/addItem/${id}`,
       type: 'DELETE',
       data: {
-          userId: sessionStorage.userID
+          userID: sessionStorage.userID
       },
       success:function(item){
           if(item == '401'){
