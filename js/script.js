@@ -4,6 +4,7 @@ let url;
 let editing = false;
 
 $(document).ready(() => {
+    console.log(sessionStorage);
     // GET THE CONFIG.JSON
     $.ajax({
         url: 'config.json',
@@ -14,13 +15,21 @@ $(document).ready(() => {
             serverPort = keys.SERVER_PORT;
             url = `${keys.SERVER_URL}:${keys.SERVER_PORT}`;
             showItems();
-            showRegisterBtn();
-            showLoginBtn();
         },
         error: function(){
             console.log('cannot find config.json file, cannot run application');
         }
     });
+    if(sessionStorage.userName){
+        // you're logged in, nice :)
+        hideRegisterBtn();
+        hideLoginBtn();
+        showLogoutBtn();
+    } else {
+        showRegisterBtn();
+        showLoginBtn();
+        hideLogoutBtn();
+    }
 });
 
 // GET ALL THE ITEMS FROM MONGO DB AND ADD THEM TO CARDS IN OUR CARD CONTAINER
@@ -41,7 +50,7 @@ showItems = () => {
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                     <p class="text-center">${data[i].price}</p>
                                 </div>`;
-                                if(sessionStorage['user_id'] === data[i].user_id) {
+                                if(sessionStorage.user_id === data[i].user_id) {
                                     itemCard += `<div class="btnSet d-flex justify-content-center">
                                     <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
                                     <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
