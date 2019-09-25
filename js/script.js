@@ -52,7 +52,7 @@ showItems = () => {
                         <div class="card" data-id="${data[i]._id}">
                             <div class="card-body">
                                 <div id="worktitle" class="card-title">
-                                <img class="img-fluid" src="${url}/${data[i].image_URL}">
+                                    <img class="img-fluid" src="${url}/${data[i].image_URL}">
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                     <p class="text-center">$ ${data[i].price}</p>
                                 </div>`;
@@ -461,7 +461,7 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             $('#singleItemModalTitle').empty();
             $('#singleItemModalTitle').append(item.item_name);
             $('#singleItemModalBody').empty();
-            // $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
+            $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
