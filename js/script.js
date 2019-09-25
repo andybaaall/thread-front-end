@@ -324,10 +324,6 @@ $('#addItemForm').on('submit', () => {
     }
 });
 
-$('.editBtn').click(() => {
-
-});
-
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
 
@@ -366,7 +362,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
     // });
 
     //MODAL NOW APPEARS TO EDIT DATA, BUT I NEED THIS TO APPEAR AFTER AJAX SUCCESS
-    $('#editModal').modal('show')
+    $('#editModal').modal('show');
 
 
     //GET REQUEST GETS ME ITEM DATA AND LOGS IT APPROPRIATE FIELDS
@@ -419,6 +415,7 @@ $('#editItemForm').submit(() => {
         }
     });
 });
+
 $('#cardContainer').on('click', '.removeBtn', function(){
     event.preventDefault();
     if(!sessionStorage.userID){
@@ -432,10 +429,10 @@ $('#cardContainer').on('click', '.removeBtn', function(){
       url: `${url}/addItem/${id}`,
       type: 'DELETE',
       data: {
-          userId: sessionStorage.userID
+          userID: sessionStorage.userID
       },
-      success:function(item){
-          if(item == '401'){
+      success:function(response){
+          if(response == '401'){
               alert('401 UNAUTHORIZED');
           } else {
              card.remove();
