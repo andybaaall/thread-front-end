@@ -19,7 +19,9 @@
         <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
 
         <div id="logInOutBox">
-
+            <button id="registerBtn" class="mr-1 btn btn-light d-none" type="button" name="button">Register</button>
+            <button id="loginBtn" class="btn btn-light d-none" type="button" name="button" >Login</button>
+            <button id="logoutBtn" class="btn btn-light d-none" type="button" name="button">Logout</button>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -45,8 +47,8 @@
             <p class="my-4 text-center lead text-muted intro">Browse, buy and sell <br/> pre-loved designer garments</p>
             <img class="mt-3 img-fluid" src="img/2nd.jpg" alt="mainImg">
         </div>
-        <div id="cardContainer" class="container d-none">
-            <div class="row">
+            <div id="cardContainer" class="container">
+                <div class="row my-5">
 
             </div>
             <!-- <button id="addItemBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Item</button> -->
@@ -59,7 +61,7 @@
     <section id="userForm" class="d-none">
         <div class="container my-3">
             <!-- LOGIN FORM CONTAINER -->
-            <div class="px-3" id="loginFormBox">
+            <div class="px-3 d-none" id="loginFormBox">
                 <p class="font-weight-bold text-secondary mt-3 h4">Login</p>
                 <form id="loginForm">
                     <div class="form-group">
@@ -76,7 +78,7 @@
                 </form>
             </div>
             <!-- REGISTER FORM CONTAINER -->
-            <div class="px-3" id="registerFormBox">
+            <div class="px-3 d-none" id="registerFormBox">
                 <p class="font-weight-bold text-secondary mt-3 h4">Register</p>
                 <form id="registerForm">
                     <div class="form-group">
