@@ -72,7 +72,7 @@ showItems = () => {
             console.log(err);
             console.log('Something went wrong');
         }
-  });
+    });
 };
 
 // clears session storage when user logs out
@@ -87,21 +87,21 @@ const clearForms = () => {
 
 // these all show DOM elements
 const showLoginBtn = () => {
-  $('#loginBtn').removeClass('d-none');
+    $('#loginBtn').removeClass('d-none');
 };
 const showLogoutBtn = () => {
-  $('#logoutBtn').removeClass('d-none');
+    $('#logoutBtn').removeClass('d-none');
 };
 const showRegisterBtn = () => {
-  $('#registerBtn').removeClass('d-none');
+    $('#registerBtn').removeClass('d-none');
 };
 const showLoginForm = () => {
-  $('#userForm').removeClass('d-none');
-  $('#loginFormBox').removeClass('d-none');
+    $('#userForm').removeClass('d-none');
+    $('#loginFormBox').removeClass('d-none');
 };
 const showRegisterForm = () => {
-  $('#userForm').removeClass('d-none');
-  $('#registerFormBox').removeClass('d-none');
+    $('#userForm').removeClass('d-none');
+    $('#registerFormBox').removeClass('d-none');
 };
 const showAddItemForm = () => {
     $('#addItemForm').show();
@@ -112,27 +112,27 @@ const showEditItemForm = () => {
 
 // these all hide DOM elements
 const hideLoginBtn = () => {
-  $('#loginBtn').addClass('d-none');
+    $('#loginBtn').addClass('d-none');
 };
 const hideLogoutBtn = () => {
-  $('#logoutBtn').addClass('d-none');
+    $('#logoutBtn').addClass('d-none');
 };
 const hideRegisterBtn = () => {
-  $('#registerBtn').addClass('d-none');
+    $('#registerBtn').addClass('d-none');
 };
 const hideLoginForm = () => {
-  $('#userForm').addClass('d-none');
-  $('#loginFormBox').addClass('d-none');
+    $('#userForm').addClass('d-none');
+    $('#loginFormBox').addClass('d-none');
 };
 const hideRegisterForm = () => {
-  $('#userForm').addClass('d-none');
-  $('#registerFormBox').addClass('d-none');
+    $('#userForm').addClass('d-none');
+    $('#registerFormBox').addClass('d-none');
 };
 const hideAddItemForm = () => {
     $('#addItemForm').hide();
 };
 const hideEditItemForm = () => {
-  $('#editModal').addClass('d-none');
+    $('#editModal').addClass('d-none');
 };
 
 $('#loginBtn').click(() => {
@@ -211,12 +211,12 @@ $('#loginForm').submit(() => {
 });
 
 $('#registerForm').submit(() => {
-  event.preventDefault();
-  console.log('register form got a click');
-  const username = $('#rUsername').val();
-  const email = $('#rEmail').val();
-  const password = $('#rPassword').val();
-  const confirmPassword = $('#rConfirmPassword').val();
+    event.preventDefault();
+    console.log('register form got a click');
+    const username = $('#rUsername').val();
+    const email = $('#rEmail').val();
+    const password = $('#rPassword').val();
+    const confirmPassword = $('#rConfirmPassword').val();
 
     if(username.length === 0){
         console.log('please enter a username');
@@ -263,13 +263,13 @@ $('#registerForm').submit(() => {
     }
     // setSessionStorage(/* whatever username comes back from the Ajax req */);
 
-  hideRegisterForm();
-  hideRegisterBtn();
-  hideLoginBtn();
+    hideRegisterForm();
+    hideRegisterBtn();
+    hideLoginBtn();
 
-  showItems();
-  showLogoutBtn();
-  showAddItemForm();
+    showItems();
+    showLogoutBtn();
+    showAddItemForm();
 });
 
 $('#addItemForm').on('submit', () => {
@@ -309,98 +309,66 @@ $('#addItemForm').on('submit', () => {
         });
 
         clearForms();
-        showItems();
 
     }   else {
         alert('At least one of the form fields is empty.');
     }
 });
 
-<<<<<<< HEAD
 $('#editBtn').click(() => {
     // if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
-        showEditItemForm();
+    showEditItemForm();
     // }
 });
-=======
-$('#itemImage').change(() => {
-    const fileName = $('#itemImage')[0].files[0].name;
-    console.log(fileName);
-    $('#itemImageLabel').html(fileName);
-});
-// $('#editItemBtn').click(() => {
-//     if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
-//         showEditItemForm();
-//     }
-// });
->>>>>>> master
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
-  event.preventDefault();
-  console.log('click');
+    event.preventDefault();
+    console.log('click');
+        $.ajax({
+            url: `${url}/getItem/${id}`,
+            type: 'GET',
+            data: {
 
-  if (!sessionStorage['userID']) {
-      alert('401 PERMISSION IS DENIED');
-      return;
-  } else {
+            },
+            success: function(result){
+                console.log(result);
+            },
+            error: function(err){
+                console.log(err);
+                console.log('No, fuck you.');
+            }
+        })
 
-    $.ajax({
-      url: `${url}/getItem/${id}`,
-      type: 'GET',
-      data: {
-        userId: sessionStorage.userID
-      },
-      dataType: 'json',
-      success:function(product){
-        if(product == '401'){
-          alert('401 UNAUTHORIZED');
-        } else {
-          console.log(product);
-          // theres no description input on add item form in HTML.
-          $('#itemName').val(res['item_name']);
-          $('#price').val(res['price']);
-          $('#clothingType').val(res['clothing_type']);
-          $('#productID').val(res['_id']);
-          $('#condition').val(res['condition']);
-          $('#addProductButton').text('Edit Product').addClass('btn-warning');
-          $('#heading').text('Edit Product');
-          editing = true;
-        }
-      },
-      error:function(err){
-        console.log(err);
-        console.log('We pulled the wrong thread, and something went wrong :~(');
-      }
+
+
+
+    $('#editModal').modal('show');
     });
 
 
-  $('#editModal').modal('show');
 
 
-  // id = $(this).parent().parent().parent().data('id');
-
-});
-
-$('#cardContainer').on('click', '.removeBtn', function(){
-  event.preventDefault();
-  if(!sessionStorage.userID){
-    alert('401, permission denied');
-    return;
-  }
-});
+    // id = $(this).parent().parent().parent().data('id');
+    // $('#cardContainer').on('click', '.removeBtn', function(){
+    //     event.preventDefault();
+    //     if(!sessionStorage.userID){
+    //         alert('401, permission denied');
+    //         return;
+    //     }
+    // });
 
 
-$('#editItemForm').submit(() => {
-  let formData = new FormData();
+    $('#editItemForm').submit(() => {
+        let formData = new FormData();
 
-  // let itemName = $('#itemNameEdit');
-  let itemName = $('#itemName').val();
-  let itemDescription = $('#itemDescriptionEdit');
-  let itemPrice = $('#itemPriceEdit');
-  let itemType = $('input[name=itemTypeEdit]:checked').val();
-  let itemCondition = $('input[name=itemConditionEdit]:checked').val();
+        // let itemName = $('#itemNameEdit');
+        let itemName = $('#itemName').val();
+        let itemDescription = $('#itemDescriptionEdit');
+        let itemPrice = $('#itemPriceEdit');
+        let itemType = $('input[name=itemTypeEdit]:checked').val();
+        let itemCondition = $('input[name=itemConditionEdit]:checked').val();
 
 
 
-});
+    });
