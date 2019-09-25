@@ -175,7 +175,7 @@
         <button type="submit" class="btn btn-primary">Add Item</button>
     </form>
 
-    <!-- MODAL CARD FOR SINGLE ITEM -->
+    <!-- MODAL CARD FOR VIEWING SINGLE ITEM -->
     <div class="modal fade" id="singleItemModal" tabindex="-1" role="dialog" aria-labelledby="singleItemModalTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -192,7 +192,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success">BUY?</button>
+            <button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>
+            <!-- <button type="button" class="btn btn-success">BUY</button> -->
           </div>
         </div>
       </div>

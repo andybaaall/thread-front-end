@@ -352,10 +352,10 @@ $('#cardContainer').on('click', '.editBtn', function() {
                 alert('401 UNAUTHORIZED');
             } else {
                 showEditItemForm();
-                $("#itemName").val();
-                $("#itemPrice").val();
-                $("#itemID").val();
-                $("#addBtn").text('Edit Product').addClass('btn-warning');
+                $('#itemName').val();
+                $('#itemPrice').val();
+                $('#itemID').val();
+                $('#addBtn').text('Edit Product').addClass('btn-warning');
                 editing = true;
             }
         },
@@ -390,10 +390,13 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
       success: function(item){
         console.log(item);
         // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
+        // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
+        $('#singleItemModalTitle').empty();
         $('#singleItemModalTitle').append(item.item_name);
-        $('#singleItemModalBody').append(item.image_URL);
-        $('#singleItemModalBody').append(item.clothing_type);
-        $('#singleItemModalBody').append(item.description);
+        $('#singleItemModalBody').empty();
+        $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
+        $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
+        $('#singleItemModalBody').append(`<p>Description: ` + item.description + `</p>`);
       },
       error: function(err){
           console.log(err);
@@ -401,3 +404,7 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
       }
   });
 });
+
+
+//  CLICK ON BUY BUTTON
+// NEED TO MAKE MODAL DISAPPEAR. HOW ABOUT:  $('#buyModal').hide();
