@@ -394,9 +394,11 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
         $('#singleItemModalTitle').empty();
         $('#singleItemModalTitle').append(item.item_name);
         $('#singleItemModalBody').empty();
-        $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
+        // $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
         $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
-        $('#singleItemModalBody').append(`<p>Description: ` + item.description + `</p>`);
+        $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
+        $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
+        $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
       },
       error: function(err){
           console.log(err);
@@ -404,7 +406,3 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
       }
   });
 });
-
-
-//  CLICK ON BUY BUTTON
-// NEED TO MAKE MODAL DISAPPEAR. HOW ABOUT:  $('#buyModal').hide();
