@@ -84,29 +84,23 @@ const clearForms = () => {
 // these all show DOM elements
 const showLoginBtn = () => {
     $('#loginBtn').removeClass('d-none');
-
 };
 const showLogoutBtn = () => {
     $('#logoutBtn').removeClass('d-none');
-
 };
 const showRegisterBtn = () => {
     $('#registerBtn').removeClass('d-none');
-
 };
 const showLoginForm = () => {
     $('#userForm').removeClass('d-none');
     $('#loginFormBox').removeClass('d-none');
-
 };
 const showRegisterForm = () => {
     $('#userForm').removeClass('d-none');
     $('#registerFormBox').removeClass('d-none');
-
 };
 const showAddItemForm = () => {
   $('#uploadModal').show();
-
 };
 const showEditItemForm = () => {
 
@@ -115,25 +109,20 @@ const showEditItemForm = () => {
 // these all hide DOM elements
 const hideLoginBtn = () => {
     $('#loginBtn').addClass('d-none');
-
 };
 const hideLogoutBtn = () => {
     $('#logoutBtn').addClass('d-none');
-
 };
 const hideRegisterBtn = () => {
     $('#registerBtn').addClass('d-none');
-
 };
 const hideLoginForm = () => {
     $('#userForm').addClass('d-none');
     $('#loginFormBox').addClass('d-none');
-
 };
 const hideRegisterForm = () => {
     $('#userForm').addClass('d-none');
     $('#registerFormBox').addClass('d-none');
-
 };
 const hideAddItemForm = () => {
 
@@ -149,7 +138,6 @@ $('#loginBtn').click(() => {
       $('#lPassword').val(null);
       showLoginForm();
       $('#registerFormBox').addClass('d-none');
-
 });
 
 $('#logoutBtn').click(() => {
@@ -171,7 +159,6 @@ $('#registerBtn').click(() => {
         $('#rConfirmPassword').val(null);
         hideLoginForm();
         showRegisterForm();
-
 });
 
 $('#loginForm').submit(() => {
@@ -213,14 +200,12 @@ $('#loginForm').submit(() => {
          error: function(err){
              console.log(err);
              console.log('Something went wrong');
-
          }
      });
     }
 });
 
 $('#registerForm').submit(() => {
-
     event.preventDefault();
     console.log('register form got a click');
     const username = $('#rUsername').val();
@@ -295,7 +280,6 @@ $('#addItemForm').submit(() => {
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
-
   event.preventDefault();
   if(!sessionStorage.userID){
       alert('401, permission denied');
@@ -329,10 +313,8 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 });
 
-
 $('#cardContainer').on('click', '.removeBtn', function(){
     event.preventDefault();
-
     if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
