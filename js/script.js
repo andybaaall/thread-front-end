@@ -298,26 +298,35 @@ $('#addItemForm').on('submit', () => {
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', itemType);
-        formData.append('itemCondition', itemCondition);
+        formData.append('itemType', $('input[name=itemType]:checked').val());
+        formData.append('itemCondition', 'input[name=itemCondition]:checked');
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
-        $.ajax({
-            url: `${url}/addItem`,
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success:function(result){
-                console.log(result);
-            },
-            error: function(){
-                console.log('error sending item to DB');
-            }
-        });
+        console.log(itemName.val());
+        console.log(itemDescription.val());
+        console.log(itemPrice.val());
+        console.log(itemType);
+        console.log(itemCondition);
+        console.log(itemImg[0].files[0]);
+        console.log(sessionStorage.userID);
+
+        // $.ajax({
+        //     url: `${url}/addItem`,
+        //     type: 'POST',
+        //     data: formData,
+        //     contentType: false,
+        //     processData: false,
+        //     success:function(result){
+        //         console.log(result);
+        //     },
+        //     error: function(){
+        //         console.log('error sending item to DB');
+        //     }
+        // });
 
         clearForms();
+        $('#itemImageLabel').html('Upload image');
         showItems();
 
     }   else {
@@ -327,7 +336,6 @@ $('#addItemForm').on('submit', () => {
 
 $('#itemImage').change(() => {
     const fileName = $('#itemImage')[0].files[0].name;
-    console.log(fileName);
     $('#itemImageLabel').html(fileName);
 });
 
