@@ -321,8 +321,15 @@ $('#addItemForm').on('submit', () => {
     }
 });
 
-$('#editBtn').click(() => {
+$('.editBtn').click(() => {
+
+});
+
+// Edit and delete btns are made when sessionStorage.userID matched
+$('#cardContainer').on('click', '.editBtn', function() {
+
     event.preventDefault();
+
     if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
@@ -330,68 +337,64 @@ $('#editBtn').click(() => {
     const id = $(this).parent().parent().parent().data('id');
     console.log(id);
 
+
+    //THIS PATCH REQUEST APPEARED AFTER I MERGED WITH JOHN'S LATEST MERGE TO MASTER
+    //THIS BREAKS CODE WHEN YOU CLICK EDIT BUTTON, IS THIS IN CORRECT PLACE?
+
+    // $.ajax({
+    //     url:`${url}/addItem/${id}`,
+    //     type: 'PATCH',
+    //     data: {
+    //         userId: sessionStorage.userID
+    //     },
+    //     dataType:'json',
+    //     success: function(item){
+    //         if (item == '401') {
+    //             alert('401 UNAUTHORIZED');
+    //         } else {
+    //             showEditItemForm();
+    //             $('#itemName').val();
+    //             $('#itemPrice').val();
+    //             $('#itemID').val();
+    //             $('#addBtn').text('Edit Product').addClass('btn-warning');
+    //             editing = true;
+    //         }
+    //     }
+    // });
+
+    //MODAL NOW APPEARS TO EDIT DATA, BUT I NEED THIS TO APPEAR AFTER AJAX SUCCESS
+    $('#editModal').modal('show')
+
+
+    //GET REQUEST GETS ME ITEM DATA AND LOGS IT APPROPRIATE FIELDS
+    //HAVEN'T WORKED RADIOS OUT AS OF 9.09
     $.ajax({
         url:`${url}/getItem/${id}`,
         type: 'GET',
         success: function(item){
             console.log(item);
             $('#itemNameEdit').empty();
-            $('#itemNameEdit').val(data.returnValue);
+            $('#itemNameEdit').val(item.item_name);
+            $('#itemDescriptionEdit').empty();
+            $('#itemDescriptionEdit').val(item.item_description);
+            $('#itemPriceEdit').empty();
+            $('#itemPriceEdit').val(item.price);
+
+
         },
         error: function(err){
             console.log(err);
             console.log('something went wrong with getting the single item');
         }
+
     });
 
-
-    $('#editModal').modal('show');
-    showEditItemForm();
-});
-
-
-
-
-
-
-// Edit and delete btns are made when sessionStorage.userID matched
-$('#cardContainer').on('click', '.editBtn', function() {
-    event.preventDefault();
-    if(!sessionStorage.userID){
-        alert('401, permission denied');
-        return;
-    }
-    const id = $(this).parent().parent().parent().data('id');
-    console.log(id);
-
-
-
-    $.ajax({
-        url:`${url}/addItem/${id}`,
-        type: 'PATCH',
-        data: {
-            userId: sessionStorage.userID
-        },
-        dataType:'json',
-        success: function(item){
-            if (item == '401') {
-                alert('401 UNAUTHORIZED');
-            } else {
-                showEditItemForm();
-                $('#itemName').val();
-                $('#itemPrice').val();
-                $('#itemID').val();
-                $('#addBtn').text('Edit Product').addClass('btn-warning');
-                editing = true;
-            }
-        }
-    });
 });
 
 
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
-
+    //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
     $.ajax({
         url:`${url}/addItem/${id}`,
         type: 'PATCH',
