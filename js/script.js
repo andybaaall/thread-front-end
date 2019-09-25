@@ -25,10 +25,12 @@ $(document).ready(() => {
         hideRegisterBtn();
         hideLoginBtn();
         showLogoutBtn();
+        showAddItemForm();
     } else {
         showRegisterBtn();
         showLoginBtn();
         hideLogoutBtn();
+        hideAddItemForm();
     }
 });
 
@@ -57,9 +59,9 @@ showItems = () => {
                                     </div>`;
                                 }
                                   itemCard += `<div class="btnSet d-flex justify-content-center">
-                                  <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn">MORE INFO</button>`
+                                  <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
                                   if (sessionStorage.userID) {
-                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn">BUY</button>`
+                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
                                   }
                             itemCard += `</div>
                             </div>
@@ -84,7 +86,7 @@ const clearSessionStorage = () => {
 
 // clears login and register forms
 const clearForms = () => {
-
+    $('input').val('');
 };
 
 // these all show DOM elements
@@ -106,7 +108,7 @@ const showRegisterForm = () => {
     $('#registerFormBox').removeClass('d-none');
 };
 const showAddItemForm = () => {
-  $('#uploadModal').removeClass('d-none');
+    $('#addItemForm').show();
 };
 const showEditItemForm = () => {
 
@@ -131,7 +133,7 @@ const hideRegisterForm = () => {
     $('#registerFormBox').addClass('d-none');
 };
 const hideAddItemForm = () => {
-
+    $('#addItemForm').hide();
 };
 const hideEditItemForm = () => {
 
@@ -139,75 +141,76 @@ const hideEditItemForm = () => {
 
 $('#loginBtn').click(() => {
     console.log('clicked login button');
-      $('.main').addClass('d-none');
-      $('#lUsername').val(null);
-      $('#lPassword').val(null);
-      showLoginForm();
-      $('#registerFormBox').addClass('d-none');
+    $('.main').addClass('d-none');
+    $('#lUsername').val(null);
+    $('#lPassword').val(null);
+    showLoginForm();
+    $('#registerFormBox').addClass('d-none');
 });
 
 $('#logoutBtn').click(() => {
     console.log('clicked logout button');
-      hideLogoutBtn();
-      showRegisterBtn();
-      showLoginBtn();
-      $('#cardContainer').addClass('d-none');
-      showItems();
-      sessionStorage.clear();
+    hideLogoutBtn();
+    hideAddItemForm();
+    showRegisterBtn();
+    showLoginBtn();
+    $('#cardContainer').addClass('d-none');
+    showItems();
+    sessionStorage.clear();
 });
 
 $('#registerBtn').click(() => {
     console.log('clicked register button');
-        $('.main').addClass('d-none');
-        $('#rUsername').val(null);
-        $('#rEmail').val(null);
-        $('#rPassword').val(null);
-        $('#rConfirmPassword').val(null);
-        hideLoginForm();
-        showRegisterForm();
+    $('.main').addClass('d-none');
+    $('#rUsername').val(null);
+    $('#rEmail').val(null);
+    $('#rPassword').val(null);
+    $('#rConfirmPassword').val(null);
+    hideLoginForm();
+    showRegisterForm();
 });
 
 $('#loginForm').submit(() => {
     event.preventDefault();
-     const username = $('#lUsername').val();
-     const password = $('#lPassword').val();
-     if ((username.length === 0)||(password.length === 0)) {
-         console.log('Please enter your username and password');
-     } else {
-         $.ajax({
-         url: `${url}/getUser`,
-         type: 'POST',
-         data: {
-             username: username,
-             password: password
-         },
-         success: function(result){
-             if (result === 'user does not exist'){
-                 console.log('user does not exist');
-             } else if (result === 'invalid password'){
-                 console.log('invalid password');
-             } else if (sessionStorage.username) {
-                 // user is logged in. This bad joke needs a lot of explanation.
-                 console.log('PERMISSION DENIED');
-             } else {
-                 sessionStorage.setItem('userID', result._id);
-                 sessionStorage.setItem('userName', result.username);
-                 sessionStorage.setItem('userEmail', result.email);
-                 hideRegisterBtn();
-                 hideLoginBtn();
-                 showLogoutBtn();
-                 $('#userForm').addClass('d-none');
-                 $('.main').removeClass('d-none');
-                 $('#addListBtn').removeClass('d-none');
-                 showItems();
-                 showAddItemForm();
-             }
-         },
-         error: function(err){
-             console.log(err);
-             console.log('Something went wrong');
-         }
-     });
+    const username = $('#lUsername').val();
+    const password = $('#lPassword').val();
+    if ((username.length === 0)||(password.length === 0)) {
+        console.log('Please enter your username and password');
+    } else {
+        $.ajax({
+            url: `${url}/getUser`,
+            type: 'POST',
+            data: {
+                username: username,
+                password: password
+            },
+            success: function(result){
+                if (result === 'user does not exist'){
+                    console.log('user does not exist');
+                } else if (result === 'invalid password'){
+                    console.log('invalid password');
+                } else if (sessionStorage.username) {
+                    // user is logged in. This bad joke needs a lot of explanation.
+                    console.log('PERMISSION DENIED');
+                } else {
+                    sessionStorage.setItem('userID', result._id);
+                    sessionStorage.setItem('userName', result.username);
+                    sessionStorage.setItem('userEmail', result.email);
+                    hideRegisterBtn();
+                    hideLoginBtn();
+                    showLogoutBtn();
+                    $('#userForm').addClass('d-none');
+                    $('.main').removeClass('d-none');
+                    $('#addListBtn').removeClass('d-none');
+                    showItems();
+                    showAddItemForm();
+                }
+            },
+            error: function(err){
+                console.log(err);
+                console.log('Something went wrong');
+            }
+        });
     }
 });
 
@@ -262,7 +265,7 @@ $('#registerForm').submit(() => {
             }
         });
     }
-    setSessionStorage(/* whatever username comes back from the Ajax req */);
+    // setSessionStorage(/* whatever username comes back from the Ajax req */);
 
     hideRegisterForm();
     hideRegisterBtn();
@@ -273,9 +276,47 @@ $('#registerForm').submit(() => {
     showAddItemForm();
 });
 
-$('#addItemForm').submit(() => {
-    // Ajax request to create database items using the form data
-    showItems();
+$('#addItemForm').on('submit', () => {
+    event.preventDefault();
+
+    let formData = new FormData();
+
+    let itemName = $('#itemName');
+    let itemDescription = $('#itemDescription');
+    let itemPrice = $('#itemPrice');
+    let itemType = $('input[name=itemType]:checked').val();
+    let itemCondition = $('input[name=itemCondition]:checked').val();
+    let itemImg = $('#itemImage');
+
+    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
+        // all of the form fields have a value
+        formData.append('itemName', itemName.val());
+        formData.append('itemDescription', itemDescription.val());
+        formData.append('itemPrice', itemPrice.val());
+        formData.append('itemType', itemType);
+        formData.append('itemCondition', itemCondition);
+        formData.append('itemImg', itemImg[0].files[0]);
+        formData.append('userID', sessionStorage.userID);
+
+        $.ajax({
+            url: `${url}/addItem`,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function(result){
+                console.log(result);
+            },
+            error: function(){
+                console.log('error sending item to DB');
+            }
+        });
+
+        clearForms();
+
+    }   else {
+        alert('At least one of the form fields is empty.');
+    }
 });
 
 // $('#editItemBtn').click(() => {
@@ -286,36 +327,36 @@ $('#addItemForm').submit(() => {
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
-  event.preventDefault();
-  if(!sessionStorage.userID){
-      alert('401, permission denied');
-      return;
-  }
-  const id = $(this).parent().parent().parent().data('id');
-  console.log(id);
-  $.ajax({
-    url:`${url}/addItem/${id}`,
-    type: 'PATCH',
-    data: {
-        userId: sessionStorage.userID
-    },
-    dataType:'json',
-    success: function(item){
-      if (item == '401') {
-          alert('401 UNAUTHORIZED');
-      } else {
-        showEditItemForm();
-        $("#itemName").val();
-        $("#itemPrice").val();
-        $("#itemID").val();
-        $("#addBtn").text('Edit Product').addClass('btn-warning');
-        editing = true;
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('something went wrong with getting the single product');
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
     }
+    const id = $(this).parent().parent().parent().data('id');
+    console.log(id);
+    $.ajax({
+        url:`${url}/addItem/${id}`,
+        type: 'PATCH',
+        data: {
+            userId: sessionStorage.userID
+        },
+        dataType:'json',
+        success: function(item){
+            if (item == '401') {
+                alert('401 UNAUTHORIZED');
+            } else {
+                showEditItemForm();
+                $("#itemName").val();
+                $("#itemPrice").val();
+                $("#itemID").val();
+                $("#addBtn").text('Edit Product').addClass('btn-warning');
+                editing = true;
+            }
+        },
+        error: function(err){
+            console.log(err);
+            console.log('something went wrong with getting the single product');
+        }
     });
 });
 
@@ -331,4 +372,26 @@ $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
     showItems();
     hideEditItemForm();
+});
+
+//  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
+$('#cardContainer').on('click', '.moreInfoBtn', function() {
+  // console.log('you clicked on the more info button');
+  const id = $(this).parent().parent().parent().data('id');
+  $.ajax({
+      url:`${url}/getItem/${id}`,
+      type: 'GET',
+      success: function(item){
+        console.log(item);
+        // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
+        $('#singleItemModalTitle').append(item.item_name);
+        $('#singleItemModalBody').append(item.image_URL);
+        $('#singleItemModalBody').append(item.clothing_type);
+        $('#singleItemModalBody').append(item.description);
+      },
+      error: function(err){
+          console.log(err);
+          console.log('something went wrong with getting the single item');
+      }
+  });
 });
