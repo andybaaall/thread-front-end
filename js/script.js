@@ -431,8 +431,8 @@ $('#cardContainer').on('click', '.removeBtn', function(){
       data: {
           userID: sessionStorage.userID
       },
-      success:function(response){
-          if(response == '401'){
+      success:function(item){
+          if(item == '401'){
               alert('401 UNAUTHORIZED');
           } else {
              card.remove();
