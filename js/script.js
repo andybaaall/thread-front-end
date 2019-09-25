@@ -324,10 +324,6 @@ $('#addItemForm').on('submit', () => {
     }
 });
 
-$('.editBtn').click(() => {
-
-});
-
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
 
