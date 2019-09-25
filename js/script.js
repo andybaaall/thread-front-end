@@ -54,7 +54,7 @@ showItems = () => {
                                 <div id="worktitle" class="card-title">
                                 <img class="img-fluid" src="${url}/${data[i].image_URL}">
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                                    <p class="text-center">${data[i].price}</p>
+                                    <p class="text-center">$ ${data[i].price}</p>
                                 </div>`;
                                 if(sessionStorage.userID === data[i].user_id) {
                                     itemCard += `<div class="btnSet d-flex justify-content-center">
@@ -446,10 +446,8 @@ $('#cardContainer').on('click', '.removeBtn', function(){
         console.log('something went wrong deleting the product');
       }
   });
-});
-
-    showItems();
-    hideEditItemForm();
+  // showItems();
+  // hideEditItemForm();
 });
 
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
@@ -466,7 +464,7 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             $('#singleItemModalTitle').empty();
             $('#singleItemModalTitle').append(item.item_name);
             $('#singleItemModalBody').empty();
-            // $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
+            // $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
