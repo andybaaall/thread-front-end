@@ -50,7 +50,7 @@ showItems = () => {
         <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
         <p class="text-center">${data[i].price}</p>
         </div>`;
-        if(sessionStorage.user_id === data[i].user_id) {
+        if(sessionStorage.userID === data[i].user_id) {
           itemCard += `<div class="btnSet d-flex justify-content-center">
           <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
           <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
@@ -128,7 +128,7 @@ const hideAddItemForm = () => {
 
 };
 const hideEditItemForm = () => {
-
+  $('#editModal').addClass('d-none');
 };
 
 $('#loginBtn').click(() => {
@@ -272,45 +272,54 @@ $('#addItemForm').submit(() => {
   showItems();
 });
 
-// $('#editItemBtn').click(() => {
-//     if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
-//         showEditItemForm();
-//     }
-// });
+$('#editBtn').click(() => {
+    // if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
+        showEditItemForm();
+    // }
+});
 
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
   event.preventDefault();
-  if(!sessionStorage.userID){
-    alert('401, permission denied');
-    return;
+  console.log('click');
+
+  if (!sessionStorage['userID']) {
+      alert('401 PERMISSION IS DENIED');
+      return;
   }
+
+
+  $('#editModal').modal('show');
+
+
   const id = $(this).parent().parent().parent().data('id');
   console.log(id);
-  $.ajax({
-    url:`${url}/addItem/${id}`,
-    type: 'PATCH',
-    data: {
-      userId: sessionStorage.userID
-    },
-    dataType:'json',
-    success: function(item){
-      if (item == '401') {
-        alert('401 UNAUTHORIZED');
-      } else {
-        showEditItemForm();
-        $("#itemName").val();
-        $("#itemPrice").val();
-        $("#itemID").val();
-        $("#addBtn").text('Edit Product').addClass('btn-warning');
-        editing = true;
-      }
-    },
-    error: function(err){
-      console.log(err);
-      console.log('something went wrong with getting the single product');
-    }
-  });
+
+
+  // $.ajax({
+  //   url:`${url}/addItem/${id}`,
+  //   type: 'PATCH',
+  //   data: {
+  //     userId: sessionStorage.userID
+  //   },
+  //   dataType:'json',
+  //   success: function(item){
+  //     if (item == '401') {
+  //       alert('401 UNAUTHORIZED');
+  //     } else {
+  //       showEditItemForm();
+  //       $("#itemName").val();
+  //       $("#itemPrice").val();
+  //       $("#itemID").val();
+  //       $("#addBtn").text('Edit Product').addClass('btn-warning');
+  //       editing = true;
+  //     }
+  //   },
+  //   error: function(err){
+  //     console.log(err);
+  //     console.log('something went wrong with getting the single product');
+  //   }
+  // });
 });
 
 $('#cardContainer').on('click', '.removeBtn', function(){
@@ -321,37 +330,37 @@ $('#cardContainer').on('click', '.removeBtn', function(){
   }
 });
 
-$('#editItemForm').click(() => {
-  // Ajax request to patch database items using the form data
-  $.ajax({
-    // url here
-    type: 'post',
-    data: {
-      userId: sessionStorage.userID
-    },
-    dataType: 'json',
-    success:function(product){
-      if(product == '401'){
-        alert('401 UNAUTHORIZED');
-      } else {
-        console.log(product);
-        // theres no description input on add item form in HTML.
-        // $('#itemName').val(res['item_name']);
-        // $('#price').val(res['price']);
-        // $('#clothingType').val(res['clothing_type']);
-        // $('#productID').val(res['_id']);
-        // $('#condition').val(res['condition']);
-        // $('#addProductButton').text('Edit Product').addClass('btn-warning');
-        // $('#heading').text('Edit Product');
-        editing = true;
-      }
-    },
-    error:function(err){
-      console.log(err);
-      console.log('We pulled the wrong thread, and something went wrong :~(');
-    }
-  });
+// $('#editItemForm').submit() => {
+//   // Ajax request to patch database items using the form data
+//   $.ajax({
+//     // url here
+//     type: 'post',
+//     data: {
+//       userId: sessionStorage.userID
+//     },
+//     dataType: 'json',
+//     success:function(product){
+//       if(product == '401'){
+//         alert('401 UNAUTHORIZED');
+//       } else {
+//         console.log(product);
+//         // theres no description input on add item form in HTML.
+//         // $('#itemName').val(res['item_name']);
+//         // $('#price').val(res['price']);
+//         // $('#clothingType').val(res['clothing_type']);
+//         // $('#productID').val(res['_id']);
+//         // $('#condition').val(res['condition']);
+//         // $('#addProductButton').text('Edit Product').addClass('btn-warning');
+//         // $('#heading').text('Edit Product');
+//         editing = true;
+//       }
+//     },
+//     error:function(err){
+//       console.log(err);
+//       console.log('We pulled the wrong thread, and something went wrong :~(');
+//     }
+//   });
 
-showItems();
-hideEditItemForm();
-});
+// showItems();
+// hideEditItemForm();
+// });
