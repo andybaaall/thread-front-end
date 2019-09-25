@@ -91,6 +91,7 @@ const clearSessionStorage = () => {
 // clears login and register forms
 const clearForms = () => {
     $('input').val('');
+    $('textarea').val('');
 };
 
 // these all show DOM elements
@@ -293,44 +294,37 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
-        // all of the form fields have a value
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined) ) {
+        console.log('all of the form fields have a value');
+
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
         formData.append('itemType', $('input[name=itemType]:checked').val());
-        formData.append('itemCondition', 'input[name=itemCondition]:checked');
+        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
-        console.log(itemName.val());
-        console.log(itemDescription.val());
-        console.log(itemPrice.val());
-        console.log(itemType);
-        console.log(itemCondition);
-        console.log(itemImg[0].files[0]);
-        console.log(sessionStorage.userID);
+        $.ajax({
+            url: `${url}/addItem`,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function(result){
+                console.log(result);
 
-        // $.ajax({
-        //     url: `${url}/addItem`,
-        //     type: 'POST',
-        //     data: formData,
-        //     contentType: false,
-        //     processData: false,
-        //     success:function(result){
-        //         console.log(result);
-        //     },
-        //     error: function(){
-        //         console.log('error sending item to DB');
-        //     }
-        // });
-
-        clearForms();
-        $('#itemImageLabel').html('Upload image');
-        showItems();
+                clearForms();
+                $('#itemImageLabel').html('Upload image');
+                showItems();
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
 
     }   else {
-        alert('At least one of the form fields is empty.');
+            alert('Please add all of the item details!');
     }
 });
 
