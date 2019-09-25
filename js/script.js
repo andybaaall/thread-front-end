@@ -468,7 +468,7 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
-            $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
+            $('#singleItemModalBody').append(`<p>Price: $` + item.price + `</p>`);
         },
         error: function(err){
             console.log(err);
