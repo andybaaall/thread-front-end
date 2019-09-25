@@ -44,11 +44,13 @@ showItems = () => {
             console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
+              // console.log(data[i].image_URL);
                 let itemCard = `
                     <div class="col-12 col-md-4">
                         <div class="card" data-id="${data[i]._id}">
                             <div class="card-body">
                                 <div id="worktitle" class="card-title">
+                                <img class="img-fluid" src="${url}/${data[i].image_URL}">
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
                                     <p class="text-center">${data[i].price}</p>
                                 </div>`;
@@ -187,6 +189,7 @@ $('#loginForm').submit(() => {
             success: function(result){
                 if (result === 'user does not exist'){
                     console.log('user does not exist');
+                    $('#errLogin').append('<p class="text-danger">Sorry, user does not exist. </p>');
                 } else if (result === 'invalid password'){
                     console.log('invalid password');
                 } else if (sessionStorage.username) {
@@ -365,13 +368,33 @@ $('#cardContainer').on('click', '.editBtn', function() {
         }
     });
 });
-
 $('#cardContainer').on('click', '.removeBtn', function(){
     event.preventDefault();
     if(!sessionStorage.userID){
         alert('401, permission denied');
         return;
     }
+    const id = $(this).parent().parent().parent().data('id');
+    const card = $(this).parent().parent().parent();
+    console.log(id);
+    $.ajax({
+      url: `${url}/addItem/${id}`,
+      type: 'DELETE',
+      data: {
+          userId: sessionStorage.userID
+      },
+      success:function(item){
+          if(item == '401'){
+              alert('401 UNAUTHORIZED');
+          } else {
+             card.remove();
+          }
+      },
+      error:function(err) {
+        console.log(err);
+        console.log('something went wrong deleting the product');
+      }
+  });
 });
 
 $('#editItemForm').submit(() => {
