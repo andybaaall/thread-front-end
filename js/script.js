@@ -25,10 +25,12 @@ $(document).ready(() => {
         hideRegisterBtn();
         hideLoginBtn();
         showLogoutBtn();
+        showAddItemForm();
     } else {
         showRegisterBtn();
         showLoginBtn();
         hideLogoutBtn();
+        hideAddItemForm();
     }
 });
 
@@ -78,7 +80,7 @@ const clearSessionStorage = () => {
 
 // clears login and register forms
 const clearForms = () => {
-
+    $('input').val('');
 };
 
 // these all show DOM elements
@@ -100,7 +102,7 @@ const showRegisterForm = () => {
     $('#registerFormBox').removeClass('d-none');
 };
 const showAddItemForm = () => {
-  $('#uploadModal').show();
+  $('#addItemForm').show();
 };
 const showEditItemForm = () => {
 
@@ -125,7 +127,7 @@ const hideRegisterForm = () => {
     $('#registerFormBox').addClass('d-none');
 };
 const hideAddItemForm = () => {
-
+    $('#addItemForm').hide();
 };
 const hideEditItemForm = () => {
 
@@ -143,6 +145,7 @@ $('#loginBtn').click(() => {
 $('#logoutBtn').click(() => {
     console.log('clicked logout button');
       hideLogoutBtn();
+      hideAddItemForm();
       showRegisterBtn();
       showLoginBtn();
       $('#cardContainer').addClass('d-none');
@@ -256,7 +259,7 @@ $('#registerForm').submit(() => {
             }
         });
     }
-    setSessionStorage(/* whatever username comes back from the Ajax req */);
+    // setSessionStorage(/* whatever username comes back from the Ajax req */);
 
     hideRegisterForm();
     hideRegisterBtn();
@@ -275,34 +278,39 @@ $('#addItemForm').on('submit', () => {
     let itemName = $('#itemName');
     let itemDescription = $('#itemDescription');
     let itemPrice = $('#itemPrice');
-    let itemType = $('#itemType');
-    let itemCondition = $('#itemType');
+    let itemType = $('input[name=itemType]:checked').val();
+    let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
+
+    if ((itemName.val()) && (itemDescription.val()) && (itemPrice.val()) && (itemType.val()) && (itemName.val()) && ) {
+        console.log('we have itemname');
+    } else {
+        console.log('fd has no have itemname');
+    }
 
     formData.append('itemName', itemName.val());
     formData.append('itemDescription', itemDescription.val());
     formData.append('itemPrice', itemPrice.val());
-    formData.append('itemType', itemType.val());
-    // formData.append('itemCondition', itemCondition.('input[name="genderS"]:checked').value;
+    formData.append('itemType', itemType);
+    formData.append('itemCondition', itemCondition);
     formData.append('itemImg', itemImg[0].files[0]);
-    // this will change when we set sessionStorage
-    formData.append('userID', 'dummy user ID');
+    formData.append('userID', sessionStorage.userID);
 
-    // console.log(itemImg[0].files[0]);
+    // $.ajax({
+    //     url: `${url}/addItem`,
+    //     type: 'POST',
+    //     data: formData,
+    //     contentType: false,
+    //     processData: false,
+    //     success:function(result){
+    //         console.log(result);
+    //     },
+    //     error: function(){
+    //         console.log('error sending item to DB');
+    //     }
+    // });
 
-    $.ajax({
-        url: `${url}/addItem`,
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success:function(result){
-            console.log(result);
-        },
-        error: function(){
-            console.log('error sending item to DB');
-        }
-    });
+    clearForms();
 
 });
 
