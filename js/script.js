@@ -47,22 +47,28 @@ showItems = () => {
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
                 let itemCard = `
-                <div class="col-12 col-md-3">
-                <div class="card" data-id="${data[i]._id}">
-                <div class="card-body">
-                <div id="worktitle" class="card-title">
-                <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                <p class="text-center">${data[i].price}</p>
-                </div>`;
-                if(sessionStorage.userID === data[i].user_id) {
-                    itemCard += `<div class="btnSet d-flex justify-content-center">
-                    <button class="btn btn-primary btn-sm mr-1 editBtn">EDIT</button>
-                    <button class="btn btn-secondary btn-sm removeBtn">REMOVE</button>
-                    </div>`;
-                }
-                itemCard += `</div>
-                </div>
-                </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card" data-id="${data[i]._id}">
+                            <div class="card-body">
+                                <div id="worktitle" class="card-title">
+                                    <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
+                                    <p class="text-center">${data[i].price}</p>
+                                </div>`;
+                                if(sessionStorage.userID === data[i].user_id) {
+                                    itemCard += `<div class="btnSet d-flex justify-content-center">
+                                    <button class="btn btn-warning btn-sm mr-1 editBtn">EDIT</button>
+                                    <button class="btn btn-danger btn-sm removeBtn">REMOVE</button>
+                                    </div>`;
+                                }
+                                  itemCard += `<div class="btnSet d-flex justify-content-center">
+                                  <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
+                                  if (sessionStorage.userID) {
+                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
+                                  }
+                            itemCard += `</div>
+                            </div>
+                        </div>
+                    </div>
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
             }
@@ -324,19 +330,29 @@ $('#editBtn').click(() => {
 // Edit and delete btns are made when sessionStorage.userID matched
 $('#cardContainer').on('click', '.editBtn', function() {
     event.preventDefault();
-    console.log('click');
-        $.ajax({
-            url: `${url}/getItem/${id}`,
-            type: 'GET',
-            data: {
-
-            },
-            success: function(result){
-                console.log(result);
-            },
-            error: function(err){
-                console.log(err);
-                console.log('No, fuck you.');
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
+    }
+    const id = $(this).parent().parent().parent().data('id');
+    console.log(id);
+    $.ajax({
+        url:`${url}/addItem/${id}`,
+        type: 'PATCH',
+        data: {
+            userId: sessionStorage.userID
+        },
+        dataType:'json',
+        success: function(item){
+            if (item == '401') {
+                alert('401 UNAUTHORIZED');
+            } else {
+                showEditItemForm();
+                $('#itemName').val();
+                $('#itemPrice').val();
+                $('#itemID').val();
+                $('#addBtn').text('Edit Product').addClass('btn-warning');
+                editing = true;
             }
         })
 
@@ -347,28 +363,35 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 
 
+$('#editItemForm').submit(() => {
+    // Ajax request to patch database items using the form data
+    showItems();
+    hideEditItemForm();
+});
 
-
-    // id = $(this).parent().parent().parent().data('id');
-    // $('#cardContainer').on('click', '.removeBtn', function(){
-    //     event.preventDefault();
-    //     if(!sessionStorage.userID){
-    //         alert('401, permission denied');
-    //         return;
-    //     }
-    // });
-
-
-    $('#editItemForm').submit(() => {
-        let formData = new FormData();
-
-        // let itemName = $('#itemNameEdit');
-        let itemName = $('#itemName').val();
-        let itemDescription = $('#itemDescriptionEdit');
-        let itemPrice = $('#itemPriceEdit');
-        let itemType = $('input[name=itemTypeEdit]:checked').val();
-        let itemCondition = $('input[name=itemConditionEdit]:checked').val();
-
-
-
-    });
+//  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
+$('#cardContainer').on('click', '.moreInfoBtn', function() {
+  // console.log('you clicked on the more info button');
+  const id = $(this).parent().parent().parent().data('id');
+  $.ajax({
+      url:`${url}/getItem/${id}`,
+      type: 'GET',
+      success: function(item){
+        console.log(item);
+        // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
+        // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
+        $('#singleItemModalTitle').empty();
+        $('#singleItemModalTitle').append(item.item_name);
+        $('#singleItemModalBody').empty();
+        // $('#singleItemModalBody').append(`<p>item.image_URL</p>`);
+        $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
+        $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
+        $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
+        $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
+      },
+      error: function(err){
+          console.log(err);
+          console.log('something went wrong with getting the single item');
+      }
+  });
+});

@@ -13,9 +13,9 @@
 <body>
     <!-- SOPHIE'S BEAUTIFUL NAV BAR WITH DROPDOWN MENU -->
     <nav class="navbar navbar-light bg-thread fixed">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon white"></span>
-        </button>
+        </button> -->
         <a class="navbar-brand mx-auto text-white shopTitle" href="#">Thread</a>
 
         <div id="logInOutBox">
@@ -23,7 +23,7 @@
             <button id="loginBtn" class="btn btn-light d-none" type="button" name="button" >Login</button>
             <button id="logoutBtn" class="btn btn-light d-none" type="button" name="button">Logout</button>
         </div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active mx-auto">
                     <a class="nav-link" href="#">TOPS</a>
@@ -38,7 +38,7 @@
                     <a class="nav-link" href="#">OTHER</a>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </nav>
 
     <!-- SOPHIE'S BEAUTIFUL HERO IMAGE AND CARD CONTAINER -->
@@ -176,6 +176,29 @@
         <button type="submit" class="btn btn-primary">Add Item</button>
     </form>
 
+    <!-- MODAL CARD FOR VIEWING SINGLE ITEM -->
+    <div class="modal fade" id="singleItemModal" tabindex="-1" role="dialog" aria-labelledby="singleItemModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="singleItemModalTitle"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="singleItemModalBody">
+
+            <!-- PUT DATA FROM MONGO DB IN HERE; APPEND FROM JS -->
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANDY'S BUY ITEM MODAL -->
     <div id="buyModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -196,6 +219,7 @@
     </div>
 
 
+<<<<<<< HEAD
       <!-- MATT'S EDIT ITEMS FORM -->
       <div class="modal" id="editModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -278,6 +302,8 @@
         </div>
       </div>
 
+=======
+>>>>>>> master
     <script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="node_modules/popper.js/dist/umd/popper.min.js" charset="utf-8"></script>
