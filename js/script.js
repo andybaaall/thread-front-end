@@ -307,12 +307,18 @@ $('#addItemForm').on('submit', () => {
         });
 
         clearForms();
+        showItems();
 
     }   else {
         alert('At least one of the form fields is empty.');
     }
 });
 
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    console.log(fileName);
+    $('#itemImageLabel').html(fileName);
+});
 // $('#editItemBtn').click(() => {
 //     if (/* the item to be edited has the same userID as the userID stored in sessionStorage*/) {
 //         showEditItemForm();
