@@ -330,7 +330,11 @@ $('#addItemForm').on('submit', () => {
         clearForms();
 
     }   else {
+<<<<<<< HEAD
         alert('At least one of the form fields is empty.');
+=======
+        alert('Please add all of the item details!');
+>>>>>>> mattEditWorking
     }
 });
 
@@ -405,8 +409,12 @@ $('#cardContainer').on('click', '.editBtn', function() {
 
 });
 
+<<<<<<< HEAD
 
 $('#editItemForm').submit(() => {
+=======
+$('#editItemFormBtn').click(() => {
+>>>>>>> mattEditWorking
     // Ajax request to patch database items using the form data
 
     event.preventDefault();
@@ -532,11 +540,11 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             $('#singleItemModalTitle').empty();
             $('#singleItemModalTitle').append(item.item_name);
             $('#singleItemModalBody').empty();
-            // $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
+            $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
-            $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
+            $('#singleItemModalBody').append(`<p>Price: $` + item.price + `</p>`);
         },
         error: function(err){
             console.log(err);
@@ -561,3 +569,45 @@ $('#cardContainer').on('click','.buyBtn',function(){
       }
     });
 });
+<<<<<<< HEAD
+=======
+
+$('#buyModal').click(function(){
+    let buy = $(this).children().children().children().children();
+    buy.addClass('buyConfirm');
+    console.log('has been clicked');
+    let boughtID;
+});
+
+// $('#buyModal').on('click','.buyConfirm',function(){
+  // console.log('click');
+  // console.log(id);
+  // console.log($('.buyBtn').parent().parent().parent().data('id'));
+  // let boughtID = $('.buyBtn').parent().parent().parent().data('id');
+  //   $.ajax({
+  //       url:`${url}/buyItem/${boughtID}`,
+  //       type: 'PATCH',
+  //       data: {
+  //           _id:  boughtID,
+  //           item_name: itemName,
+  //           item_description: ,
+  //           clothing_type: ,
+  //           image_URL:  ,
+  //           price:  ,
+  //           condition: ,
+  //           user_id: ,
+  //           bought: true
+  //       },
+  //       dataType:'json',
+  //       success: function(result){
+  //         console.log(result);
+  //           // showItems().find(p).text('sold');
+  //           bought = true;
+  //       },
+  //       error: function(err){
+  //         console.log(err);
+  //         console.log('cannot buy it');
+  //       }
+  //   });
+// });
+>>>>>>> mattEditWorking
