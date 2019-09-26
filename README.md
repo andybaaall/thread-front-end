@@ -7,7 +7,7 @@ For this to work, you will also need to have a server running and have it connec
 The repo for our server is located here: [thread-back-end](https://github.com/alexsophiekim/thread-back-end).  
 
 ## Installation
-To install everything needed for this project, you need to have a stable version of Node JS and NPM installed on your computer or server.
+To install everything needed for this project, you need to have a stable version of Node JS and NPM installed on your computer or server. You may wish to use Vagrant to host your sever, if you're not the administrator on the computer you're using.
 
 ### Clone and install the front-end project
 ```sh
