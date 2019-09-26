@@ -4,6 +4,7 @@ let url;
 let editing = false;
 let id;
 
+
 $(document).ready(() => {
     console.log(sessionStorage);
     // GET THE CONFIG.JSON
@@ -73,6 +74,7 @@ showItems = () => {
                     </div>
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
+                console.log(data[i].bought);
             }
             $('#cardContainer').removeClass('d-none');
         },
@@ -91,6 +93,7 @@ const clearSessionStorage = () => {
 // clears login and register forms
 const clearForms = () => {
     $('input').val('');
+    $('textarea').val('');
 };
 
 // these all show DOM elements
@@ -293,13 +296,14 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
-        // all of the form fields have a value
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined) ) {
+        console.log('all of the form fields have a value');
+
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', itemType);
-        formData.append('itemCondition', itemCondition);
+        formData.append('itemType', $('input[name=itemType]:checked').val());
+        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
@@ -311,17 +315,24 @@ $('#addItemForm').on('submit', () => {
             processData: false,
             success:function(result){
                 console.log(result);
+
+                clearForms();
+                $('#itemImageLabel').html('Upload image');
+                showItems();
             },
-            error: function(){
-                console.log('error sending item to DB');
+            error: function(err){
+                console.log(err);
             }
         });
 
-        clearForms();
-
     }   else {
-        alert('At least one of the form fields is empty.');
+            alert('Please add all of the item details!');
     }
+});
+
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    $('#itemImageLabel').html(fileName);
 });
 
 // Edit and delete btns are made when sessionStorage.userID matched
@@ -525,4 +536,42 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             console.log('something went wrong with getting the single item');
         }
     });
+});
+
+$('#buyModal').click(function(){
+  let buy = $(this).children().children().children().children();
+  buy.addClass('buyConfirm');
+  console.log('has been clicked');
+  let boughtID;
+});
+
+$('#buyModal').on('click','.buyConfirm',function(){
+  console.log(id);
+  console.log($('.buyBtn').parent().parent().parent().data('id'));
+  let boughtID = $('.buyBtn').parent().parent().parent().data('id');
+  $.ajax({
+      url:`${url}/buyItem/${boughtID}`,
+      type: 'PATCH',
+      data: {
+          _id:  boughtID,
+          item_name: itemName,
+          item_description: String,
+          clothing_type:   String,
+          image_URL: String,
+          price: Number,
+          condition: String,
+          user_id: String,
+          bought: true
+      },
+      dataType:'json',
+      success: function(result){
+        console.log(result);
+          // showItems().find(p).text('sold');
+          bought = true;
+      },
+      error: function(err){
+        console.log(err);
+        console.log('cannot buy it');
+      }
+  });
 });
