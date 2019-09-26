@@ -408,7 +408,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
 
 $('#editItemFormBtn').click(() => {
     // Ajax request to patch database items using the form data
-    //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
+
     event.preventDefault();
 
     let editing = true;
