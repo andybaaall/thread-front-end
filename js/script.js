@@ -47,31 +47,31 @@ showItems = () => {
             console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
-              // console.log(data[i].image_URL);
+                // console.log(data[i].image_URL);
                 let itemCard = `
-                    <div class="col-12 col-md-4">
-                        <div class="card" data-id="${data[i]._id}">
-                            <div class="card-body">
-                                <div id="worktitle" class="card-title">
-                                <img class="img-fluid" src="${url}/${data[i].image_URL}">
-                                    <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                                    <p class="text-center">$ ${data[i].price}</p>
-                                </div>`;
-                                if(sessionStorage.userID === data[i].user_id) {
-                                    itemCard += `<div class="btnSet d-flex justify-content-center">
-                                    <button class="btn btn-warning btn-sm mr-1 editBtn">EDIT</button>
-                                    <button class="btn btn-danger btn-sm removeBtn">REMOVE</button>
-                                    </div>`;
-                                }
-                                  itemCard += `<div class="btnSet d-flex justify-content-center">
-                                  <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
-                                  if (sessionStorage.userID) {
-                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
-                                  }
-                            itemCard += `</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-4">
+                <div class="card" data-id="${data[i]._id}">
+                <div class="card-body">
+                <div id="worktitle" class="card-title">
+                <img class="img-fluid" src="${url}/${data[i].image_URL}">
+                <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
+                <p class="text-center">$ ${data[i].price}</p>
+                </div>`;
+                if(sessionStorage.userID === data[i].user_id) {
+                    itemCard += `<div class="btnSet d-flex justify-content-center">
+                    <button class="btn btn-warning btn-sm mr-1 editBtn">EDIT</button>
+                    <button class="btn btn-danger btn-sm removeBtn">REMOVE</button>
+                    </div>`;
+                }
+                itemCard += `<div class="btnSet d-flex justify-content-center">
+                <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
+                if (sessionStorage.userID) {
+                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
+                }
+                itemCard += `</div>
+                </div>
+                </div>
+                </div>
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
                 console.log(data[i].bought);
@@ -326,7 +326,7 @@ $('#addItemForm').on('submit', () => {
         });
 
     }   else {
-            alert('Please add all of the item details!');
+        alert('Please add all of the item details!');
     }
 });
 
@@ -391,6 +391,9 @@ $('#cardContainer').on('click', '.editBtn', function() {
             $('#itemPriceEdit').val(item.price);
             $('#itemIDEdit').empty();
             $('#itemIDEdit').val(item._id);
+            $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
+            $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
+
 
 
         },
@@ -406,78 +409,82 @@ $('#cardContainer').on('click', '.editBtn', function() {
 $('#editItemFormBtn').click(() => {
     // Ajax request to patch database items using the form data
     //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
-  event.preventDefault();
+    event.preventDefault();
 
-  let editing = true;
-  let id = $('#itemIDEdit').val();
-  let itemName = $('#itemNameEdit').val();
-  let itemDescription = $('#itemDescriptionEdit').val();
-  let itemPrice = $('#itemPriceEdit').val();
-  let itemType = $('input[name=itemType]:checked').val();
-  let itemCondition = $('input[name=itemCondition]:checked').val();
-
-  // console.log(id);
-  // console.log(itemName);
-  // console.log(itemDescription);
-  // console.log(itemPrice);
-  // console.log(itemType);
-  // console.log(itemCondition);
-
-  if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length) {
+    let editing = true;
+    let id = $('#itemIDEdit').val();
+    let itemName = $('#itemNameEdit').val();
+    let itemDescription = $('#itemDescriptionEdit').val();
+    let itemPrice = $('#itemPriceEdit').val();
+    let itemType = $('input[name=itemTypeEdit]:checked').val();
+    let itemCondition = $('input[name=itemConditionEdit]:checked').val();
 
 
 
-    //trying to get item conditon to console.log
+    // console.log(id.length);
+    // console.log(itemName.length);
+    // console.log(itemDescription.length);
+    // console.log(itemPrice.length);
+    // console.log(itemType);
+    // console.log(itemCondition);
+
+    if ((itemName.length != 0) && (itemDescription.length != 0) && (itemPrice.length != 0) ) {
+        $.ajax({
+            url:`${url}/editItem/${id}`,
+            type: 'PATCH',
+            data: {
+                itemName: itemName,
+                itemDescription: itemDescription,
+                itemPrice: itemPrice,
+                itemCondition: itemCondition,
+                itemType: itemType,
+                userId: sessionStorage.userID
+            },
+            success: function(item){
+                console.log(item);
+                $('#editModal').modal('hide');
+                showItems();
+            },
+            error: function(err){
+                console.log(err);
+                console.log('update didnt work');
+            }
+        });
+    } else {
+        console.log('uh oh');
+    }
 
 
-    // $.ajax({
-    //     url:`${url}/editItem/${id}`,
-    //     type: 'PATCH',
-    //     data: {
-    //         userId: sessionStorage.userID,
-    //         itemName: itemNameEdit,
-    //         itemDescription: itemDescriptionEdit,
-    //         itemPrice: itemPriceEdit,
-    //         _id: item.itemIDEdit
-    //     },
-    //     dataType:'json',
-    //     success: function(item){
-    //         if (item == '401') {
-    //             alert('401 UNAUTHORIZED');
-    //         } else {
-    //             showEditItemForm();
-    //             $('#itemNameEdit').val();
-    //             $('#itemPriceEdit').val();
-    //             $('#itemDescriptionEdit').val();
-    //             $('#itemIDEdit').val();
-    //
-    //         }
-    //     }
-    // });
 
-    $.ajax({
-      url:`${url}/editItem/${id}`,
-      type: 'PATCH',
-      data: {
-        itemName: itemName,
-        itemDescription: itemDescription,
-        itemPrice: itemPrice,
-        itemCondition: itemCondition,
-        userId: sessionStorage.userID,
-        _id: id
-      },
-      success: function(item){
-        console.log(item);
-      },
-      error: function(err){
-        console.log(err);
-        console.log('update didnt work');
-      }
-    });
+        //trying to get item conditon to console.log
 
-  } else {
-    alert('You havent updated all the fields!');
-  }
+
+        // $.ajax({
+        //     url:`${url}/editItem/${id}`,
+        //     type: 'PATCH',
+        //     data: {
+        //         userId: sessionStorage.userID,
+        //         itemName: itemNameEdit,
+        //         itemDescription: itemDescriptionEdit,
+        //         itemPrice: itemPriceEdit,
+        //         _id: item.itemIDEdit
+        //     },
+        //     dataType:'json',
+        //     success: function(item){
+        //         if (item == '401') {
+        //             alert('401 UNAUTHORIZED');
+        //         } else {
+        //             showEditItemForm();
+        //             $('#itemNameEdit').val();
+        //             $('#itemPriceEdit').val();
+        //             $('#itemDescriptionEdit').val();
+        //             $('#itemIDEdit').val();
+        //
+        //         }
+        //     }
+        // });
+
+
 });
 
 $('#cardContainer').on('click', '.removeBtn', function(){
@@ -490,25 +497,25 @@ $('#cardContainer').on('click', '.removeBtn', function(){
     const card = $(this).parent().parent().parent();
     console.log(id);
     $.ajax({
-      url: `${url}/addItem/${id}`,
-      type: 'DELETE',
-      data: {
-          userID: sessionStorage.userID
-      },
-      success:function(item){
-          if(item == '401'){
-              alert('401 UNAUTHORIZED');
-          } else {
-             card.remove();
-          }
-      },
-      error:function(err) {
-        console.log(err);
-        console.log('something went wrong deleting the product');
-      }
-  });
-  // showItems();
-  // hideEditItemForm();
+        url: `${url}/addItem/${id}`,
+        type: 'DELETE',
+        data: {
+            userID: sessionStorage.userID
+        },
+        success:function(item){
+            if(item == '401'){
+                alert('401 UNAUTHORIZED');
+            } else {
+                card.remove();
+            }
+        },
+        error:function(err) {
+            console.log(err);
+            console.log('something went wrong deleting the product');
+        }
+    });
+    // showItems();
+    // hideEditItemForm();
 });
 
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
@@ -539,39 +546,39 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
 });
 
 $('#buyModal').click(function(){
-  let buy = $(this).children().children().children().children();
-  buy.addClass('buyConfirm');
-  console.log('has been clicked');
-  let boughtID;
+    let buy = $(this).children().children().children().children();
+    buy.addClass('buyConfirm');
+    console.log('has been clicked');
+    let boughtID;
 });
 
 $('#buyModal').on('click','.buyConfirm',function(){
-  console.log(id);
-  console.log($('.buyBtn').parent().parent().parent().data('id'));
-  let boughtID = $('.buyBtn').parent().parent().parent().data('id');
-  $.ajax({
-      url:`${url}/buyItem/${boughtID}`,
-      type: 'PATCH',
-      data: {
-          _id:  boughtID,
-          item_name: itemName,
-          item_description: String,
-          clothing_type:   String,
-          image_URL: String,
-          price: Number,
-          condition: String,
-          user_id: String,
-          bought: true
-      },
-      dataType:'json',
-      success: function(result){
-        console.log(result);
-          // showItems().find(p).text('sold');
-          bought = true;
-      },
-      error: function(err){
-        console.log(err);
-        console.log('cannot buy it');
-      }
-  });
+    console.log(id);
+    console.log($('.buyBtn').parent().parent().parent().data('id'));
+    let boughtID = $('.buyBtn').parent().parent().parent().data('id');
+    $.ajax({
+        url:`${url}/buyItem/${boughtID}`,
+        type: 'PATCH',
+        data: {
+            _id:  boughtID,
+            item_name: itemName,
+            item_description: String,
+            clothing_type:   String,
+            image_URL: String,
+            price: Number,
+            condition: String,
+            user_id: String,
+            bought: true
+        },
+        dataType:'json',
+        success: function(result){
+            console.log(result);
+            // showItems().find(p).text('sold');
+            bought = true;
+        },
+        error: function(err){
+            console.log(err);
+            console.log('cannot buy it');
+        }
+    });
 });
