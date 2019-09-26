@@ -386,7 +386,7 @@ $('#cardContainer').on('click', '.removeBtn', function(){
     const card = $(this).parent().parent().parent();
 
     $.ajax({
-        url: `${url}/addItem/${id}`,
+        url: `${url}/deleteItem/${id}`,
         type: 'DELETE',
         data: {
             userID: sessionStorage.userID
