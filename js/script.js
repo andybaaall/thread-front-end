@@ -37,6 +37,8 @@ $(document).ready(() => {
 
 });
 
+// <img class="img-fluid" src="${url}/${data[i].image_URL}">
+  // <div class="cardImg" style="background-image: url(${url}/${data[i].image_URL}); height: 200px; width: 400px;" >
 // GET ALL THE ITEMS FROM MONGO DB AND ADD THEM TO CARDS IN OUR CARD CONTAINER
 showItems = () => {
     $.ajax({
@@ -53,10 +55,14 @@ showItems = () => {
                         <div class="card" data-id="${data[i]._id}">
                             <div class="card-body">
                                 <div id="worktitle" class="card-title">
-                                <img class="img-fluid" src="${url}/${data[i].image_URL}">
+                               <div class="cardImg" style="background-image: url(${url}/${data[i].image_URL}); height: 200px; width: 100%;" >
+                                </div>
                                     <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
-                                    <p class="text-center">$ ${data[i].price}</p>
-                                </div>`;
+                                    <p class="text-center">$ ${data[i].price}</p>`;
+                                    if (data[i].bought == true) {
+                                    itemCard += `<p class="text-center">Sold out</p>`;
+                                    }
+                                itemCard += `</div>`;
                                 if(sessionStorage.userID === data[i].user_id) {
                                     itemCard += `<div class="btnSet d-flex justify-content-center">
                                     <button class="btn btn-warning btn-sm mr-1 editBtn">EDIT</button>
@@ -66,7 +72,9 @@ showItems = () => {
                                   itemCard += `<div class="btnSet d-flex justify-content-center">
                                   <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
                                   if (sessionStorage.userID) {
-                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
+                                    if (data[i].bought==false) {
+                                      itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
+                                    }
                                   }
                             itemCard += `</div>
                             </div>
@@ -93,7 +101,6 @@ const clearSessionStorage = () => {
 // clears login and register forms
 const clearForms = () => {
     $('input').val('');
-    $('textarea').val('');
 };
 
 // these all show DOM elements
@@ -296,14 +303,13 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined) ) {
-        console.log('all of the form fields have a value');
-
+    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
+        // all of the form fields have a value
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', $('input[name=itemType]:checked').val());
-        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
+        formData.append('itemType', itemType);
+        formData.append('itemCondition', itemCondition);
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
@@ -315,24 +321,17 @@ $('#addItemForm').on('submit', () => {
             processData: false,
             success:function(result){
                 console.log(result);
-
-                clearForms();
-                $('#itemImageLabel').html('Upload image');
-                showItems();
             },
-            error: function(err){
-                console.log(err);
+            error: function(){
+                console.log('error sending item to DB');
             }
         });
 
-    }   else {
-            alert('Please add all of the item details!');
-    }
-});
+        clearForms();
 
-$('#itemImage').change(() => {
-    const fileName = $('#itemImage')[0].files[0].name;
-    $('#itemImageLabel').html(fileName);
+    }   else {
+        alert('At least one of the form fields is empty.');
+    }
 });
 
 // Edit and delete btns are made when sessionStorage.userID matched
@@ -400,6 +399,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 
 });
+
 
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
@@ -484,6 +484,23 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
     });
 });
 
+$('#cardContainer').on('click','.buyBtn',function(){
+  console.log('clicked');
+  const id = $(this).parent().parent().parent().data('id');
+  console.log(id);
+    $.ajax({
+      url: `${url}/buyItem/${id}`,
+      type:'PATCH',
+      success:function(){
+        console.log('get request');
+        showItems();
+      },
+      error: function(err){
+        console.log(err);
+      }
+    });
+});
+
 $('#buyModal').click(function(){
   let buy = $(this).children().children().children().children();
   buy.addClass('buyConfirm');
@@ -492,32 +509,33 @@ $('#buyModal').click(function(){
 });
 
 $('#buyModal').on('click','.buyConfirm',function(){
-  console.log(id);
-  console.log($('.buyBtn').parent().parent().parent().data('id'));
-  let boughtID = $('.buyBtn').parent().parent().parent().data('id');
-  $.ajax({
-      url:`${url}/buyItem/${boughtID}`,
-      type: 'PATCH',
-      data: {
-          _id:  boughtID,
-          item_name: itemName,
-          item_description: String,
-          clothing_type:   String,
-          image_URL: String,
-          price: Number,
-          condition: String,
-          user_id: String,
-          bought: true
-      },
-      dataType:'json',
-      success: function(result){
-        console.log(result);
-          // showItems().find(p).text('sold');
-          bought = true;
-      },
-      error: function(err){
-        console.log(err);
-        console.log('cannot buy it');
-      }
-  });
+  console.log('click');
+  // console.log(id);
+  // console.log($('.buyBtn').parent().parent().parent().data('id'));
+  // let boughtID = $('.buyBtn').parent().parent().parent().data('id');
+  //   $.ajax({
+  //       url:`${url}/buyItem/${boughtID}`,
+  //       type: 'PATCH',
+  //       data: {
+  //           _id:  boughtID,
+  //           item_name: itemName,
+  //           item_description: ,
+  //           clothing_type: ,
+  //           image_URL:  ,
+  //           price:  ,
+  //           condition: ,
+  //           user_id: ,
+  //           bought: true
+  //       },
+  //       dataType:'json',
+  //       success: function(result){
+  //         console.log(result);
+  //           // showItems().find(p).text('sold');
+  //           bought = true;
+  //       },
+  //       error: function(err){
+  //         console.log(err);
+  //         console.log('cannot buy it');
+  //       }
+  //   });
 });
