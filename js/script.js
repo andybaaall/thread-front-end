@@ -319,7 +319,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
         url:`${url}/getItem/${id}`,
         type: 'GET',
         success: function(item){
-            console.log(item);
             $('#itemNameEdit').empty();
             $('#itemNameEdit').val(item.item_name);
             $('#itemDescriptionEdit').empty();
@@ -385,7 +384,7 @@ $('#cardContainer').on('click', '.removeBtn', function(){
     }
     const id = $(this).parent().parent().parent().data('id');
     const card = $(this).parent().parent().parent();
-    console.log(id);
+
     $.ajax({
         url: `${url}/addItem/${id}`,
         type: 'DELETE',
