@@ -568,8 +568,8 @@ $('#buyModal').click(function(){
     let boughtID;
 });
 
-$('#buyModal').on('click','.buyConfirm',function(){
-  console.log('click');
+// $('#buyModal').on('click','.buyConfirm',function(){
+  // console.log('click');
   // console.log(id);
   // console.log($('.buyBtn').parent().parent().parent().data('id'));
   // let boughtID = $('.buyBtn').parent().parent().parent().data('id');
@@ -598,4 +598,4 @@ $('#buyModal').on('click','.buyConfirm',function(){
   //         console.log('cannot buy it');
   //       }
   //   });
-});
+// });
