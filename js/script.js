@@ -49,7 +49,7 @@ showItems = () => {
             console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
-              // console.log(data[i].image_URL);
+                // console.log(data[i].image_URL);
                 let itemCard = `
                     <div class="col-12 col-md-4">
                         <div class="card" data-id="${data[i]._id}">
@@ -388,6 +388,11 @@ $('#cardContainer').on('click', '.editBtn', function() {
             $('#itemDescriptionEdit').val(item.item_description);
             $('#itemPriceEdit').empty();
             $('#itemPriceEdit').val(item.price);
+            $('#itemIDEdit').empty();
+            $('#itemIDEdit').val(item._id);
+            $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
+            $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
+
 
 
         },
@@ -403,27 +408,83 @@ $('#cardContainer').on('click', '.editBtn', function() {
 
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
-    //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
-    $.ajax({
-        url:`${url}/addItem/${id}`,
-        type: 'PATCH',
-        data: {
-            userId: sessionStorage.userID
-        },
-        dataType:'json',
-        success: function(item){
-            if (item == '401') {
-                alert('401 UNAUTHORIZED');
-            } else {
-                showEditItemForm();
-                $('#itemName').val();
-                $('#itemPrice').val();
-                $('#itemID').val();
-                $('#addBtn').text('Edit Product').addClass('btn-warning');
-                editing = true;
+
+    event.preventDefault();
+
+    let editing = true;
+    let id = $('#itemIDEdit').val();
+    let itemName = $('#itemNameEdit').val();
+    let itemDescription = $('#itemDescriptionEdit').val();
+    let itemPrice = $('#itemPriceEdit').val();
+    let itemType = $('input[name=itemTypeEdit]:checked').val();
+    let itemCondition = $('input[name=itemConditionEdit]:checked').val();
+
+
+
+    // console.log(id.length);
+    // console.log(itemName.length);
+    // console.log(itemDescription.length);
+    // console.log(itemPrice.length);
+    // console.log(itemType);
+    // console.log(itemCondition);
+
+    if ((itemName.length != 0) && (itemDescription.length != 0) && (itemPrice.length != 0) ) {
+        $.ajax({
+            url:`${url}/editItem/${id}`,
+            type: 'PATCH',
+            data: {
+                itemName: itemName,
+                itemDescription: itemDescription,
+                itemPrice: itemPrice,
+                itemCondition: itemCondition,
+                itemType: itemType,
+                userId: sessionStorage.userID
+            },
+            success: function(item){
+                console.log(item);
+                $('#editModal').modal('hide');
+                showItems();
+            },
+            error: function(err){
+                console.log(err);
+                console.log('update didnt work');
             }
-        }
-    });
+        });
+    } else {
+        console.log('uh oh');
+    }
+
+
+
+        //trying to get item conditon to console.log
+
+
+        // $.ajax({
+        //     url:`${url}/editItem/${id}`,
+        //     type: 'PATCH',
+        //     data: {
+        //         userId: sessionStorage.userID,
+        //         itemName: itemNameEdit,
+        //         itemDescription: itemDescriptionEdit,
+        //         itemPrice: itemPriceEdit,
+        //         _id: item.itemIDEdit
+        //     },
+        //     dataType:'json',
+        //     success: function(item){
+        //         if (item == '401') {
+        //             alert('401 UNAUTHORIZED');
+        //         } else {
+        //             showEditItemForm();
+        //             $('#itemNameEdit').val();
+        //             $('#itemPriceEdit').val();
+        //             $('#itemDescriptionEdit').val();
+        //             $('#itemIDEdit').val();
+        //
+        //         }
+        //     }
+        // });
+
+
 });
 
 $('#cardContainer').on('click', '.removeBtn', function(){
@@ -436,25 +497,25 @@ $('#cardContainer').on('click', '.removeBtn', function(){
     const card = $(this).parent().parent().parent();
     console.log(id);
     $.ajax({
-      url: `${url}/addItem/${id}`,
-      type: 'DELETE',
-      data: {
-          userID: sessionStorage.userID
-      },
-      success:function(item){
-          if(item == '401'){
-              alert('401 UNAUTHORIZED');
-          } else {
-             card.remove();
-          }
-      },
-      error:function(err) {
-        console.log(err);
-        console.log('something went wrong deleting the product');
-      }
-  });
-  // showItems();
-  // hideEditItemForm();
+        url: `${url}/addItem/${id}`,
+        type: 'DELETE',
+        data: {
+            userID: sessionStorage.userID
+        },
+        success:function(item){
+            if(item == '401'){
+                alert('401 UNAUTHORIZED');
+            } else {
+                card.remove();
+            }
+        },
+        error:function(err) {
+            console.log(err);
+            console.log('something went wrong deleting the product');
+        }
+    });
+    // showItems();
+    // hideEditItemForm();
 });
 
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
@@ -499,43 +560,4 @@ $('#cardContainer').on('click','.buyBtn',function(){
         console.log(err);
       }
     });
-});
-
-$('#buyModal').click(function(){
-  let buy = $(this).children().children().children().children();
-  buy.addClass('buyConfirm');
-  console.log('has been clicked');
-  let boughtID;
-});
-
-$('#buyModal').on('click','.buyConfirm',function(){
-  console.log('click');
-  // console.log(id);
-  // console.log($('.buyBtn').parent().parent().parent().data('id'));
-  // let boughtID = $('.buyBtn').parent().parent().parent().data('id');
-  //   $.ajax({
-  //       url:`${url}/buyItem/${boughtID}`,
-  //       type: 'PATCH',
-  //       data: {
-  //           _id:  boughtID,
-  //           item_name: itemName,
-  //           item_description: ,
-  //           clothing_type: ,
-  //           image_URL:  ,
-  //           price:  ,
-  //           condition: ,
-  //           user_id: ,
-  //           bought: true
-  //       },
-  //       dataType:'json',
-  //       success: function(result){
-  //         console.log(result);
-  //           // showItems().find(p).text('sold');
-  //           bought = true;
-  //       },
-  //       error: function(err){
-  //         console.log(err);
-  //         console.log('cannot buy it');
-  //       }
-  //   });
 });
