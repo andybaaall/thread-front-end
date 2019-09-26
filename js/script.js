@@ -93,6 +93,7 @@ const clearSessionStorage = () => {
 // clears login and register forms
 const clearForms = () => {
     $('input').val('');
+    $('textarea').val('');
 };
 
 // these all show DOM elements
@@ -295,13 +296,14 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
-        // all of the form fields have a value
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined) ) {
+        console.log('all of the form fields have a value');
+
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', itemType);
-        formData.append('itemCondition', itemCondition);
+        formData.append('itemType', $('input[name=itemType]:checked').val());
+        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
@@ -313,17 +315,24 @@ $('#addItemForm').on('submit', () => {
             processData: false,
             success:function(result){
                 console.log(result);
+
+                clearForms();
+                $('#itemImageLabel').html('Upload image');
+                showItems();
             },
-            error: function(){
-                console.log('error sending item to DB');
+            error: function(err){
+                console.log(err);
             }
         });
 
-        clearForms();
-
     }   else {
-        alert('At least one of the form fields is empty.');
+            alert('Please add all of the item details!');
     }
+});
+
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    $('#itemImageLabel').html(fileName);
 });
 
 // Edit and delete btns are made when sessionStorage.userID matched
@@ -391,7 +400,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 
 });
-
 
 $('#editItemForm').submit(() => {
     // Ajax request to patch database items using the form data
