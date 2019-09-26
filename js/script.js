@@ -49,6 +49,7 @@ showItems = () => {
             for (var i = 0; i < data.length; i++) {
                 // console.log(data[i].image_URL);
                 let itemCard = `
+<<<<<<< HEAD
                 <div class="col-12 col-md-4">
                 <div class="card" data-id="${data[i]._id}">
                 <div class="card-body">
@@ -72,6 +73,31 @@ showItems = () => {
                 </div>
                 </div>
                 </div>
+=======
+                    <div class="col-12 col-md-4">
+                        <div class="card" data-id="${data[i]._id}">
+                            <div class="card-body">
+                                <div id="worktitle" class="card-title">
+                                    <img class="img-fluid" src="${url}/${data[i].image_URL}">
+                                    <h5 class="card-title text-center mt-3" >${data[i].item_name}</h5>
+                                    <p class="text-center">$ ${data[i].price}</p>
+                                </div>`;
+                                if(sessionStorage.userID === data[i].user_id) {
+                                    itemCard += `<div class="btnSet d-flex justify-content-center">
+                                    <button class="btn btn-warning btn-sm mr-1 editBtn">EDIT</button>
+                                    <button class="btn btn-danger btn-sm removeBtn">REMOVE</button>
+                                    </div>`;
+                                }
+                                  itemCard += `<div class="btnSet d-flex justify-content-center">
+                                  <button class="btn btn-secondary btn-sm mr-1 moreInfoBtn" data-toggle="modal" data-target="#singleItemModal">MORE INFO</button>`;
+                                  if (sessionStorage.userID) {
+                                    itemCard += `<button class="btn btn-success btn-sm mr-1 buyBtn" data-toggle="modal" data-target="#buyModal">BUY</button>`;
+                                  }
+                            itemCard += `</div>
+                            </div>
+                        </div>
+                    </div>
+>>>>>>> johnModalHasImages
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
                 console.log(data[i].bought);
@@ -532,11 +558,11 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             $('#singleItemModalTitle').empty();
             $('#singleItemModalTitle').append(item.item_name);
             $('#singleItemModalBody').empty();
-            // $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
+            $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
-            $('#singleItemModalBody').append(`<p>Price: ` + item.price + `</p>`);
+            $('#singleItemModalBody').append(`<p>Price: $` + item.price + `</p>`);
         },
         error: function(err){
             console.log(err);
