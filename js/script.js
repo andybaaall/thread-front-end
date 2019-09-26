@@ -378,6 +378,8 @@ $('#cardContainer').on('click', '.editBtn', function() {
             $('#itemDescriptionEdit').val(item.item_description);
             $('#itemPriceEdit').empty();
             $('#itemPriceEdit').val(item.price);
+            $('#itemIDEdit').empty();
+            $('#itemIDEdit').val(item._id);
 
 
         },
@@ -390,30 +392,81 @@ $('#cardContainer').on('click', '.editBtn', function() {
 
 });
 
-
-$('#editItemForm').submit(() => {
+$('#editItemFormBtn').click(() => {
     // Ajax request to patch database items using the form data
     //I COPY-PASTED THIS, I THINK THE PATCH REQUEST IS MEANT TO GO HERE? UNLESS I'M A TOTAL FUCKING IDIOT.
+  event.preventDefault();
+
+  let editing = true;
+  let id = $('#itemIDEdit').val();
+  let itemName = $('#itemNameEdit').val();
+  let itemDescription = $('#itemDescriptionEdit').val();
+  let itemPrice = $('#itemPriceEdit').val();
+  let itemType = $('input[name=itemType]:checked').val();
+  let itemCondition = $('input[name=itemCondition]:checked').val();
+
+  // console.log(id);
+  // console.log(itemName);
+  // console.log(itemDescription);
+  // console.log(itemPrice);
+  // console.log(itemType);
+  // console.log(itemCondition);
+
+  if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length) {
+
+
+
+    //trying to get item conditon to console.log
+
+
+    // $.ajax({
+    //     url:`${url}/editItem/${id}`,
+    //     type: 'PATCH',
+    //     data: {
+    //         userId: sessionStorage.userID,
+    //         itemName: itemNameEdit,
+    //         itemDescription: itemDescriptionEdit,
+    //         itemPrice: itemPriceEdit,
+    //         _id: item.itemIDEdit
+    //     },
+    //     dataType:'json',
+    //     success: function(item){
+    //         if (item == '401') {
+    //             alert('401 UNAUTHORIZED');
+    //         } else {
+    //             showEditItemForm();
+    //             $('#itemNameEdit').val();
+    //             $('#itemPriceEdit').val();
+    //             $('#itemDescriptionEdit').val();
+    //             $('#itemIDEdit').val();
+    //
+    //         }
+    //     }
+    // });
+
     $.ajax({
-        url:`${url}/addItem/${id}`,
-        type: 'PATCH',
-        data: {
-            userId: sessionStorage.userID
-        },
-        dataType:'json',
-        success: function(item){
-            if (item == '401') {
-                alert('401 UNAUTHORIZED');
-            } else {
-                showEditItemForm();
-                $('#itemName').val();
-                $('#itemPrice').val();
-                $('#itemID').val();
-                $('#addBtn').text('Edit Product').addClass('btn-warning');
-                editing = true;
-            }
-        }
+      url:`${url}/editItem/${id}`,
+      type: 'PATCH',
+      data: {
+        itemName: itemName,
+        itemDescription: itemDescription,
+        itemPrice: itemPrice,
+        itemCondition: itemCondition,
+        userId: sessionStorage.userID,
+        _id: id
+      },
+      success: function(item){
+        console.log(item);
+      },
+      error: function(err){
+        console.log(err);
+        console.log('update didnt work');
+      }
     });
+
+  } else {
+    alert('You havent updated all the fields!');
+  }
 });
 
 $('#cardContainer').on('click', '.removeBtn', function(){
