@@ -4,6 +4,7 @@ let url;
 let editing = false;
 let id;
 
+
 $(document).ready(() => {
     console.log(sessionStorage);
     // GET THE CONFIG.JSON
@@ -73,6 +74,7 @@ showItems = () => {
                     </div>
                 `;
                 $('#cardContainer').find('.row').append(itemCard);
+                console.log(data[i].bought);
             }
             $('#cardContainer').removeClass('d-none');
         },
@@ -472,4 +474,42 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
             console.log('something went wrong with getting the single item');
         }
     });
+});
+
+$('#buyModal').click(function(){
+  let buy = $(this).children().children().children().children();
+  buy.addClass('buyConfirm');
+  console.log('has been clicked');
+  let boughtID;
+});
+
+$('#buyModal').on('click','.buyConfirm',function(){
+  console.log(id);
+  console.log($('.buyBtn').parent().parent().parent().data('id'));
+  let boughtID = $('.buyBtn').parent().parent().parent().data('id');
+  $.ajax({
+      url:`${url}/buyItem/${boughtID}`,
+      type: 'PATCH',
+      data: {
+          _id:  boughtID,
+          item_name: itemName,
+          item_description: String,
+          clothing_type:   String,
+          image_URL: String,
+          price: Number,
+          condition: String,
+          user_id: String,
+          bought: true
+      },
+      dataType:'json',
+      success: function(result){
+        console.log(result);
+          // showItems().find(p).text('sold');
+          bought = true;
+      },
+      error: function(err){
+        console.log(err);
+        console.log('cannot buy it');
+      }
+  });
 });
