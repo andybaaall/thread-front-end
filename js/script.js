@@ -101,6 +101,7 @@ const clearSessionStorage = () => {
 // clears login and register forms
 const clearForms = () => {
     $('input').val('');
+    $('textarea').val('');
 };
 
 // these all show DOM elements
@@ -229,6 +230,11 @@ $('#loginForm').submit(() => {
     }
 });
 
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    $('#itemImageLabel').html(fileName);
+});
+
 $('#registerForm').submit(() => {
     event.preventDefault();
     console.log('register form got a click');
@@ -303,13 +309,14 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
-        // all of the form fields have a value
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined) ) {
+        console.log('all of the form fields have a value');
+
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', itemType);
-        formData.append('itemCondition', itemCondition);
+        formData.append('itemType', $('input[name=itemType]:checked').val());
+        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
@@ -321,20 +328,18 @@ $('#addItemForm').on('submit', () => {
             processData: false,
             success:function(result){
                 console.log(result);
+
+                clearForms();
+                $('#itemImageLabel').html('Upload image');
+                showItems();
             },
-            error: function(){
-                console.log('error sending item to DB');
+            error: function(err){
+                console.log(err);
             }
         });
 
-        clearForms();
-
     }   else {
-<<<<<<< HEAD
-        alert('At least one of the form fields is empty.');
-=======
-        alert('Please add all of the item details!');
->>>>>>> mattEditWorking
+            alert('Please add all of the item details!');
     }
 });
 
@@ -409,12 +414,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
 
 });
 
-<<<<<<< HEAD
-
-$('#editItemForm').submit(() => {
-=======
 $('#editItemFormBtn').click(() => {
->>>>>>> mattEditWorking
     // Ajax request to patch database items using the form data
 
     event.preventDefault();
@@ -569,8 +569,6 @@ $('#cardContainer').on('click','.buyBtn',function(){
       }
     });
 });
-<<<<<<< HEAD
-=======
 
 $('#buyModal').click(function(){
     let buy = $(this).children().children().children().children();
@@ -610,4 +608,3 @@ $('#buyModal').click(function(){
   //       }
   //   });
 // });
->>>>>>> mattEditWorking
