@@ -85,7 +85,6 @@ showItems = () => {
 const clearForms = () => {
     $('input').val('');
     $('textarea').val('');
-    $('.form-check-input').prop('checked', false);
 };
 
 const showLoginBtn = () => {
