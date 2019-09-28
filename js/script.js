@@ -265,6 +265,7 @@ $('#registerForm').submit(() => {
     showAddItemForm();
 });
 
+// ADD A NEW ITEM (SUBMIT)
 $('#addItemForm').on('submit', () => {
     event.preventDefault();
 
@@ -280,9 +281,18 @@ $('#addItemForm').on('submit', () => {
     if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
         console.log(itemImg[0].files[0].type);
 
-        if ((itemImg[0].files[0].type != ('image/png' || 'image/jpeg' || 'image/gif' || 'img/jpg'))) {
+        if (itemImg[0].files[0].type != 'image/jpg') {
             alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
         }
+        // if (itemImg[0].files[0].type != 'image/jpeg') {
+        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
+        // }
+        // if (itemImg[0].files[0].type != 'image/png') {
+        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
+        // }
+        // if (itemImg[0].files[0].type != 'image/gif') {
+        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
+        // } 
 
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
@@ -318,6 +328,7 @@ $('#itemImage').change(() => {
     $('#itemImageLabel').html(fileName);
 });
 
+// CLICK EDIT BUTTON FOR SINGLE ITEM
 $('#cardContainer').on('click', '.editBtn', function() {
     event.preventDefault();
 
@@ -349,6 +360,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 });
 
+// SUBMIT NEW DETAILS FOR AN ITEM
 $('#editItemForm').submit(() => {
     event.preventDefault();
 
@@ -385,7 +397,35 @@ $('#editItemForm').submit(() => {
         alert(`Please make sure you've put something in all of the fields!`);
     }
 });
-//
+
+// DELETE AN ITEM
+$('#cardContainer').on('click', '.removeBtn', function(){
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert('401, permission denied');
+        return;
+    }
+    const id = $(this).parent().parent().parent().data('id');
+    const card = $(this).parent().parent().parent();
+    $.ajax({
+      url: `${url}/deleteItem/${id}`,
+      type: 'DELETE',
+      data: {
+          userID: sessionStorage.userID
+      },
+      success:function(response){
+          if(response == '401'){
+              alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+          } else {
+             card.remove();
+          }
+      },
+      error:function(err) {
+        console.log(err);
+        console.log('something went wrong deleting the product');
+      }
+  });
+});
 // $('#cardContainer').on('click', '.removeBtn', function(){
 //     event.preventDefault();
 //     if(!sessionStorage.userID){
