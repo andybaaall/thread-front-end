@@ -85,6 +85,7 @@ showItems = () => {
 const clearForms = () => {
     $('input').val('');
     $('textarea').val('');
+    // radio buttons?
 };
 
 const showLoginBtn = () => {
@@ -152,7 +153,7 @@ $('#logoutBtn').click(() => {
     showItems();
     sessionStorage.clear();
 });
-//
+
 $('#registerBtn').click(() => {
     $('.main').addClass('d-none');
     $('#rUsername').val(null);
@@ -162,7 +163,7 @@ $('#registerBtn').click(() => {
     hideLoginForm();
     showRegisterForm();
 });
-//
+
 $('#loginForm').submit(() => {
     event.preventDefault();
     const username = $('#lUsername').val();
@@ -277,12 +278,14 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if (itemName.length && itemDescription.length && itemPrice.length && itemType.length && itemCondition.length && itemImg.length) {
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)) {
+        console.log(itemImg[0].files[0]);
+
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
-        formData.append('itemType', itemType);
-        formData.append('itemCondition', itemCondition);
+        formData.append('itemType', $('input[name=itemType]:checked').val());
+        formData.append('itemCondition', $('input[name=itemCondition]:checked').val());
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
@@ -293,17 +296,23 @@ $('#addItemForm').on('submit', () => {
             contentType: false,
             processData: false,
             success:function(result){
+                clearForms();
+                $('#itemImageLabel').html('Upload image');
+                showItems();
             },
             error: function(err){
-                console.log('How embarassing, a database error! This never usually happens to me.');
+                console.log(err);
+                console.log('How embarrassing, a database error! This never usually happens to me.');
             }
         });
-
-        clearForms();
-
     }   else {
         alert('Please add all of the item details!');
     }
+});
+
+$('#itemImage').change(() => {
+    const fileName = $('#itemImage')[0].files[0].name;
+    $('#itemImageLabel').html(fileName);
 });
 //
 // $('#cardContainer').on('click', '.editBtn', function() {
