@@ -317,108 +317,108 @@ $('#itemImage').change(() => {
     const fileName = $('#itemImage')[0].files[0].name;
     $('#itemImageLabel').html(fileName);
 });
-//
-// $('#cardContainer').on('click', '.editBtn', function() {
-//     event.preventDefault();
-//
-//     if(!sessionStorage.userID){
-//         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-//         return;
-//     }
-//     const id = $(this).parent().parent().parent().data('id');
-//
-//     $('#editModal').modal('show');
-//
-//     $.ajax({
-//         url:`${url}/getItem/${id}`,
-//         type: 'GET',
-//         success: function(item){
-//             $('#itemNameEdit').empty();
-//             $('#itemNameEdit').val(item.item_name);
-//             $('#itemDescriptionEdit').empty();
-//             $('#itemDescriptionEdit').val(item.item_description);
-//             $('#itemPriceEdit').empty();
-//             $('#itemPriceEdit').val(item.price);
-//             $('#itemIDEdit').empty();
-//             $('#itemIDEdit').val(item._id);
-//             $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
-//             $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
-//         },
-//         error: function(err){
-//             console.log(err);
-//             console.log('How embarassing, a database error! This never usually happens to me.');
-//         }
-//
-//     });
-//
-// });
-//
-// $('#editItemFormBtn').click(() => {
-//     event.preventDefault();
-//
-//     let editing = true;
-//     let id = $('#itemIDEdit').val();
-//     let itemName = $('#itemNameEdit').val();
-//     let itemDescription = $('#itemDescriptionEdit').val();
-//     let itemPrice = $('#itemPriceEdit').val();
-//     let itemType = $('input[name=itemTypeEdit]:checked').val();
-//     let itemCondition = $('input[name=itemConditionEdit]:checked').val();
-//
-//     if ((itemName.length != 0) && (itemDescription.length != 0) && (itemPrice.length != 0) ) {
-//         $.ajax({
-//             url:`${url}/editItem/${id}`,
-//             type: 'PATCH',
-//             data: {
-//                 itemName: itemName,
-//                 itemDescription: itemDescription,
-//                 itemPrice: itemPrice,
-//                 itemCondition: itemCondition,
-//                 itemType: itemType,
-//                 userId: sessionStorage.userID
-//             },
-//             success: function(item){
-//                 $('#editModal').modal('hide');
-//                 showItems();
-//             },
-//             error: function(err){
-//                 console.log(err);
-//                 console.log('How embarassing, a database error! This never usually happens to me.');
-//             }
-//         });
-//     } else {
-//         alert('Please make sure that you fill in all the fields!');
-//     }
-// });
-//
-// $('#cardContainer').on('click', '.removeBtn', function(){
-//     event.preventDefault();
-//     if(!sessionStorage.userID){
-//         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-//         return;
-//     }
-//     const id = $(this).parent().parent().parent().data('id');
-//     const card = $(this).parent().parent().parent();
-//
-//     $.ajax({
-//         url: `${url}/deleteItem/${id}`,
-//         type: 'DELETE',
-//         data: {
-//             userID: sessionStorage.userID
-//         },
-//         success:function(item){
-//             if(item == '401'){
-//                 alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-//             } else {
-//                 card.remove();
-//             }
-//         },
-//         error:function(err) {
-//             console.log(err);
-//             console.log('How embarassing, a database error! This never usually happens to me.');
-//         }
-//     });
-// });
-//
+
+$('#cardContainer').on('click', '.editBtn', function() {
+    event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
+    const id = $(this).parent().parent().parent().data('id');
+
+    $('#editModal').modal('show');
+
+    $.ajax({
+        url:`${url}/getItem/${id}`,
+        type: 'GET',
+        success: function(item){
+            $('#itemNameEdit').empty();
+            $('#itemNameEdit').val(item.item_name);
+            $('#itemDescriptionEdit').empty();
+            $('#itemDescriptionEdit').val(item.item_description);
+            $('#itemPriceEdit').empty();
+            $('#itemPriceEdit').val(item.price);
+            $('#itemIDEdit').empty();
+            $('#itemIDEdit').val(item._id);
+            $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
+            $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
+        },
+        error: function(err){
+            console.log(err);
+            console.log('How embarassing, a database error! This never usually happens to me.');
+        }
+
+    });
+
+});
+
+$('#editItemFormBtn').click(() => {
+    event.preventDefault();
+
+    let editing = true;
+    let id = $('#itemIDEdit').val();
+    let itemName = $('#itemNameEdit').val();
+    let itemDescription = $('#itemDescriptionEdit').val();
+    let itemPrice = $('#itemPriceEdit').val();
+    let itemType = $('input[name=itemTypeEdit]:checked').val();
+    let itemCondition = $('input[name=itemConditionEdit]:checked').val();
+
+    if ((itemName.length != 0) && (itemDescription.length != 0) && (itemPrice.length != 0) ) {
+        $.ajax({
+            url:`${url}/editItem/${id}`,
+            type: 'PATCH',
+            data: {
+                itemName: itemName,
+                itemDescription: itemDescription,
+                itemPrice: itemPrice,
+                itemCondition: itemCondition,
+                itemType: itemType,
+                userId: sessionStorage.userID
+            },
+            success: function(item){
+                $('#editModal').modal('hide');
+                showItems();
+            },
+            error: function(err){
+                console.log(err);
+                console.log('How embarassing, a database error! This never usually happens to me.');
+            }
+        });
+    } else {
+        alert('Please make sure that you fill in all the fields!');
+    }
+});
+
+$('#cardContainer').on('click', '.removeBtn', function(){
+    event.preventDefault();
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
+    const id = $(this).parent().parent().parent().data('id');
+    const card = $(this).parent().parent().parent();
+
+    $.ajax({
+        url: `${url}/deleteItem/${id}`,
+        type: 'DELETE',
+        data: {
+            userID: sessionStorage.userID
+        },
+        success:function(item){
+            if(item == '401'){
+                alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+            } else {
+                card.remove();
+            }
+        },
+        error:function(err) {
+            console.log(err);
+            console.log('How embarassing, a database error! This never usually happens to me.');
+        }
+    });
+});
+
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
 $('#cardContainer').on('click', '.moreInfoBtn', function() {
     // console.log('you clicked on the more info button');
@@ -446,25 +446,25 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
     });
 });
 
-//
-// $('#cardContainer').on('click','.buyBtn',function(){
-//     const id = $(this).parent().parent().parent().data('id');
-//
-//     $.ajax({
-//         url: `${url}/buyItem/${id}`,
-//         type:'PATCH',
-//         success:function(){
-//             showItems();
-//         },
-//         error: function(err){
-//             console.log(err);
-//             console.log('How embarassing, a database error! This never usually happens to me.');
-//         }
-//     });
-// });
-//
-// $('#buyModal').click(function(){
-//     let buy = $(this).children().children().children().children();
-//     buy.addClass('buyConfirm');
-//     let boughtID;
-// });
+
+$('#cardContainer').on('click','.buyBtn',function(){
+    const id = $(this).parent().parent().parent().data('id');
+
+    $.ajax({
+        url: `${url}/buyItem/${id}`,
+        type:'PATCH',
+        success:function(){
+            showItems();
+        },
+        error: function(err){
+            console.log(err);
+            console.log('How embarassing, a database error! This never usually happens to me.');
+        }
+    });
+});
+
+$('#buyModal').click(function(){
+    let buy = $(this).children().children().children().children();
+    buy.addClass('buyConfirm');
+    let boughtID;
+});
