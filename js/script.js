@@ -278,8 +278,12 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)) {
-        console.log(itemImg[0].files[0]);
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
+        console.log(itemImg[0].files[0].type);
+
+        if ((itemImg[0].files[0].type != ('image/png' || 'image/jpeg' || 'image/gif' || 'img/jpg'))) {
+            console.log('got a bad file format');
+        }
 
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
