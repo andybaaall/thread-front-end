@@ -281,7 +281,7 @@ $('#addItemForm').on('submit', () => {
         console.log(itemImg[0].files[0].type);
 
         if ((itemImg[0].files[0].type != ('image/png' || 'image/jpeg' || 'image/gif' || 'img/jpg'))) {
-            console.log('got a bad file format');
+            alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
         }
 
         formData.append('itemName', itemName.val());
@@ -326,6 +326,7 @@ $('#cardContainer').on('click', '.editBtn', function() {
         return;
     }
     const id = $(this).parent().parent().parent().data('id');
+    console.log(id);
 
     $('#editModal').modal('show');
 
@@ -333,30 +334,24 @@ $('#cardContainer').on('click', '.editBtn', function() {
         url:`${url}/getItem/${id}`,
         type: 'GET',
         success: function(item){
-            $('#itemNameEdit').empty();
+            console.log(item);
             $('#itemNameEdit').val(item.item_name);
-            $('#itemDescriptionEdit').empty();
             $('#itemDescriptionEdit').val(item.item_description);
-            $('#itemPriceEdit').empty();
             $('#itemPriceEdit').val(item.price);
-            $('#itemIDEdit').empty();
             $('#itemIDEdit').val(item._id);
             $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
             $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
         },
         error: function(err){
             console.log(err);
-            console.log('How embarassing, a database error! This never usually happens to me.');
+            console.log('How embarrassing, a database error! This never usually happens to me.');
         }
-
     });
-
 });
 
-$('#editItemFormBtn').click(() => {
+$('#editItemForm').submit(() => {
     event.preventDefault();
 
-    let editing = true;
     let id = $('#itemIDEdit').val();
     let itemName = $('#itemNameEdit').val();
     let itemDescription = $('#itemDescriptionEdit').val();
@@ -377,48 +372,49 @@ $('#editItemFormBtn').click(() => {
                 userId: sessionStorage.userID
             },
             success: function(item){
+                console.log(item);
                 $('#editModal').modal('hide');
                 showItems();
             },
             error: function(err){
                 console.log(err);
-                console.log('How embarassing, a database error! This never usually happens to me.');
+                console.log('How embarrassing, a database error! This never usually happens to me.');
             }
         });
     } else {
-        alert('Please make sure that you fill in all the fields!');
+        alert(`Please make sure you've put something in all of the fields!`);
     }
 });
-
-$('#cardContainer').on('click', '.removeBtn', function(){
-    event.preventDefault();
-    if(!sessionStorage.userID){
-        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-        return;
-    }
-    const id = $(this).parent().parent().parent().data('id');
-    const card = $(this).parent().parent().parent();
-
-    $.ajax({
-        url: `${url}/deleteItem/${id}`,
-        type: 'DELETE',
-        data: {
-            userID: sessionStorage.userID
-        },
-        success:function(item){
-            if(item == '401'){
-                alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-            } else {
-                card.remove();
-            }
-        },
-        error:function(err) {
-            console.log(err);
-            console.log('How embarassing, a database error! This never usually happens to me.');
-        }
-    });
-});
-
+//
+// $('#cardContainer').on('click', '.removeBtn', function(){
+//     event.preventDefault();
+//     if(!sessionStorage.userID){
+//         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+//         return;
+//     }
+//     const id = $(this).parent().parent().parent().data('id');
+//     const card = $(this).parent().parent().parent();
+//
+//     $.ajax({
+//         url: `${url}/deleteItem/${id}`,
+//         type: 'DELETE',
+//         data: {
+//             userID: sessionStorage.userID
+//         },
+//         success:function(item){
+//             if(item == '401'){
+//                 alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+//             } else {
+//                 card.remove();
+//             }
+//         },
+//         error:function(err) {
+//             console.log(err);
+//             console.log('How embarassing, a database error! This never usually happens to me.');
+//         }
+//     });
+// });
+//
 //  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
 $('#cardContainer').on('click', '.moreInfoBtn', function() {
     // console.log('you clicked on the more info button');
