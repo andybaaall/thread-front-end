@@ -420,27 +420,33 @@ $('#itemImage').change(() => {
 //     });
 // });
 //
-// $('#cardContainer').on('click', '.moreInfoBtn', function() {
-//     const id = $(this).parent().parent().parent().data('id');
-//     $.ajax({
-//         url:`${url}/getItem/${id}`,
-//         type: 'GET',
-//         success: function(item){
-//             $('#singleItemModalTitle').empty();
-//             $('#singleItemModalTitle').append(item.item_name);
-//             $('#singleItemModalBody').empty();
-//             $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
-//             $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
-//             $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
-//             $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
-//             $('#singleItemModalBody').append(`<p>Price: $` + item.price + `</p>`);
-//         },
-//         error: function(err){
-//             console.log(err);
-//             console.log('How embarassing, a database error! This never usually happens to me.');
-//         }
-//     });
-// });
+//  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
+$('#cardContainer').on('click', '.moreInfoBtn', function() {
+    // console.log('you clicked on the more info button');
+    const id = $(this).parent().parent().parent().data('id');
+    $.ajax({
+        url:`${url}/getItem/${id}`,
+        type: 'GET',
+        success: function(item){
+            console.log(item);
+            // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
+            // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
+            $('#singleItemModalTitle').empty();
+            $('#singleItemModalTitle').append(item.item_name);
+            $('#singleItemModalBody').empty();
+            $('#singleItemModalBody').append(`<img class="img-fluid" src="${url}/${item.image_URL}">`);
+            $('#singleItemModalBody').append(`<p>Clothing type: ` + item.clothing_type + `</p>`);
+            $('#singleItemModalBody').append(`<p>Condition: ` + item.condition + `</p>`);
+            $('#singleItemModalBody').append(`<p>Description: ` + item.item_description + `</p>`);
+            $('#singleItemModalBody').append(`<p>Price: $` + item.price + `</p>`);
+        },
+        error: function(err){
+            console.log(err);
+            console.log('something went wrong with getting the single item');
+        }
+    });
+});
+
 //
 // $('#cardContainer').on('click','.buyBtn',function(){
 //     const id = $(this).parent().parent().parent().data('id');
