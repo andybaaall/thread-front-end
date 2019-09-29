@@ -39,7 +39,7 @@ showItems = () => {
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            // console.log(data);
+            console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
                 let itemCard = `
@@ -519,4 +519,12 @@ $('#cardContainer').on('click','.buyBtn',function(){
         console.log('How embarassing, a database error! This never usually happens to me.');
       }
     });
+});
+
+$('#titleBtn').click(() => {
+    clearForms();
+
+    $('.main').removeClass('d-none');
+    hideLoginForm();
+    hideRegisterForm();
 });
