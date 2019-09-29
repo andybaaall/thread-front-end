@@ -217,7 +217,7 @@ $('#loginForm').submit(() => {
 $('#registerForm').submit(() => {
     event.preventDefault();
 
-    if(!sessionStorage.userID){
+    if(sessionStorage.userID){
         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
         return;
     }
