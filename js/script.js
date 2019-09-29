@@ -485,30 +485,6 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
     });
 });
 
-<<<<<<< HEAD
-
-$('#cardContainer').on('click','.buyBtn',function(){
-    const id = $(this).parent().parent().parent().data('id');
-
-    $.ajax({
-        url: `${url}/buyItem/${id}`,
-        type:'PATCH',
-        success:function(){
-            showItems();
-        },
-        error: function(err){
-            console.log(err);
-            console.log('How embarassing, a database error! This never usually happens to me.');
-        }
-    });
-});
-
-$('#buyModal').click(function(){
-    let buy = $(this).children().children().children().children();
-    buy.addClass('buyConfirm');
-    let boughtID;
-});
-=======
 $('#cardContainer').on('click','.buyBtn',function(){
   console.log('clicked');
   const id = $(this).parent().parent().parent().data('id');
@@ -526,4 +502,3 @@ $('#cardContainer').on('click','.buyBtn',function(){
       }
     });
 });
->>>>>>> andy28
