@@ -166,6 +166,12 @@ $('#registerBtn').click(() => {
 
 $('#loginForm').submit(() => {
     event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
+
     const username = $('#lUsername').val();
     const password = $('#lPassword').val();
     if ((username.length === 0)||(password.length === 0)) {
@@ -210,6 +216,11 @@ $('#loginForm').submit(() => {
 
 $('#registerForm').submit(() => {
     event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
 
     const username = $('#rUsername').val();
     const email = $('#rEmail').val();
@@ -287,6 +298,11 @@ $('#registerForm').submit(() => {
 // ADD A NEW ITEM (SUBMIT)
 $('#addItemForm').on('submit', () => {
     event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
 
     let formData = new FormData();
 
@@ -387,6 +403,11 @@ $('#cardContainer').on('click', '.editBtn', function() {
 // SUBMIT NEW DETAILS FOR AN ITEM
 $('#editItemForm').submit(() => {
     event.preventDefault();
+
+    if(!sessionStorage.userID){
+        alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
+        return;
+    }
 
     let id = $('#itemIDEdit').val();
     let itemName = $('#itemNameEdit').val();
