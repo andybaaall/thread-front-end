@@ -142,6 +142,7 @@ $('#loginBtn').click(() => {
     $('#lPassword').val(null);
     showLoginForm();
     $('#registerFormBox').addClass('d-none');
+    $('#errLogin').empty();
 });
 
 $('#logoutBtn').click(() => {
@@ -160,6 +161,7 @@ $('#registerBtn').click(() => {
     $('#rEmail').val(null);
     $('#rPassword').val(null);
     $('#rConfirmPassword').val(null);
+    $('#errLogin').empty();
     hideLoginForm();
     showRegisterForm();
 });
@@ -204,6 +206,7 @@ $('#loginForm').submit(() => {
                     $('#addListBtn').removeClass('d-none');
                     showItems();
                     showAddItemForm();
+                    $('#errLogin').empty();
                 }
             },
             error: function(err){
