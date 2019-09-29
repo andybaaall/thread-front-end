@@ -39,7 +39,7 @@ showItems = () => {
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            console.log(data);
+            // console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
                 let itemCard = `
@@ -180,6 +180,7 @@ $('#loginForm').submit(() => {
             },
             success: function(result){
                 if (result === 'user does not exist'){
+                    $('#errLogin').empty();
                     $('#errLogin').append('<p class="text-danger">Sorry, user does not exist. </p>');
                 } else if (result === 'invalid password'){
                     alert(`Oh dear, it looks like you've entered the wrong password.`);
@@ -215,55 +216,72 @@ $('#registerForm').submit(() => {
     const password = $('#rPassword').val();
     const confirmPassword = $('#rConfirmPassword').val();
 
-    if(username.length === 0){
-        alert('Please enter a username!');
-    } else if(email.length === 0){
-        alert('Please enter an email address!');
-    } else if(password.length === 0){
-        alert('Please enter a password!');
-    } else if(confirmPassword.length === 0){
-        alert('Please confirm your password!');
-    } else if(password !== confirmPassword){
-        alert('One of those passwords is not like the other!');
-    } else {
-        $.ajax({
-            url: `${url}/users`,
-            type: 'POST',
-            data: {
-                username: username,
-                email: email,
-                password: password
-            },
-            success: function(result){
-                if (result === 'Invalid user') {
-                    $('#errRego').append('<p class="text-danger">Sorry, this already exists </p>');
+    if (username.length != 0) {
+        if(email.length != 0) {
+            if (password.length != 0) {
+                if (confirmPassword.length != 0) {
+                    if (password === confirmPassword) {
+
+                        $.ajax({
+                            url: `${url}/users`,
+                            type: 'POST',
+                            data: {
+                                username: username,
+                                email: email,
+                                password: password
+                            },
+                            success: function(result){
+                                console.log(result);
+                                if (result === 'Invalid user') {
+                                    alert('Sorry, this username is taken.');
+                                    console.log(sessionStorage);
+                                    showItems();
+                                } else {
+                                    sessionStorage.setItem('userID', result._id);
+                                    sessionStorage.setItem('userName', result.username);
+                                    sessionStorage.setItem('userEmail', result.email);
+                                    $('.main').removeClass('d-none');
+
+                                    hideRegisterForm();
+                                    hideRegisterBtn();
+                                    hideLoginBtn();
+
+                                    showItems();
+                                    showLogoutBtn();
+                                    showAddItemForm();
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                                console.log('How embarassing, a database error! This never usually happens to me.');
+                            }
+                        });
+
+                    } else {
+                        alert('One of those passwords is not like the other!');
+                        showItems();
+                        return;
+                    }
                 } else {
-                    sessionStorage.setItem('userID', result._id);
-                    sessionStorage.setItem('userName', result.username);
-                    sessionStorage.setItem('userEmail', result.email);
-                    $('.main').removeClass('d-none');
-                    hideLoginBtn();
-                    hideRegisterBtn();
-                    hideRegisterForm();
+                    alert('Please confirm your password!');
                     showItems();
-                    showLogoutBtn();
-                    showAddItemForm();
+                    return;
                 }
-            },
-            error: function(err){
-                console.log(err);
-                console.log('How embarassing, a database error! This never usually happens to me.');
+            } else {
+                alert('Please enter a password!');
+                showItems();
+                return;
             }
-        });
+        } else {
+            alert('Please enter an email address!');
+            showItems();
+            return;
+        }
+    } else {
+        alert('Please enter a username!');
+        showItems();
+        return;
     }
-
-    hideRegisterForm();
-    hideRegisterBtn();
-    hideLoginBtn();
-
-    showItems();
-    showLogoutBtn();
-    showAddItemForm();
 });
 
 // ADD A NEW ITEM (SUBMIT)
