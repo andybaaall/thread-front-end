@@ -167,7 +167,7 @@ $('#registerBtn').click(() => {
 $('#loginForm').submit(() => {
     event.preventDefault();
 
-    if(!sessionStorage.userID){
+    if(sessionStorage.userID){
         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
         return;
     }
@@ -322,22 +322,24 @@ $('#addItemForm').on('submit', () => {
         formData.append('itemImg', itemImg[0].files[0]);
         formData.append('userID', sessionStorage.userID);
 
-        $.ajax({
-            url: `${url}/addItem`,
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success:function(result){
-                clearForms();
-                $('#itemImageLabel').html('Upload image');
-                showItems();
-            },
-            error: function(err){
-                console.log(err);
-                console.log('How embarrassing, a database error! This never usually happens to me.');
-            }
-        });
+        console.log(formData);
+
+        // $.ajax({
+        //     url: `${url}/addItem`,
+        //     type: 'POST',
+        //     data: formData,
+        //     contentType: false,
+        //     processData: false,
+        //     success:function(result){
+        //         clearForms();
+        //         $('#itemImageLabel').html('Upload image');
+        //         showItems();
+        //     },
+        //     error: function(err){
+        //         console.log(err);
+        //         console.log('How embarrassing, a database error! This never usually happens to me.');
+        //     }
+        // });
     };
 
     if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
