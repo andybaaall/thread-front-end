@@ -281,9 +281,9 @@ $('#addItemForm').on('submit', () => {
     if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
         console.log(itemImg[0].files[0].type);
 
-        if (itemImg[0].files[0].type != 'image/jpg') {
-            alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        }
+        // if (itemImg[0].files[0].type != 'image/jpg') {
+        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
+        // }
         // if (itemImg[0].files[0].type != 'image/jpeg') {
         //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
         // }
@@ -292,7 +292,7 @@ $('#addItemForm').on('submit', () => {
         // }
         // if (itemImg[0].files[0].type != 'image/gif') {
         //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        // } 
+        // }
 
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
@@ -418,6 +418,7 @@ $('#cardContainer').on('click', '.removeBtn', function(){
               alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
           } else {
              card.remove();
+             showItems();
           }
       },
       error:function(err) {
