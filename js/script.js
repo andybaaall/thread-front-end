@@ -278,22 +278,7 @@ $('#addItemForm').on('submit', () => {
     let itemCondition = $('input[name=itemCondition]:checked').val();
     let itemImg = $('#itemImage');
 
-    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
-        console.log(itemImg[0].files[0].type);
-
-        // if (itemImg[0].files[0].type != 'image/jpg') {
-        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        // }
-        // if (itemImg[0].files[0].type != 'image/jpeg') {
-        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        // }
-        // if (itemImg[0].files[0].type != 'image/png') {
-        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        // }
-        // if (itemImg[0].files[0].type != 'image/gif') {
-        //     alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
-        // }
-
+    const upload = () => {
         formData.append('itemName', itemName.val());
         formData.append('itemDescription', itemDescription.val());
         formData.append('itemPrice', itemPrice.val());
@@ -318,6 +303,22 @@ $('#addItemForm').on('submit', () => {
                 console.log('How embarrassing, a database error! This never usually happens to me.');
             }
         });
+    };
+
+    if ((itemName.val().length != 0) && (itemDescription.val().length != 0) && (itemPrice.val().length != 0) && (itemImg[0].files[0] != undefined)){
+
+        if (itemImg[0].files[0].type === 'image/jpg'){
+            upload();
+        } else if (itemImg[0].files[0].type === 'image/jpg'){
+            upload();
+        } else if (itemImg[0].files[0].type === 'image/png'){
+            upload();
+        } else if (itemImg[0].files[0].type === 'image/gif'){
+            upload();
+        } else {
+            alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
+        }
+
     }   else {
         alert('Please add all of the item details!');
     }
