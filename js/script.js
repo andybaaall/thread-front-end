@@ -328,12 +328,16 @@ $('#addItemForm').on('submit', () => {
 
         if (itemImg[0].files[0].type === 'image/jpg'){
             upload();
-        } else if (itemImg[0].files[0].type === 'image/jpg'){
+            return;
+        } else if (itemImg[0].files[0].type === 'image/jpeg'){
             upload();
+            return;
         } else if (itemImg[0].files[0].type === 'image/png'){
             upload();
+            return;
         } else if (itemImg[0].files[0].type === 'image/gif'){
             upload();
+            return;
         } else {
             alert(`Sorry, but the server can't handle this kind of file. Try JPG, JPEG, PNG or GIF.`);
         }
