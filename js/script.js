@@ -39,6 +39,7 @@ showItems = () => {
         type: 'GET',
         dataType: 'json',
         success: function(data){
+            console.log('got all items');
             console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
@@ -337,6 +338,7 @@ $('#addItemForm').on('submit', () => {
                 showItems();
             },
             error: function(err){
+                console.log(formData);
                 console.log(err);
                 console.log('How embarrassing, a database error! This never usually happens to me.');
             }
