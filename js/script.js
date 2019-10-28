@@ -333,7 +333,7 @@ $('#addItemForm').on('submit', () => {
             contentType: false,
             processData: false,
             success:function(result){
-                clearForms();
+                // clearForms();
                 $('#itemImageLabel').html('Upload image');
                 showItems();
             },
