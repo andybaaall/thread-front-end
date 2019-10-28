@@ -32,7 +32,6 @@ $(document).ready(() => {
     }
 });
 
-// bought === true issues
 showItems = () => {
     $.ajax({
         url: `${url}/allItems`,
@@ -83,6 +82,7 @@ showItems = () => {
         }
     });
 };
+
 
 const clearForms = () => {
     $('input').val('');
@@ -382,7 +382,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
         return;
     }
     const id = $(this).parent().parent().parent().data('id');
-    console.log(id);
 
     $('#editModal').modal('show');
 
@@ -395,8 +394,8 @@ $('#cardContainer').on('click', '.editBtn', function() {
             $('#itemDescriptionEdit').val(item.item_description);
             $('#itemPriceEdit').val(item.price);
             $('#itemIDEdit').val(item._id);
-            $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
-            $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
+            // $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
+            // $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
         },
         error: function(err){
             console.log(err);
