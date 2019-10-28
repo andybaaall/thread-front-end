@@ -85,8 +85,9 @@ showItems = () => {
 
 
 const clearForms = () => {
-    $('input').val('');
-    $('textarea').val('');
+    $('.form-control').val('');
+    $("#itemUsed").prop("checked", true);
+    $("#itemTops").prop("checked", true);
 };
 
 const showLoginBtn = () => {
@@ -333,7 +334,7 @@ $('#addItemForm').on('submit', () => {
             contentType: false,
             processData: false,
             success:function(result){
-                // clearForms();
+                clearForms();
                 $('#itemImageLabel').html('Upload image');
                 showItems();
             },
