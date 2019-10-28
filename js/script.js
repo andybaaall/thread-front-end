@@ -1,9 +1,8 @@
 let serverURL;
 let serverPort;
 let url;
-let editing = false;
 let id;
-//
+
 $(document).ready(() => {
     $.ajax({
         url: 'config.json',
@@ -38,8 +37,6 @@ showItems = () => {
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            console.log('got all items');
-            console.log(data);
             $('#cardContainer').find('.row').empty();
             for (var i = 0; i < data.length; i++) {
                 let itemCard = `
@@ -77,7 +74,6 @@ showItems = () => {
             $('#cardContainer').removeClass('d-none');
         },
         error: function(err){
-            console.log(err);
             console.log('How embarassing, a database error! This never usually happens to me.');
         }
     });
@@ -86,6 +82,7 @@ showItems = () => {
 
 const clearForms = () => {
     $('.form-control').val('');
+    $('input[type="file"]').val(null);
     $("#itemUsed").prop("checked", true);
     $("#itemTops").prop("checked", true);
 };
@@ -247,10 +244,8 @@ $('#registerForm').submit(() => {
                                 password: password
                             },
                             success: function(result){
-                                console.log(result);
                                 if (result === 'Invalid user') {
                                     alert('Sorry, this username is taken.');
-                                    console.log(sessionStorage);
                                     showItems();
                                 } else {
                                     sessionStorage.setItem('userID', result._id);
@@ -300,7 +295,6 @@ $('#registerForm').submit(() => {
     }
 });
 
-// ADD A NEW ITEM (SUBMIT)
 $('#addItemForm').on('submit', () => {
     event.preventDefault();
 
@@ -339,7 +333,6 @@ $('#addItemForm').on('submit', () => {
                 showItems();
             },
             error: function(err){
-                console.log(formData);
                 console.log(err);
                 console.log('How embarrassing, a database error! This never usually happens to me.');
             }
@@ -374,7 +367,6 @@ $('#itemImage').change(() => {
     $('#itemImageLabel').html(fileName);
 });
 
-// CLICK EDIT BUTTON FOR SINGLE ITEM
 $('#cardContainer').on('click', '.editBtn', function() {
     event.preventDefault();
 
@@ -390,13 +382,10 @@ $('#cardContainer').on('click', '.editBtn', function() {
         url:`${url}/getItem/${id}`,
         type: 'GET',
         success: function(item){
-            console.log(item);
             $('#itemNameEdit').val(item.item_name);
             $('#itemDescriptionEdit').val(item.item_description);
             $('#itemPriceEdit').val(item.price);
             $('#itemIDEdit').val(item._id);
-            // $("input[name=itemTypeEdit][value=" + item.clothing_type + "]").attr('checked', 'checked');
-            // $("input[name=itemConditionEdit][value=" + item.condition + "]").attr('checked', 'checked');
         },
         error: function(err){
             console.log(err);
@@ -405,7 +394,6 @@ $('#cardContainer').on('click', '.editBtn', function() {
     });
 });
 
-// SUBMIT NEW DETAILS FOR AN ITEM
 $('#editItemForm').submit(() => {
     event.preventDefault();
 
@@ -434,7 +422,6 @@ $('#editItemForm').submit(() => {
                 userId: sessionStorage.userID
             },
             success: function(item){
-                console.log(item);
                 $('#editModal').modal('hide');
                 showItems();
             },
@@ -448,7 +435,6 @@ $('#editItemForm').submit(() => {
     }
 });
 
-// DELETE AN ITEM
 $('#cardContainer').on('click', '.removeBtn', function(){
     event.preventDefault();
     if(!sessionStorage.userID){
@@ -477,46 +463,14 @@ $('#cardContainer').on('click', '.removeBtn', function(){
       }
   });
 });
-// $('#cardContainer').on('click', '.removeBtn', function(){
-//     event.preventDefault();
-//     if(!sessionStorage.userID){
-//         alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-//         return;
-//     }
-//     const id = $(this).parent().parent().parent().data('id');
-//     const card = $(this).parent().parent().parent();
-//
-//     $.ajax({
-//         url: `${url}/deleteItem/${id}`,
-//         type: 'DELETE',
-//         data: {
-//             userID: sessionStorage.userID
-//         },
-//         success:function(item){
-//             if(item == '401'){
-//                 alert(`401 error: you don't have permission to be here. Sorry. We don't make the rules.`);
-//             } else {
-//                 card.remove();
-//             }
-//         },
-//         error:function(err) {
-//             console.log(err);
-//             console.log('How embarassing, a database error! This never usually happens to me.');
-//         }
-//     });
-// });
-//
-//  CLICK ON "MORE INFO" BUTTON TO SHOW A SINGLE ITEM CARD (MODAL)
+
 $('#cardContainer').on('click', '.moreInfoBtn', function() {
-    // console.log('you clicked on the more info button');
     const id = $(this).parent().parent().parent().data('id');
     $.ajax({
         url:`${url}/getItem/${id}`,
         type: 'GET',
         success: function(item){
             console.log(item);
-            // NEED TO ADD DATA TO POPUP MODAL CALLED singleItemModal
-            // NEED TO INCLUDE SOME HTML TO LAYOUT THIS DATA NICELY
             $('#singleItemModalTitle').empty();
             $('#singleItemModalTitle').append(item.item_name);
             $('#singleItemModalBody').empty();
@@ -534,14 +488,11 @@ $('#cardContainer').on('click', '.moreInfoBtn', function() {
 });
 
 $('#cardContainer').on('click','.buyBtn',function(){
-  console.log('clicked');
   const id = $(this).parent().parent().parent().data('id');
-  console.log(id);
     $.ajax({
       url: `${url}/buyItem/${id}`,
       type:'PATCH',
       success:function(){
-        console.log('changing bought to true in backend');
         showItems();
       },
       error: function(err){
